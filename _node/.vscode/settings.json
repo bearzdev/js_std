@@ -1,0 +1,5 @@
+{
+    "deno.enable": false,
+    "npm.packageManager": "yarn",
+    "npm.enable": true
+}

@@ -1,0 +1,26 @@
+{
+    "tasks": [
+        {
+            // The name that shows up in terminal tab
+            "label": "Bearz",
+            // The task will launch a shell
+            "type": "shell",
+            "command": "",
+            // Set the shell type
+            "options": {
+                "shell": {
+                    "executable": "pwsh",
+                    "args": [
+                        "-NoLogo",
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-Command",
+                        "'push-location c:/dev/projects/bearzjs'"
+                    ]
+                }
+            },
+            "problemMatcher": []
+        }
+    ]
+}

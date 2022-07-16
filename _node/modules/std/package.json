@@ -1,0 +1,39 @@
+{
+  "module": "./esm/mod.js",
+  "main": "./script/mod.js",
+  "types": "./types/mod.d.ts",
+  "name": "@bearz/std",
+  "version": "0.0.1",
+  "description": "Standard Library for Deno, Node, and the Browser",
+  "license": "APACHE-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/repo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/repo/issues"
+  },
+  "exports": {
+    ".": {
+      "import": "./esm/mod.js",
+      "require": "./script/mod.js",
+      "types": "./types/mod.d.ts"
+    },
+    "./runtime": {
+      "import": "./esm/runtime/mod.js",
+      "require": "./script/runtime/mod.js",
+      "types": "./types/runtime/mod.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "dependencies": {
+    "@deno/sham-weakref": "~0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.37",
+    "chalk": "4.1.2",
+    "@deno/shim-deno-test": "~0.3.2"
+  }
+}

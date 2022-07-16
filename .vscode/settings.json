@@ -1,0 +1,14 @@
+{
+    "editor.rulers": [120],
+    "deno.enable": true,
+    "deno.config": "./src/deno.jsonc",
+    "deno.importMap": "./src/import_mappings.json",
+    "deno.testing.enable": true,
+    "deno.lint": true,
+    "deno.unstable": true,
+    "terminal.integrated.tabs.title": "${process}",
+    "cSpell.words": [
+        "Deno",
+        "skippable"
+    ]
+}
