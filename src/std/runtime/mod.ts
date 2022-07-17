@@ -1,27 +1,12 @@
 import { Version } from './version.ts';
 import { globalScope } from './global.ts';
+import type { IRuntimeEnvironment, Browser, Engine, RuntimeArch } from './interfaces.ts';
 export * from './semantic_version.ts';
+export * from './interfaces.ts';
 
 export { Version, globalScope }
 
-export type Engine = 'v8' | 'spidermonkey' | 'jsc' | 'chromium' | 'rhino' | 'unknown';
-export type Runtime = 'deno' | 'node' | 'browser' | 'electron' | 'unknown';
-export type Browser = 'chrome' | 'chromium' | 'edge' | 'firefox' | 'ie' | 'opera' | 'safari' | 'brave' | 'unknown';
-export type OsFamily = 'unix' | 'linux' | 'darwin' | 'windows' | 'sunos' | 'freebsd' | 'openbsd' | 'netbsd' | 'aix' | 'unknown';
-export type RuntimeArch = 'arm' | 'arm64' | 'ia32' | 'mips' | 'mipsel' | 'ppc' | 'ppc64' | 's390' | 's390x' | 'x64' | 'x86_64' | 'x86' | 'aarch' | 'aarch64' | 'unknown';
 
-export interface IRuntimeEnvironment {
-    readonly version: Version;
-    readonly engine: Engine;
-    readonly runtime: Runtime;
-    readonly browser?: string;
-    readonly osFamily: OsFamily;
-    readonly arch: RuntimeArch;
-    readonly mobile: boolean;
-    readonly is64bitProcess: boolean;
-    // deno-lint-ignore no-explicit-any
-    readonly data: { [key: string]: any };
-}
 
 const g = globalScope;
 let re : IRuntimeEnvironment;
@@ -29,13 +14,45 @@ let re : IRuntimeEnvironment;
 // deno-lint-ignore no-explicit-any
 const data : { [key: string]: any }= {}
 
+// allow the ability to short circuit querying the os release version
+let osVersion = g._osRelease || '';
+
 if (typeof g.Deno !== 'undefined') {
+
+    if(osVersion === '') {
+        try 
+        {
+            osVersion = g.Deno.osRelease();
+            // NOTE: osVersion is not always available and this isn't not ideal.
+            // deno returns the wrong version for windows 10 & above.. however this returns fairly quickly.
+            // avg 65 ms on my machine.
+            if(g.Deno.build.os === 'windows' && osVersion.startsWith('6.2.9200')) {
+                const start = new Date();
+                // @ts-ignore - spansync is not showing up
+                const r = g.Deno.spawnSync("wmic", { args: ["os", "get", "version"] });
+                if(r.status.code === 0) {
+                    const output =  new TextDecoder().decode(r.stdout);
+                    osVersion = output.split("\n")[1].trim();
+                }
+
+                const end = new Date();
+                const diff = end.getTime() - start.getTime();
+                console.log('diff ms:', diff);
+            }
+
+        } catch(e) {
+            if(g.Deno.env.get("DEBUG") !== undefined)
+                console.debug(e);
+            osVersion = '';
+        }
+    }
 
     re =  {
         version: Version.parse(g.Deno.version.deno),
         engine: 'v8',
         runtime: 'deno',
         osFamily: g.Deno.build.os,
+        osVersion: osVersion,
         mobile: false,
         arch: g.Deno.build.arch,
         is64bitProcess: ['x64', 'x86_64', 'aarch64', 'arm64', 'ppc64', 's390x'].includes(g.Deno.build.arch),
@@ -67,6 +84,7 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
         engine: 'v8',
         runtime: 'node',
         mobile: platform === 'android',
+        osVersion: osVersion === '' ? g.os.release() : osVersion,
         osFamily: platform,
         arch: g.process.arch,
         is64bitProcess: ['x64', 'x86_64', 'aarch64', 'arm64', 'ppc64', 's390x'].includes(g.process.arch),
@@ -88,8 +106,8 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
     let platform : any = undefined;
     let is64bit = false;
     let arch : RuntimeArch | undefined = undefined;
-    const userAgent = self.navigator.userAgent;
-    if(uaData && uaData.brands) {
+    const { userAgent } = self.navigator;
+    if(uaData?.brands) {
         platform = uaData.platform;
 
         uaData.getHighEntropyValues(['bitness', 'architecture']).then((o: { bitness: string; architecture: RuntimeArch|undefined; }) => {
@@ -181,6 +199,7 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
             runtime: uaData.runtime,
             mobile: mobile,
             osFamily: platform || 'unknown',
+            osVersion: '',
             arch: arch || 'unknown',
             is64bitProcess: is64bit,
             data: data
@@ -291,6 +310,7 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
         browser: browser || 'unknown',
         mobile: mobile,
         osFamily: platform || 'unknown',
+        osVersion: osVersion,
         arch: arch || 'unknown',
         is64bitProcess: is64bit,
         data: data
@@ -303,6 +323,7 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
         is64bitProcess: false,
         mobile: false,
         osFamily: 'unknown',
+        osVersion: osVersion,
         arch: 'unknown',
         data: {}
     }

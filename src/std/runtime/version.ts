@@ -1,4 +1,6 @@
-export class Version {
+import type { IVersion } from './interfaces.ts';
+
+export class Version implements IVersion {
     #major: number;
     #minor: number;
     #build: number;

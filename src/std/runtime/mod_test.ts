@@ -4,4 +4,5 @@ import { runtimeInfo } from '../runtime/mod.ts';
 
 test("runtime: runtimeInfo exists", (assert) => {
     assert.hasValue(runtimeInfo);
+    console.log(runtimeInfo.osVersion);
 });

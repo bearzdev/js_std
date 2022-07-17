@@ -18,11 +18,10 @@
  * @module
  */
 
-// deno-lint-ignore no-explicit-any
-const { Deno } = globalThis as any;
-const noColor = typeof Deno?.noColor === "boolean"
-  ? Deno.noColor as boolean
-  : true;
+import { supportsColor } from "../env/supports-color.ts";
+const noColor = supportsColor.stdout.off;
+
+export { supportsColor }
 
 interface Code {
   open: string;
