@@ -42,7 +42,7 @@ export interface ICollectionOf<T> extends Iterable<T> {
     clear(): void;
     includes(item: T): boolean;
     add(item: T): void;
-    remove(item: T): boolean;
+    delete(item: T): boolean;
     copyTo(array: T[], arrayIndex: number): void;
     toArray(): T[];
 }
@@ -51,7 +51,7 @@ export interface IListOf<T> extends ICollectionOf<T> {
     item: { [index: number]: T };
     at(index: number) : T;
     insert(index: number, value: T) : void;
-    removeAt(index: number, value: T) : void;
+    deleteAt(index: number, value: T) : void;
     indexOf(item: T): number;
     lastIndexOf(item: T): number;
 }
@@ -63,11 +63,11 @@ export interface IDictionary<TKey, TValue> extends ICollectionOf<KeyValuePair<TK
     add(item: KeyValuePair<TKey, TValue>): void;
     tryAdd(key: TKey, value: TValue): boolean;
     has(key: TKey): boolean;
-    remove(key: TKey): boolean;
-    remove(item: KeyValuePair<TKey, TValue>): boolean;
+    delete(key: TKey): boolean;
+    delete(item: KeyValuePair<TKey, TValue>): boolean;
     get(key: TKey): TValue | undefined;
     getOrThrow(key: TKey): TValue;
-    set(key: TKey, value: TValue): void;
-    set(item: KeyValuePair<TKey, TValue>): void;
+    set(key: TKey, value: TValue): this;
+    set(item: KeyValuePair<TKey, TValue>): this;
     toArray(): KeyValuePair<TKey, TValue>[];
 }

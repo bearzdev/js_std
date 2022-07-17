@@ -13,6 +13,10 @@ export interface ICloneable {
     clone(): unknown;
 }
 
+export interface IDisposable {
+    dispose(): void;
+}
+
 export interface ICloneableOf<T> {
     clone(): T;
 }
