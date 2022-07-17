@@ -1,4 +1,4 @@
-// LICENSE MIT https://github.com/meikidd/iso-639-1
+// LICENSE MIT https://github.com/meikidd/iso-639-1/blob/master/LICENSE
 
 export const LANGUAGES_LIST = {
     aa: {

@@ -18,4 +18,3 @@ export {
 } from 'https://deno.land/std@$STD_VERSION/testing/asserts.ts';
 
 
-export const VERSION = '0.0.1';

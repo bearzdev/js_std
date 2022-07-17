@@ -2,7 +2,7 @@ import { Version } from './version.ts';
 import { globalScope } from './global.ts';
 export * from './semantic_version.ts';
 
-export { Version }
+export { Version, globalScope }
 
 export type Engine = 'v8' | 'spidermonkey' | 'jsc' | 'chromium' | 'rhino' | 'unknown';
 export type Runtime = 'deno' | 'node' | 'browser' | 'electron' | 'unknown';
@@ -35,10 +35,10 @@ if (typeof g.Deno !== 'undefined') {
         version: Version.parse(g.Deno.version.deno),
         engine: 'v8',
         runtime: 'deno',
-        osFamily: g.Deno.os,
+        osFamily: g.Deno.build.os,
         mobile: false,
-        arch: g.Deno.arch,
-        is64bitProcess: ['x64', 'x86_64', 'aarch64', 'arm64', 'ppc64', 's390x'].includes(g.Deno.arch),
+        arch: g.Deno.build.arch,
+        is64bitProcess: ['x64', 'x86_64', 'aarch64', 'arm64', 'ppc64', 's390x'].includes(g.Deno.build.arch),
         data: {
             'build': g.Deno.build,
             'typescript': g.Deno.version.typescript,

@@ -7,7 +7,7 @@ export type CloneDelegate = () => unknown;
 export type CloneDelegateOf<out T> = <T>() => T;
 export type EquatableDelegate = (other: unknown) => boolean;
 export type EquatableDelegateOf<out T> = <T>(other: T) => boolean;
-
+export type CompareResult = -1 | 0 | 1;
 
 export interface ICloneable {
     clone(): unknown;

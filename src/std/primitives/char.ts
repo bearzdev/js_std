@@ -66,7 +66,7 @@ const asciiMax = '\u007f'.codePointAt(0) as number;
  * Represents a unicode character (code point). NOTE:
  * most of the static methods only support Latin1.
  */
-export default class Char {
+export class Char {
     public value: number;
 
     constructor(value: number) {
@@ -118,6 +118,10 @@ export default class Char {
         return value.codePointAt(index) as number < asciiMax;
     }
 
+    static isAsciiCharCode(value: number): boolean {
+        return value < asciiMax;
+    }
+
     static isAsciiCodePoint(value: number): boolean {
         return value < asciiMax;
     }
@@ -145,26 +149,34 @@ export default class Char {
     }
 
     static isLetterOrDigitCharAt(value: string, index: number): boolean {
-        return this.isLetterOrDigitCodePoint(
+        return Char.isLetterOrDigitCodePoint(
             value.codePointAt(index) as number,
         );
     }
 
     static isLetterOrDigitCodePoint(value: number): boolean {
-        return this.isLetterCodePoint(value) ||
-            this.isDigitCodePoint(value);
+        return Char.isLetterCodePoint(value) ||
+        Char.isDigitCodePoint(value);
     }
 
     static isLetterOrDigit(value: Char): boolean {
-        return this.isLetterOrDigitCodePoint(value.value);
+        return Char.isLetterOrDigitCodePoint(value.value);
     }
 
     static isLetterCharAt(value: string, index: number): boolean {
-        return this.isLetterCodePoint(value.codePointAt(index) as number);
+        return Char.isLetterCodePoint(value.codePointAt(index) as number);
+    }
+
+    static isLetterCharCode(value: number): boolean {
+        if(isAsciiCharCode(value)) {
+            return (latin[value] & (latinUpperMask | latinLowerMask)) !== 0;
+        }
+
+        return false;
     }
 
     static isLetterCodePoint(value: number): boolean {
-        if (this.isAsciiCodePoint(value)) {
+        if (isAsciiCodePoint(value)) {
             // For the version of the Unicode standard the Char type is locked to, the
             // ASCII range doesn't include letters in categories other than "upper" and "lower".
             return (latin[value] & (latinUpperMask | latinLowerMask)) != 0;
@@ -174,7 +186,7 @@ export default class Char {
     }
 
     static isLetter(value: Char): boolean {
-        if (this.isAscii(value)) {
+        if (isAscii(value)) {
             // For the version of the Unicode standard the Char type is locked to, the
             // ASCII range doesn't include letters in categories other than "upper" and "lower".
             return (latin[value.value] & (latinUpperMask | latinLowerMask)) !=
@@ -274,3 +286,18 @@ export default class Char {
         return String.fromCharCode(this.value);
     }
 }
+
+
+export const {
+    isAscii,
+    isAsciiCharAt,
+    isAsciiCharCode,
+    isAsciiCodePoint,
+   isWhiteSpace,
+   isWhiteSpaceCodePoint,
+   isWhiteSpaceAt,
+   isLetter,
+   isLetterCharAt,
+   isLetterCharCode,
+   isLetterCodePoint, 
+} = Char;
