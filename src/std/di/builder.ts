@@ -20,9 +20,13 @@ export interface IServiceDescriptor {
     factory?: (serviceProvider: IServiceProvider) => unknown;
 }
 
+export interface IServiceCollection extends Array<IServiceDescriptor> {
+    add(serviceType: string, implementationType: AnyConstructor, lifetime: ServiceLifetime): void;
+}
+
 export interface IServiceProviderFactory<TContainerBuilder> 
 {
-    createBuilder(): TContainerBuilder;
+    createBuilder(services: ServiceCollection): TContainerBuilder;
     createServiceProvider(builder: TContainerBuilder): IServiceProvider;
 }
 
@@ -31,3 +35,4 @@ export class ServiceCollection extends Array<IServiceDescriptor> {
         this.push(serviceDescriptor);
     }
 }
+

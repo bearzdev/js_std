@@ -1,4 +1,6 @@
-import { ArgumentEmptyError, ArgumentNullError, InvalidOperationError, NullReferenceError } from "./errors.ts";
+import { isWhiteSpaceAt } from "../primitives/char.ts";
+
+import { ArgumentEmptyError, ArgumentNullError, ArgumentWhiteSpaceError, InvalidOperationError, NullReferenceError } from "./errors.ts";
 
 export function notNull<T>(value: T | undefined | null, parameterName: string): asserts value is NonNullable<T>;
 export function notNull(value: unknown, parameterName: string): asserts value is NonNullable<unknown> {
@@ -15,6 +17,18 @@ export function notNullRef(value: unknown, expression: string): asserts value is
 export function notEmpty(value: ArrayLike<unknown> | undefined | null, parameterName: string): asserts value is NonNullable<ArrayLike<unknown>> {
     if(value === null || value === undefined || value.length === 0)
         throw new ArgumentEmptyError(parameterName);
+}
+
+export function notNullOrWhiteSpace(value: string | undefined | null, parameterName: string): asserts value is NonNullable<string> {
+    if(value === null || value === undefined || value.length === 0)
+        throw new ArgumentEmptyError(parameterName);
+
+    for(let i = 0; i < value.length; i++) {
+        if(!isWhiteSpaceAt(value, i))
+            return;
+    }
+
+    throw new ArgumentWhiteSpaceError(parameterName);
 }
 
 export function expression(expression: unknown, message?: string): asserts expression {

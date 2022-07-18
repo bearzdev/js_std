@@ -1,4 +1,4 @@
-export default class StringBuilder {
+export class StringBuilder {
     #buffer: Uint8Array;
     #length: number;
 

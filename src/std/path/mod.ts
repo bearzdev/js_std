@@ -9,14 +9,60 @@
  * @module
  */
 
-import { isWindows } from "../runtime/mod.ts";
+import { isWindows, isDarwin, isDeno, isNode, globalScope } from "../runtime/mod.ts";
 import * as _win32 from "./win32.ts";
 import * as _posix from "./posix.ts";
 
-const path = isWindows ? _win32 : _posix;
+const path2 = isWindows ? _win32 : _posix;
 
 export const win32 = _win32;
 export const posix = _posix;
+
+export function tmpDir() {
+    if(isDeno) {
+        if(isWindows) {
+            return globalScope.Deno.env.get("TEMP") || globalScope.Deno.env.get("TMP") ||
+              "C:\\ProgramData\\Temp";
+        }
+
+        if(isDarwin) {
+            return globalScope.Deno.env.get("TMPDIR") || globalScope.Deno.env.get("TMP") ||
+              "/private/tmp";
+        }
+
+        return globalScope.Deno.env.get("TMPDIR") || "/tmp";
+    }
+
+    if(isNode) {
+        if(isWindows) {
+            return globalScope.process.env["TEMP"] || globalScope.process.env["TMP"] ||
+              "C:\\ProgramData\\Temp";
+        }
+
+        if(isDarwin) {
+            return globalScope.process.env["TMPDIR"] || globalScope.process.env["TMP"] ||
+              "/private/tmp";
+        }
+
+        return globalScope.process.env["TMPDIR"] || "/tmp";
+    }
+
+    return undefined;
+}
+
+export function filenameWithoutExtension(path: string): string {
+    const ext = path2.extname(path);
+    let name = path2.basename(path);
+    if(ext && ext.length > 0) {
+        name = name.substring(0, name.length - ext.length);
+    }
+
+    return name;
+}
+
+export const filename = path2.basename;
+
+
 export const {
   basename,
   delimiter,
@@ -33,7 +79,7 @@ export const {
   sep,
   toFileUrl,
   toNamespacedPath,
-} = path;
+} = path2;
 
 export * from "./common.ts";
 export { SEP, SEP_PATTERN } from "./separator.ts";

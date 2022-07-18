@@ -15,6 +15,23 @@ export class SystemError extends Error {
         this.data = new Map();
     }
 
+    set (props: Partial<this>) {
+    
+        for(const [key, value] of Object.entries(props)) {
+            
+            if(key === 'name' || key === 'stack') {
+                continue;
+            }
+
+            if(Object.hasOwn(this, key)) {
+                // @ts-ignore. between the Partial and Object.hasOwn, this is a valid property
+                this[key] = value;
+            }
+        }
+
+        return this;
+    }
+
     set stack(value: string | undefined) {
         this.#stackLines = undefined;
         super.stack = value;
@@ -120,6 +137,13 @@ export class NotSupportedError extends SystemError {
     constructor(message?: string) {
         super(message || 'Operation is not supported.');
         this.name = 'NotSupportedError';
+    }
+}
+
+export class ObjectDisposedError extends SystemError {
+    constructor(message?: string, innerError?: Error) {
+        super(message || 'Object has been disposed.', innerError);
+        this.name = 'ObjectDisposedError';
     }
 }
 

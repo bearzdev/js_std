@@ -19,6 +19,7 @@ ctrl + / will comment code
 - bundlephobia.com <=
 - cloudcraft.co
 - <https://lucidscale.com/product/azure>
-- https://www.storyblocks.com/pricing
+- <https://www.storyblocks.com/pricing>
+- 
 
 flare

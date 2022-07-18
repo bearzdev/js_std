@@ -94,3 +94,23 @@ export function toCodePointArray(str: string): number[] {
 
     return set;
 }
+
+export function isNullOrWhiteSpace(str: string | null | undefined): boolean {
+    if(str === null || str === undefined)
+        return true;
+
+    for(let i = 0; i < str.length; i++) {
+        if(!Char.isWhiteSpaceAt(str, i))
+            return false;
+    }
+
+    return true;
+}
+
+export function isNullOrEmpty(str: string | null | undefined): boolean {
+    if(str === null || str === undefined)
+        return true;
+
+    return str.length === 0;
+}
+

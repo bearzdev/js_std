@@ -70,6 +70,12 @@ export class EnvironmentPath implements IEnvironmentPath {
         return this.#env.get(homeDataKey) || '';
     }
 
+    *[Symbol.iterator]() {
+        for (const path of this.value.split(pathSeparator)) {
+            yield path;
+        }
+    }
+
     has(path: string): boolean {
         return this.value.split(pathSeparator).includes(path);
     }

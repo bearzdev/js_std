@@ -9,6 +9,7 @@ export class Dictionary<TKey, TValue> extends Map<TKey, TValue> implements IDict
     constructor()
     {
         super(arguments);
+        // TODO: test and benchmark this against a full js implementation of a dictionary 
     }
 
 

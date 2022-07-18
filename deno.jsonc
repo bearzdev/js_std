@@ -20,10 +20,10 @@
     },
     "compilerOptions": {
         "lib": [
-            "deno.ns",
-            "deno.unstable",
             "dom",
-            "dom.iterable"
+            "dom.iterable",
+            "deno.ns",
+            "deno.unstable"
         ],
         "target": "es2021",
         "experimentalDecorators": true,

@@ -155,7 +155,7 @@ export class Char {
     }
 
     static isLetterOrDigitCodePoint(value: number): boolean {
-        return Char.isLetterCodePoint(value) ||
+        return isLetterCodePoint(value) ||
         Char.isDigitCodePoint(value);
     }
 

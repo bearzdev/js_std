@@ -643,6 +643,8 @@ export const {
     isFileAsync,
     move,
     moveAsync,
+    readDirectory,
+    readDirectoryAsync,
     readFile,
     readFileAsync,
     readTextFile,

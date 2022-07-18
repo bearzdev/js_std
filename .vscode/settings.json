@@ -6,9 +6,16 @@
     "deno.testing.enable": true,
     "deno.lint": true,
     "deno.unstable": true,
+    "deno.codeLens.references": true,
+
     "terminal.integrated.tabs.title": "${process}",
     "cSpell.words": [
         "Deno",
         "skippable"
+    ],
+    "deno.codeLens.testArgs": [
+        "--allow-all",
+        "--no-check",
+        "--unstable"
     ]
 }
