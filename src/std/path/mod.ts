@@ -10,6 +10,7 @@
  */
 
 import { isWindows, isDarwin, isDeno, isNode, globalScope } from "../runtime/mod.ts";
+export * from './separator.ts';
 import * as _win32 from "./win32.ts";
 import * as _posix from "./posix.ts";
 
@@ -66,6 +67,7 @@ export const filename = path2.basename;
 export const {
   basename,
   delimiter,
+
   dirname,
   extname,
   format,
