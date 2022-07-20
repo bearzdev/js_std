@@ -2,7 +2,6 @@ import { StringBuilder } from '../text/string-builder.ts';
 import { ArgumentError, ArgumentNullError } from '../errors/errors.ts';
 import type { IDisposable } from '../primitives/interfaces.ts';
 import type { IProcessCapture, IProcessResult, IProcessStartInfo } from './interfaces.ts';
-import { Char } from '../primitives/char.ts';
 
 
 // based on System.CommandLine.ArgumentStringSplitter
