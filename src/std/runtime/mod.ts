@@ -78,13 +78,18 @@ else if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== '
         default :
         break;
     }
+
+    const nOs = g.os;
+    if(osVersion === '' && nOs !== undefined) {
+        osVersion = nOs.release();
+    }
     
     re = {
         version: Version.parse(g.process.versions.node),
         engine: 'v8',
         runtime: 'node',
         mobile: platform === 'android',
-        osVersion: osVersion === '' ? g.os.release() : osVersion,
+        osVersion: osVersion,
         osFamily: platform,
         arch: g.process.arch,
         is64bitProcess: ['x64', 'x86_64', 'aarch64', 'arm64', 'ppc64', 's390x'].includes(g.process.arch),

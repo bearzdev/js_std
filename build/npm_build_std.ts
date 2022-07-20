@@ -20,14 +20,63 @@ function fromStd(path: string) {
 
 await emptyDir(`${moduleDir}/std`);
 
+Deno.chdir(std);
+
 
 await build({
+  mappings: {},
+  rootTestDir: std,
+
   entryPoints: [
     fromStd('mod.ts'),
     {
+      name: './errors',
+      path: fromStd('errors/mod.ts'),
+    },
+    {
+      name: './g11n',
+      path: fromStd('g11n/mod.ts'),
+    },
+    {
+      name: './random',
+      path: fromStd('random/mod.ts'),
+    },
+    {
+      name: './secrets',
+      path: fromStd('secrets/mod.ts'),
+    },
+    {
+      name: './templating',
+      path: fromStd('templating/mod.ts'),
+    },
+    {
+       name: './text/string-builder',
+        path: fromStd('text/string-builder.ts'),
+    },
+    {
+      name: './text/encoding/hex',
+      path: fromStd('text/encoding/hex.ts'),
+    },
+    {
+      name: './primitives/char',
+      path: fromStd('primitives/char.ts'),
+    },
+    {
+      name: './primitives/uuid',
+      path: fromStd('primitives/uuid.ts'),
+    },
+    {
+        name: './primitives/string-utils',
+        path: fromStd('primitives/string-utils.ts'),
+    },
+    {
       name: "./runtime",
       path: fromStd('runtime/mod.ts'),
-    }
+    },
+    {
+      name: "./path",
+      path: fromStd('path/mod.ts'),
+    },
   ],
   packageManager: 'yarn',
   outDir: `${moduleDir}/std`,
@@ -36,7 +85,7 @@ await build({
     lib: ['dom', 'dom.iterable', 'es2021'],
     sourceMap: true,
   },
-  'importMap': './import_mappings.json',
+  'importMap': `${root}/import_mappings.json`,
   shims: {
     // see JS docs for overview and more options
     deno: {

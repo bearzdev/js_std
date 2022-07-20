@@ -3,6 +3,7 @@
 // Ported from https://github.com/browserify/path-browserify/
 import { assertEquals } from "../deps.ts";
 import * as path from "./mod.ts";
+import { env } from '../env/mod.ts';
 
 const windowsTests =
   // arguments                               result
@@ -27,8 +28,8 @@ const posixTests =
   [
     [["/var/lib", "../", "file/"], "/var/file"],
     [["/var/lib", "/../", "file/"], "/file"],
-    [["a/b/c/", "../../.."], Deno.cwd()],
-    [["."], Deno.cwd()],
+    [["a/b/c/", "../../.."], env.currentDirectory],
+    [["."], env.currentDirectory],
     [["/some/dir", ".", "/absolute/"], "/absolute"],
     [["/foo/tmp.3/", "../tmp.3/cycles/root.js"], "/foo/tmp.3/cycles/root.js"],
   ];

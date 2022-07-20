@@ -25,6 +25,40 @@ export class Version {
         const [major, minor, build, revision] = version.split('.').map(Number);
         return new Version(major, minor, build, revision);
     }
+    equals() {
+        return this.compareTo(arguments[0]) === 0;
+    }
+    compareTo() {
+        if (arguments.length === 0)
+            throw new Error('compareTo expects at least 1 argument');
+        let other = arguments[0];
+        if (Object.is(this, other)) {
+            return 0;
+        }
+        if (typeof other === 'string') {
+            try {
+                other = Version.parse(other);
+            }
+            catch {
+                const str = this.toString();
+                if (str.length === other.length && str === other) {
+                    return 0;
+                }
+                if (str.length > other.length || str > other)
+                    return 1;
+                return -1;
+            }
+        }
+        if (__classPrivateFieldGet(this, _Version_major, "f") !== __classPrivateFieldGet(other, _Version_major, "f"))
+            return __classPrivateFieldGet(this, _Version_major, "f") > __classPrivateFieldGet(other, _Version_major, "f") ? 1 : -1;
+        if (__classPrivateFieldGet(this, _Version_minor, "f") !== __classPrivateFieldGet(other, _Version_minor, "f"))
+            return __classPrivateFieldGet(this, _Version_minor, "f") > __classPrivateFieldGet(other, _Version_minor, "f") ? 1 : -1;
+        if (__classPrivateFieldGet(this, _Version_build, "f") !== __classPrivateFieldGet(other, _Version_build, "f"))
+            return __classPrivateFieldGet(this, _Version_build, "f") > __classPrivateFieldGet(other, _Version_build, "f") ? 1 : -1;
+        if (__classPrivateFieldGet(this, _Version_revision, "f") !== __classPrivateFieldGet(other, _Version_revision, "f"))
+            return __classPrivateFieldGet(this, _Version_revision, "f") > __classPrivateFieldGet(other, _Version_revision, "f") ? 1 : -1;
+        return 0;
+    }
     get major() {
         return __classPrivateFieldGet(this, _Version_major, "f");
     }

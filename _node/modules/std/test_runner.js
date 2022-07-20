@@ -2,7 +2,25 @@ const chalk = require("chalk");
 const process = require("process");
 const { testDefinitions } = require("@deno/shim-deno-test");
 const filePaths = [
+    "dotenv/util_test.js",
+    "fmt/colors_test.js",
+    "path/basename_test.js",
+    "path/common_test.js",
+    "path/dirname_test.js",
+    "path/extname_test.js",
+    "path/from_file_url_test.js",
+    "path/glob_test.js",
+    "path/isabsolute_test.js",
+    "path/join_test.js",
+    "path/parse_format_test.js",
+    "path/relative_test.js",
+    "path/resolve_test.js",
+    "path/test.js",
+    "path/to_file_url_test.js",
+    "path/zero_length_strings_test.js",
     "runtime/mod_test.js",
+    "templating/mod_test.js",
+    "text/encoding/hex_test.js",
 ];
 async function main() {
     const testContext = {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERSION = exports.fail = exports.assertThrows = exports.assertRejects = exports.assertNotStrictEquals = exports.assertStrictEquals = exports.assertArrayIncludes = exports.assertStringIncludes = exports.assertNotMatch = exports.assertMatch = exports.assertInstanceOf = exports.assertFalse = exports.assertExists = exports.assertAlmostEquals = exports.assertNotEquals = exports.assertEquals = exports.assert = void 0;
+exports.fail = exports.assertThrows = exports.assertRejects = exports.assertNotStrictEquals = exports.assertStrictEquals = exports.assertArrayIncludes = exports.assertStringIncludes = exports.assertNotMatch = exports.assertMatch = exports.assertInstanceOf = exports.assertFalse = exports.assertExists = exports.assertAlmostEquals = exports.assertNotEquals = exports.assertEquals = exports.assert = void 0;
 var asserts_js_1 = require("./deps/deno.land/std@0.148.0/testing/asserts.js");
 Object.defineProperty(exports, "assert", { enumerable: true, get: function () { return asserts_js_1.assert; } });
 Object.defineProperty(exports, "assertEquals", { enumerable: true, get: function () { return asserts_js_1.assertEquals; } });
@@ -18,5 +18,4 @@ Object.defineProperty(exports, "assertNotStrictEquals", { enumerable: true, get:
 Object.defineProperty(exports, "assertRejects", { enumerable: true, get: function () { return asserts_js_1.assertRejects; } });
 Object.defineProperty(exports, "assertThrows", { enumerable: true, get: function () { return asserts_js_1.assertThrows; } });
 Object.defineProperty(exports, "fail", { enumerable: true, get: function () { return asserts_js_1.fail; } });
-exports.VERSION = '0.0.1';
 //# sourceMappingURL=deps.js.map

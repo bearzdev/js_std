@@ -1,6 +1,4 @@
 import { 
-    run, 
-    runAsync, 
     tmpDir, 
     randomFileName, 
     removeFileAsync, 

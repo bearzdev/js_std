@@ -156,6 +156,12 @@ class AssertContext {
     false(actual, message) {
         (0, deps_js_1.assertFalse)(actual, message);
     }
+    /**
+     * Asserts the actual value is not undefined or null.
+     *
+     * @param actual the value to test.
+     * @param message the failure message.
+     */
     hasValue(actual, message) {
         (0, deps_js_1.assert)(actual !== undefined || actual !== null, message ||
             `Actual is ${typeof (actual)} and is expected to be not null or undefined.`);

@@ -135,10 +135,14 @@ processRunner.runAsync = (context: IProcessInvocationContext): Promise<IProcessR
                 });
             });
 
-           process.on('exit', (code) => {
+           process.on('exit', (_) => {
                 stopWatch.stop();
+                let ec = process.exitCode;
+                if(ec === null)
+                    ec = 0; // default to 1?
+
                 const result = new ProcessResult({
-                    exitCode: code,
+                    exitCode: ec,
                     args: si.args,
                     fileName: si.fileName,
                     standardError: [],

@@ -134,6 +134,12 @@ export class AssertContext {
     false(actual, message) {
         assertFalse(actual, message);
     }
+    /**
+     * Asserts the actual value is not undefined or null.
+     *
+     * @param actual the value to test.
+     * @param message the failure message.
+     */
     hasValue(actual, message) {
         assert2(actual !== undefined || actual !== null, message ||
             `Actual is ${typeof (actual)} and is expected to be not null or undefined.`);

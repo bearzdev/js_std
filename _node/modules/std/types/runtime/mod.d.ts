@@ -1,14 +1,15 @@
+import "../_dnt.polyfills.js";
 import { Version } from './version.js';
-export declare type Engine = 'v8' | 'spidermonkey' | 'jsc' | 'chromium' | 'rhino' | 'unknown';
-export declare type Runtime = 'deno' | 'node' | 'browser' | 'electron' | 'unknown';
-export declare type Browser = 'chrome' | 'chromium' | 'edge' | 'firefox' | 'ie' | 'opera' | 'safari' | 'brave' | 'unknown';
-export interface IRuntimeEnvironment {
-    readonly version: Version;
-    readonly engine: Engine;
-    readonly runtime: Runtime;
-    readonly browser?: string;
-}
+import { globalScope } from './global.js';
+import type { IRuntimeEnvironment } from './interfaces.js';
+export * from './semantic-version.js';
+export * from './interfaces.js';
+export { Version, globalScope };
 export declare const runtimeInfo: IRuntimeEnvironment;
 export declare const isDeno: boolean;
 export declare const isNode: boolean;
 export declare const isBrowser: boolean;
+export declare const isWindows: boolean;
+export declare const isDarwin: boolean;
+export declare const isLinux: boolean;
+export declare const isMobile: boolean;

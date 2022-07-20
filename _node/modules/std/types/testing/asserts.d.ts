@@ -39,6 +39,12 @@ export declare class AssertContext {
     ok(actual: boolean, message?: string): void;
     true(actual: boolean, message?: string): void;
     false(actual: boolean, message?: string): void;
+    /**
+     * Asserts the actual value is not undefined or null.
+     *
+     * @param actual the value to test.
+     * @param message the failure message.
+     */
     hasValue(actual: unknown, message?: string): void;
     hasNoValue(actual: unknown, message?: string): void;
     truthy(actual: unknown, message?: string): void;

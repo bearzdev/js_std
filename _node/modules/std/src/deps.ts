@@ -18,4 +18,3 @@ export {
 } from './deps/deno.land/std@0.148.0/testing/asserts.js';
 
 
-export const VERSION = '0.0.1';

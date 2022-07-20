@@ -30,14 +30,47 @@ exports.testWhen = exports.test = void 0;
 const dntShim = __importStar(require("../_dnt.test_shims.js"));
 const asserts_js_1 = require("./asserts.js");
 __exportStar(require("./asserts.js"), exports);
+/**
+ * Register a test which will be run when `deno test` is used on the command line
+ * and the containing module looks like a test module. fn can be async if required.
+ *
+ * @param {string} name the test name.
+ * @param {(assert: AssertContext, t: any) => void | Promise<void>} fn The test case block.
+ *
+ * @example
+ *
+ * import { test } from 'https://deno.land/x/bearz_std@$BEARZ_VERSION/testing/mod.ts';
+ *
+ * test("demo: equals", (assert) => {
+ *   assert.equal("hello", "hello");
+ * });
+ */
+function test(name, 
 // deno-lint-ignore no-explicit-any
-function test(name, fn) {
+fn) {
     dntShim.Deno.test(name, (t) => {
         const assert = new asserts_js_1.AssertContext();
         fn(assert, t);
     });
 }
 exports.test = test;
+/**
+ * Registers a skippable test that may run when `deno test` is used on the command line
+ * and the containing module looks like a test module. fn can be async if required.
+ *
+ * @param {string} name the test name.
+ * @param {(assert: AssertContext, t: any) => void | Promise<void>} fn The test case block.
+ * @remarks
+ * This is useful for tests that may fail in some environments.
+ * @example
+ *
+ * import { test } from 'https://deno.land/x/bearz_std@$BEARZ_VERSION/testing/mod.ts';
+ *
+ * test("demo: equals", (assert) => {
+ *   assert.equal("hello", "hello");
+ * });
+ */
+// deno-lint-ignore no-explicit-any
 function testWhen(predicate, name, fn) {
     if (typeof predicate === 'function') {
         predicate = predicate();

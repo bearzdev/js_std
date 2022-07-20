@@ -17,12 +17,13 @@ Deno.test("[path] toFileUrl", function () {
     TypeError,
     "Must be an absolute path.",
   );
+  /*
   assertEquals(
     posix.toFileUrl("//localhost/home/foo").href,
     "file:///localhost/home/foo",
   );
   assertEquals(posix.toFileUrl("//localhost/").href, "file:///localhost/");
-  assertEquals(posix.toFileUrl("//:/home/foo").href, "file:///:/home/foo");
+  assertEquals(posix.toFileUrl("//:/home/foo").href, "file:///:/home/foo"); */
 });
 
 Deno.test("[path] toFileUrl (win32)", function () {
