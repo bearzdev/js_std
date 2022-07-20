@@ -4,89 +4,72 @@ import type { IDisposable } from '../primitives/interfaces.ts';
 import type { IProcessCapture, IProcessResult, IProcessStartInfo } from './interfaces.ts';
 import { Char } from '../primitives/char.ts';
 
-enum Boundary {
-    TokenStart = 0,
-    WordEnd = 1,
-    QuoteStart = 2,
-    QuoteEnd = 3,
-}
+
 // based on System.CommandLine.ArgumentStringSplitter
 export function splitArguments(value: string): string[] {
-    let startTokenIndex = 0;
-    let pos = 0;
-    let seeking = Boundary.TokenStart;
-    let seekingQuote = Boundary.QuoteStart;
-
-    const advance = () => pos++;
-    const indexOfEndToken = () => pos - startTokenIndex;
-    const isEol = () => pos == value.length;
-
-    const currentToken = () => value.slice(startTokenIndex, indexOfEndToken()).replace('"', '');
-
-    const results: string[] = [];
-
-    while (pos < value.length) {
-        const c = value[pos];
-        if (Char.isWhiteSpaceAt(value, pos)) {
-            if (seekingQuote === Boundary.QuoteStart) {
-                switch (seeking) {
-                    case Boundary.WordEnd:
-                        results.push(currentToken());
-                        startTokenIndex = pos;
-                        seekingQuote = Boundary.TokenStart;
-                        break;
-
-                    case Boundary.TokenStart:
-                        startTokenIndex = pos;
-                        break;
-                }
-            }
-        } else if (c === '"') {
-            if (seeking === Boundary.TokenStart) {
-                switch (seekingQuote) {
-                    case Boundary.QuoteEnd:
-                        results.push(currentToken());
-                        startTokenIndex = pos;
-                        seekingQuote = Boundary.QuoteStart;
-                        break;
-
-                    case Boundary.QuoteStart:
-                        startTokenIndex = pos + 1;
-                        seekingQuote = Boundary.QuoteEnd;
-                        break;
-                }
-            } else {
-                switch (seekingQuote) {
-                    case Boundary.QuoteEnd:
-                        seekingQuote = Boundary.QuoteStart;
-                        break;
-
-                    case Boundary.QuoteStart:
-                        seekingQuote = Boundary.QuoteEnd;
-                        break;
-                }
-            }
-        } else if (
-            seeking === Boundary.TokenStart &&
-            seekingQuote === Boundary.QuoteStart
-        ) {
-            seeking = Boundary.WordEnd;
-            startTokenIndex = pos;
-        }
-
-        advance();
-        if (isEol()) {
-            switch (seeking) {
-                case Boundary.TokenStart:
-                    break;
-                default:
-                    results.push(currentToken());
-                    break;
-            }
-        }
+    
+    enum Quote {
+        None = 0,
+        Single = 1,
+        Double = 2,
     }
 
-    return results;
+    let token = "";
+    let quote = Quote.None;
+    const tokens = [];
+
+    for(let i = 0; i < value.length; i++) {
+        const c = value[i];
+
+        if(quote > Quote.None) {
+            if(quote === Quote.Single && c === '\'') {
+                quote = Quote.None;
+                token += c;
+                tokens.push(token);
+                token = "";
+                continue;
+            } else if(quote === Quote.Double && c === '"') {
+                quote = Quote.None;
+                token += c;
+                tokens.push(token);
+                token = "";
+                continue;
+            }
+            
+            token += c;
+            continue;
+        }
+
+        if(c === ' ') {
+            if(token.length > 0) {
+                tokens.push(token);
+                token = "";
+            }
+            continue;
+        }
+
+        if(token.length === 0) {
+            if(c === '\'') {
+                quote = Quote.Single;
+                token += c;
+                continue;
+            }
+            if(c === '"') {
+                quote = Quote.Double;
+                token += c;
+                continue;
+            }
+        }
+
+        token += c;
+    }
+
+    if(token.length > 0) {
+        tokens.push(token);
+    }
+
+
+    return tokens;
 }
 
 export type {
@@ -191,7 +174,7 @@ export class WritableStreamCapture extends ProcessCapture implements IProcessCap
 }
 
 export class ProcessArgs extends Array<string> {
-    constructor(...args: string[]) {
+    constructor(args: string[] = []) {
         super(...args);
     }
 
@@ -203,31 +186,36 @@ export class ProcessArgs extends Array<string> {
         if (arguments.length === 1) {
             const first = arguments[0];
             if (typeof first === 'string') {
-                return new ProcessArgs(...splitArguments(first));
+                console.log('first', first);
+                const args = splitArguments(first);
+                console.log('args', args);
+                super.push(...args);
+                return this;
             }
 
             if (first instanceof ProcessArgs) {
-                return first;
+                super.push(...first);
+                return this;
             }
 
             if (first instanceof StringBuilder) {
-                return new ProcessArgs(...splitArguments(first.toString()));
+                super.push(...splitArguments(first.toString()))
+                return this;
             }
 
             if (Array.isArray(first)) {
-                const args = new ProcessArgs();
-                args.push(...first);
-                return args;
+                this.push(...first);
+                return this;
             }
 
             if (Object.prototype.toString.call(first) === '[object Object]') {
-                const args = new ProcessArgs();
+             
                 Object.keys(first).forEach((key) => {
-                    args.push(key);
-                    args.push(first[key]);
+                    super.push(key);
+                    super.push(first[key]);
                 });
 
-                return args;
+                return this;
             }
 
             throw new TypeError(`Cannot convert ${first} to ProcessArgs`);
@@ -239,13 +227,13 @@ export class ProcessArgs extends Array<string> {
     }
 
     override push(...args: string[]) {
-        const set: string[] = [];
+        let count = 0;
         args.forEach((arg) => {
             const next = splitArguments(arg);
-            set.push(...next);
+            count += super.push(...next);
         });
 
-        return super.push(...set);
+        return count;
     }
 
     static from(value: string): ProcessArgs;
@@ -253,9 +241,7 @@ export class ProcessArgs extends Array<string> {
     static from(value: StringBuilder): ProcessArgs;
     static from(value: ProcessArgs): ProcessArgs;
     static from(): ProcessArgs {
-        const args = new ProcessArgs();
-        args.append(...arguments);
-        return args;
+        return new ProcessArgs().append(...arguments);
     }
 }
 

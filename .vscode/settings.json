@@ -10,6 +10,7 @@
 
     "terminal.integrated.tabs.title": "${process}",
     "cSpell.words": [
+        "choco",
         "Deno",
         "skippable"
     ],

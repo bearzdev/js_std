@@ -1,7 +1,7 @@
 import { cancelAfter } from "../async/cancellation-token.ts";
 import { notNullOrWhiteSpace } from "../errors/check.ts";
 import { ArgumentNullError } from "../errors/errors.ts";
-import { ProcessError } from "./errors.ts";
+import { ProcessError, NotFoundOnPathError } from "./errors.ts";
 import type { 
     IProcessInvocationOptions, 
     IProcessStartInfo, 
@@ -9,7 +9,7 @@ import type {
     IProcessInvocationContext, 
     IProcessCapture,
 } from "./interfaces.ts";
-import { ProcessStartInfo, ArrayCapture, ProcessCapture } from "./start-info.ts";
+import { ProcessStartInfo, ArrayCapture, ProcessCapture, ProcessArgs, } from "./start-info.ts";
 import { 
     pathFinder, 
     findExecutable, 
@@ -27,41 +27,12 @@ import {
 
 import { processRunner } from "./base.deno.ts";
 
-function map(startInfo: ProcessStartInfo,  options?: IProcessInvocationOptions) {
-    if (options) {
-        if (options?.workingDirectory) {
-            startInfo.workingDirectory = options.workingDirectory;
-        }
-        if (options?.env) {
-            startInfo.env = options.env;
-        }
-        if (options.outCaptures) {
-            startInfo.outCaptures = options.outCaptures;
-        }
-        if (options.errorCaptures) {
-            startInfo.errorCaptures = options.errorCaptures;
-        }
-        if (options.timeout) {
-            startInfo.timeout = options.timeout;
-        }
-        if (options.userId) {
-            startInfo.userId = options.userId;
-        }
-        if (options.groupId) {
-            startInfo.groupId = options.groupId;
-        }
-        if (options.signal) {
-            startInfo.signal = options.signal;
-        }
-    }
-
-    return startInfo;
-}
 
 function createStartInfo(fileName: string, args?: string[], options?: IProcessInvocationOptions): ProcessStartInfo {
-    const startInfo = new ProcessStartInfo(fileName, ...(args || []));
-
-    map(startInfo, options);
+    options ||= {};
+    options.fileName = fileName;
+    options.args = args;
+    const startInfo = new ProcessStartInfo(options);
 
     return startInfo;
 }
@@ -123,8 +94,7 @@ export default class Process {
     }
 
     static captureScript(script: string, shell?: string, options?: IProcessInvocationOptions) : IProcessResult {
-        const startInfo = new ProcessStartInfo();
-        map(startInfo, options);
+        const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = processRunner.resolveShellScript(script, shell, startInfo);
         const process = new Process(startInfo);
         try {
@@ -142,8 +112,7 @@ export default class Process {
     }
 
     static async captureScriptAsync(script: string, shell?: string, options?: IProcessInvocationOptions) : Promise<IProcessResult> {
-        const startInfo = new ProcessStartInfo();
-        map(startInfo, options);
+        const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = await processRunner.resolveShellScriptAsync(script, shell, startInfo);
         const process = new Process(startInfo);
         try {
@@ -164,7 +133,14 @@ export default class Process {
         notNullOrWhiteSpace(fileName, 'fileName');
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
-        const result = process.run();
+        let result: IProcessResult;
+        if(options?.capture) {
+            result = process.capture();
+        } else if(options?.tee) {
+            result = process.tee();
+        } else {
+            result = process.run();
+        }
 
         const validator = options?.exitCodeValidator || ((code) => code === 0);
         if (!validator(result.exitCode)) {
@@ -179,8 +155,14 @@ export default class Process {
 
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
-        const result = await process.run();
-
+        let result: IProcessResult;
+        if(options?.capture) {
+            result = await process.captureAsync();
+        } else if(options?.tee) {
+            result = await process.teeAsync();
+        } else {
+            result = await process.runAsync();
+        }
         const validator = options?.exitCodeValidator || ((code) => code === 0);
         if (!validator(result.exitCode)) {
             throw new ProcessError(fileName, result.exitCode);
@@ -190,8 +172,7 @@ export default class Process {
     }
 
     static runScript(script: string, shell?: string, options?: IProcessInvocationOptions) : IProcessResult {
-        const startInfo = new ProcessStartInfo();
-        map(startInfo, options);
+        const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = processRunner.resolveShellScript(script, shell, startInfo);
         const process = new Process(startInfo);
         try {
@@ -209,8 +190,7 @@ export default class Process {
     }
 
     static async runScriptAsync(script: string, shell?: string, options?: IProcessInvocationOptions) : Promise<IProcessResult> {
-        const startInfo = new ProcessStartInfo();
-        map(startInfo, options);
+        const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = await processRunner.resolveShellScriptAsync(script, shell, startInfo);
         const process = new Process(startInfo);
         try {
@@ -284,6 +264,7 @@ export default class Process {
     run(): IProcessResult;
     run(): IProcessResult {
         let fileName = this.startInfo.fileName;
+        notNullOrWhiteSpace(fileName, 'startInfo.fileName');
         fileName = pathFinder.findOrThrow(fileName);
         this.startInfo.fileName = fileName;
 
@@ -315,6 +296,7 @@ export default class Process {
     runAsync(): Promise<IProcessResult>;
     runAsync(): Promise<IProcessResult> {
         let fileName = this.startInfo.fileName;
+        notNullOrWhiteSpace(fileName, 'startInfo.fileName');
         fileName = pathFinder.findOrThrow(fileName);
         this.startInfo.fileName = fileName;
 
@@ -431,6 +413,13 @@ export const {
 
 export { 
     pathFinder,
+    IProcessStartInfo,
+    IProcessCapture,
+    IProcessInvocationOptions,
+    IProcessResult,
+    ProcessArgs,
+    ProcessError,
+    NotFoundOnPathError,
     findExecutable,
     findExecutableAsync,
     findExecutableOrThrow,
@@ -441,3 +430,5 @@ export {
     which, 
     whichAsync,   
 };
+
+export const fromArgs = ProcessArgs.from;

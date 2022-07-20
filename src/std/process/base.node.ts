@@ -5,6 +5,7 @@ import { ProcessResult } from "./start-info.ts";
 import { writeCommand } from './write-command.ts';
 import * as child_process from "https://deno.land/std@0.147.0/node/child_process.ts";
 import { TimeoutError } from "../errors/errors.ts";
+import { notNullOrWhiteSpace } from "../errors/check.ts";
 
 processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
 // deno doesn't currently have a polyfill for child_process.spawnSync
@@ -22,6 +23,8 @@ processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
         }
 
         const si = context.startInfo;
+        notNullOrWhiteSpace(si.fileName, 'fileName');
+        si.args = si.args || [];
         const stdoutType = context.outCaptures.length > 0 ? 'pipe' : 'inherit';
         const stderrType = context.errorCaptures.length > 0 ? 'pipe' : 'inherit';
         const { outCaptures, errorCaptures } = context;
@@ -76,6 +79,8 @@ processRunner.runAsync = (context: IProcessInvocationContext): Promise<IProcessR
     return new Promise<ProcessResult>((resolve, reject) => {
 
         const si = context.startInfo;
+        notNullOrWhiteSpace(si.fileName, 'fileName');
+        si.args = si.args || [];
         const stdoutType = context.outCaptures.length > 0 ? 'pipe' : 'inherit';
         const stderrType = context.errorCaptures.length > 0 ? 'pipe' : 'inherit';
         const { outCaptures, errorCaptures } = context;

@@ -1,4 +1,5 @@
 import { StopWatch } from "../diagnostics/stop-watch.ts";
+import { notNullOrWhiteSpace } from "../errors/check.ts";
 import  { processRunner } from './base.ts';
 import type { IProcessInvocationContext, IProcessResult } from "./interfaces.ts";
 import { ProcessResult } from "./start-info.ts";
@@ -6,6 +7,8 @@ import { writeCommand } from './write-command.ts';
 
 processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
     const si = context.startInfo;
+    notNullOrWhiteSpace(si.fileName, 'startInfo.fileName');
+    si.args = si.args || [];
     const stdoutType = context.outCaptures.length > 0 ? 'piped' : 'inherit';
     const stderrType = context.errorCaptures.length > 0 ? 'piped' : 'inherit';
     const stopWatch = new StopWatch();
@@ -58,6 +61,8 @@ processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
 
 processRunner.runAsync = async (context: IProcessInvocationContext): Promise<IProcessResult> => {
     const si = context.startInfo;
+    notNullOrWhiteSpace(si.fileName, 'startInfo.fileName');
+    si.args = si.args || [];
     const stdoutType = context.outCaptures.length > 0 ? 'piped' : 'inherit';
     const stderrType = context.errorCaptures.length > 0 ? 'piped' : 'inherit';
     const { outCaptures, errorCaptures } = context;

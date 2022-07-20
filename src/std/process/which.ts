@@ -310,9 +310,9 @@ export function registerExecutable(
 }
 
 export function findExecutable(name: string, prependPaths?: string[], env: IEnvironment = envDefault, registry = globalRegistry): string | undefined {
-    const entry = registry[name];
+    let entry = registry[name];
         if (!entry) {
-            registry[name] = {
+            entry = registry[name] = {
                 name: name,
                 executableName: name,
             }

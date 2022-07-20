@@ -17,11 +17,11 @@ export interface IProcessResult {
 
 export interface IProcessStartInfo {
     env?: { [key: string]: string };
-    args: string[];
+    args?: string[];
     workingDirectory?: string;
     userId?: number;
     groupId?: number;
-    fileName: string;
+    fileName?: string;
     outCaptures?: IProcessCapture[];
     errorCaptures?: IProcessCapture[];
     timeout?: number;
@@ -60,6 +60,10 @@ export interface IAsyncShellScriptResolver {
 }
 
 export interface IProcessInvocationOptions extends IProcessStartInfo {
+    capture?: boolean;
+
+    tee?: boolean;
+
     exitCodeValidator?: (exitCode: number) => boolean;
 }
 
