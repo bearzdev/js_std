@@ -1,6 +1,4 @@
 import { 
-    run, 
-    runAsync, 
     tmpDir, 
     randomFileName, 
     removeFileAsync, 
@@ -10,28 +8,39 @@ import {
     writeFile, 
     removeFile, 
     writeFileAsync, 
-    registerExecutable 
+    registerExecutable, 
+    CommandBuilder,
 } from '../deps.ts';
 
-// C:\Program Files\Git\cmd\git.exe
-// C:\Program Files\Git\usr\bin
+import { exec, execAsync } from "../util/_exec.ts";
+
+const exe = 'bash';
+
+export function bash(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function bash(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function bash(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function bash(): IProcessResult {
+    return exec(exe, arguments[0], arguments[1]);
+}
+
+export function bashAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function bashAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function bashAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function bashAsync(): Promise<IProcessResult> {
+    return execAsync(exe, arguments[0], arguments[1]);
+}
+
+// C:\Program Files\bash\cmd\bash.exe
+// C:\Program Files\bash\usr\bin
 registerExecutable('bash', 'bash', {
     windows: [
         "%SystemRoot%\\System32\\bash.exe",
-        "%ProgramFiles%\\Git\\user\\bin\\bash.exe",
+        "%ProgramFiles%\\bash\\user\\bin\\bash.exe",
         "%ChocolateyInstall%\\msys2\\usr\\bin\\bash.exe",
         "%SystemDrive%\\msys64\\usr\\bin\\bash.exe",
         "%SystemDrive%\\msys\\usr\\bin\\bash.exe",
     ]
 });
-
-export function bash(args: string[] = [], options?: IProcessInvocationOptions): IProcessResult {
-    return run('bash', args, options);
-}
-
-export function bashAsync(args: string[] = [], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    return runAsync('bash', args, options);
-}
 
 export function bashScript(script: string, options?: IProcessInvocationOptions): IProcessResult {
     let fileName  = '';

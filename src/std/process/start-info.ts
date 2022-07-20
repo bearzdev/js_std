@@ -41,12 +41,51 @@ export function splitArguments(value: string): string[] {
         }
 
         if(c === ' ') {
+            const remaining = (value.length - 1) - i;
+            if(remaining > 2) {
+
+                // if the line ends with characters that normally allow for scripts with multiline
+                // statements, consume token and skip characters.
+                // ' \\\n'
+                // ' \\\r\n'
+                // ' `\n'
+                // ' `\r\n'
+                const j = value[i + 1];
+                const k = value[i + 2];
+                if(j === '\'' || j === '`') 
+                {
+                    if(k === '\n')
+                    {
+                        i += 2;
+                        if(token.length > 0)
+                            tokens.push(token);
+                        token = "";
+                        continue;
+                    }
+                    
+                    if(remaining > 3)
+                    {
+                        const l = value[i + 3];
+                        if(k === '\r' && l === '\n')
+                        {
+                            i += 3;
+                            if(token.length > 0)
+                                tokens.push(token);
+                            token = "";
+                            continue;
+                        }
+                    }
+                }
+                continue;
+            }
             if(token.length > 0) {
                 tokens.push(token);
                 token = "";
             }
             continue;
         }
+
+        
 
         if(token.length === 0) {
             if(c === '\'') {
@@ -242,6 +281,82 @@ export class ProcessArgs extends Array<string> {
     static from(value: ProcessArgs): ProcessArgs;
     static from(): ProcessArgs {
         return new ProcessArgs().append(...arguments);
+    }
+}
+
+export class CommandBuilder {
+    #parameters: ProcessArgs; 
+    
+
+    constructor()
+    {
+        this.#parameters = new ProcessArgs();
+    }
+
+    addArgument(value: number) : this
+    addArgument(value: string) : this
+    addArgument() : this {
+        const first = arguments[0];
+        if(typeof first === 'string') {
+            this.#parameters.push(first);
+            return this;
+        }
+
+        if(typeof first === 'number') {
+            this.#parameters.push(first.toString());
+            return this;
+        }
+
+        throw new TypeError(`Cannot convert ${first} to string`);
+    }
+
+    addOption(name: string, value: number) : this
+    addOption(name: string, value: boolean) : this 
+    addOption(name: string, value: string) : this 
+    addOption() : this {
+        if(arguments.length != 2) {
+            throw new ArgumentError(
+                `CommandBuilder.addOption() takes 2 arguments, but got ${arguments.length}`,
+            );
+        }
+
+        const name = arguments[0] as string;
+        const value = arguments[1];
+
+        if(typeof name !== 'string') {
+            throw new TypeError(`Cannot convert ${name} to string`);
+        }
+
+        if(typeof value === 'string') {
+            this.#parameters.push(name, value);
+            return this;
+        }
+
+        if(typeof value === 'number') {
+            this.#parameters.push(name, value.toString());
+            return this;
+        }
+
+        if(typeof value === 'boolean') {
+            this.#parameters.push(name);
+            return this;
+        }
+
+        throw new TypeError(`Argument value type is not supported ${typeof(value)}`);
+    }
+    
+    build(): string[]
+    {
+        return this.#parameters;
+    }
+
+    valueOf() {
+        return this.#parameters;
+    }
+
+    toString() 
+    {
+        return this.#parameters.join(' ');
     }
 }
 

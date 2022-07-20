@@ -1,11 +1,28 @@
 import { VisualStudioVersion, VisualStudioEditions } from './enums.ts'
 import { 
-    run,
-    runAsync,
     registerExecutable, 
     IProcessInvocationOptions,
     IProcessResult,
+    CommandBuilder,
 } from '../deps.ts'
+
+import { exec, execAsync } from "../util/_exec.ts";
+
+const exe = 'dotnet';
+
+export function dotnet(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function dotnet(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function dotnet(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function dotnet(): IProcessResult {
+    return exec(exe, arguments[0], arguments[1]);
+}
+
+export function dotnetAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function dotnetAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function dotnetAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function dotnetAsync(): Promise<IProcessResult> {
+    return execAsync(exe, arguments[0], arguments[1]);
+}
 
 
 registerExecutable('dotnet', 'dotnet.exe', {
@@ -49,20 +66,32 @@ export function getVisualStudioEditionArgs(edition: VisualStudioEditions): strin
     return args;
 }
 
-export function nuget(args?: string[], options?: IProcessInvocationOptions): IProcessResult {
-    return run("nuget", args, options);
+export function nuget(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function nuget(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function nuget(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function nuget(): IProcessResult {
+    return exec('nuget', arguments[0], arguments[1]);
 }
 
-export function nugetAsync(args?: string[], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    return runAsync("nuget", args, options);
+export function nugetAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function nugetAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function nugetAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function nugetAsync(): Promise<IProcessResult> {
+    return execAsync('nuget', arguments[0], arguments[1]);
 }
 
-export function vsWhere(args?: string[], options?: IProcessInvocationOptions): IProcessResult {
-    return run('vswhere', args, options);
+export function vsWhere(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function vsWhere(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function vsWhere(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function vsWhere(): IProcessResult {
+    return exec('vsWhere', arguments[0], arguments[1]);
 }
 
-export function vsWhereAsync(args?: string[], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    return runAsync('vswhere', args, options);
+export function vsWhereAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function vsWhereAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function vsWhereAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function vsWhereAsync(): Promise<IProcessResult> {
+    return execAsync('vsWhere', arguments[0], arguments[1]);
 }
 
 export function findMsBuild(
@@ -122,37 +151,35 @@ export function findVsTest( edition: VisualStudioEditions = VisualStudioEditions
     return '';
 }
 
-export function vsTest(args?: string[], options?: IProcessInvocationOptions): IProcessResult {
-    const p = vsTest.path;
-    return run(p, args, options);
+export function vsTest(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function vsTest(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function vsTest(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function vsTest(): IProcessResult {
+    return exec(vsTest.path, arguments[0], arguments[1]);
 }
 
-export function vsTestAsync(args?: string[], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    const p = vsTestAsync.path;
-    return runAsync(p, args, options);
+export function vsTestAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function vsTestAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function vsTestAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function vsTestAsync(): Promise<IProcessResult> {
+    return execAsync(vsTestAsync.path, arguments[0], arguments[1]);
 }
 
 vsTest.path = 'vstest.console.exe';
 vsTestAsync.path = 'vstest.console.exe';
 
-export function msBuild(args: string[], options?: IProcessInvocationOptions): IProcessResult {
-    const p = msBuild.path;
-    return run(p, args || [], options);
+export function msBuild(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function msBuild(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function msBuild(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function msBuild(): IProcessResult {
+    return exec(msBuild.path, arguments[0], arguments[1]);
 }
 
-export function msBuildAsync(args: string[], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    const p = msBuildAsync.path;
-
-    return runAsync(p, args, options);
+export function msBuildAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function msBuildAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function msBuildAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function msBuildAsync(): Promise<IProcessResult> {
+    return execAsync(msBuildAsync.path, arguments[0], arguments[1]);
 }
-
 msBuild.path = 'msbuild'
 msBuildAsync.path = 'msbuild'
-
-export function dotnet(args?: string[], options?: IProcessInvocationOptions): IProcessResult {
-    return run('dotnet', args, options);
-}
-
-export function dotnetAsync(args?: string[], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    return runAsync('dotnet', args, options);
-}

@@ -67,6 +67,10 @@ export interface IProcessInvocationOptions extends IProcessStartInfo {
     exitCodeValidator?: (exitCode: number) => boolean;
 }
 
+export interface IParameterBuilder {
+    build() : string[]
+}
+
 export interface IProcessRunner {
     run(context: IProcessInvocationContext): IProcessResult
 

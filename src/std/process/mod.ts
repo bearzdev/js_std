@@ -8,8 +8,9 @@ import type {
     IProcessResult, 
     IProcessInvocationContext, 
     IProcessCapture,
+IParameterBuilder,
 } from "./interfaces.ts";
-import { ProcessStartInfo, ArrayCapture, ProcessCapture, ProcessArgs, } from "./start-info.ts";
+import { ProcessStartInfo, ArrayCapture, ProcessCapture, ProcessArgs, CommandBuilder, } from "./start-info.ts";
 import { 
     pathFinder, 
     findExecutable, 
@@ -417,6 +418,8 @@ export {
     IProcessCapture,
     IProcessInvocationOptions,
     IProcessResult,
+    IParameterBuilder,
+    CommandBuilder,
     ProcessArgs,
     ProcessError,
     NotFoundOnPathError,

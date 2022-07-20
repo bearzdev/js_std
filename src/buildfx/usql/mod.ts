@@ -1,9 +1,21 @@
-import { env, IProcessInvocationOptions, IProcessResult, registerExecutable, run } from '../deps.ts'
+import { CommandBuilder, IProcessInvocationOptions, IProcessResult, run } from '../deps.ts'
 
-registerExecutable('usql', 'usql');
+import { exec, execAsync } from "../util/_exec.ts";
 
-export function usql(args?: string[], options?: IProcessInvocationOptions): IProcessResult {
-    return run('usql', args, options);
+const exe = 'usql';
+
+export function usql(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function usql(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function usql(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function usql(): IProcessResult {
+    return exec(exe, arguments[0], arguments[1]);
+}
+
+export function usqlAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function usqlAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function usqlAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function usqlAsync(): Promise<IProcessResult> {
+    return execAsync(exe, arguments[0], arguments[1]);
 }
 
 // deno-lint-ignore no-explicit-any

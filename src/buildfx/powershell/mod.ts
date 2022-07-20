@@ -1,6 +1,4 @@
 import { 
-    run,
-    runAsync,
     tmpDir,
     randomFileName,
     removeFileAsync,
@@ -11,22 +9,25 @@ import {
     writeFile,
     removeFile,
     writeFileAsync, 
-    PlatformNotSupportedError 
+    CommandBuilder,
 } from '../deps.ts';
 
+import { exec, execAsync } from "../util/_exec.ts";
 
-export function powershell(args: string[] = [], options?: IProcessInvocationOptions): IProcessResult {
-    if(!isWindows) 
-        throw new PlatformNotSupportedError('powershell is only supported on windows.');
+const exe = isWindows ? 'powershell' : 'pwsh';
 
-    return run('powershell', args, options);
+export function powershell(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function powershell(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function powershell(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function powershell(): IProcessResult {
+    return exec(exe, arguments[0], arguments[1]);
 }
 
-export function powershellAsync(args: string[] = [], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    if(!isWindows) 
-        throw new PlatformNotSupportedError('powershell is only supported on windows.');
-
-    return runAsync('powershell', args, options);
+export function powershellAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function powershellAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function powershellAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function powershellAsync(): Promise<IProcessResult> {
+    return execAsync(exe, arguments[0], arguments[1]);
 }
 
 export function powershellScript(script: string, options?: IProcessInvocationOptions): IProcessResult {

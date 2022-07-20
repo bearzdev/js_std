@@ -1,6 +1,4 @@
 import { 
-    run, 
-    runAsync, 
     tmpDir, 
     randomFileName, 
     removeFileAsync, 
@@ -11,9 +9,27 @@ import {
     writeFile, 
     removeFile, 
     writeFileAsync, 
-    registerExecutable 
+    registerExecutable, 
+    CommandBuilder,
 } from '../deps.ts';
 
+import { exec, execAsync } from "../util/_exec.ts";
+
+const exe = 'pwsh';
+
+export function pwsh(args: string, options?: IProcessInvocationOptions) : IProcessResult
+export function pwsh(args: string[], options?: IProcessInvocationOptions) : IProcessResult
+export function pwsh(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult
+export function pwsh(): IProcessResult {
+    return exec(exe, arguments[0], arguments[1]);
+}
+
+export function pwshAsync(args: string, options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function pwshAsync(args: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult>
+export function pwshAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>
+export function pwshAsync(): Promise<IProcessResult> {
+    return execAsync(exe, arguments[0], arguments[1]);
+}
 
 registerExecutable('pwsh', 'pwsh', {
     windows: [
@@ -23,14 +39,6 @@ registerExecutable('pwsh', 'pwsh', {
         "%ProgramFiles(x86)%/PowerShell/6/pwsh.exe",
     ]
 });
-
-export function pwsh(args: string[] = [], options?: IProcessInvocationOptions): IProcessResult {
-    return run('pwsh', args, options);
-}
-
-export function pwshAsync(args: string[] = [], options?: IProcessInvocationOptions): Promise<IProcessResult> {
-    return runAsync('pwsh', args, options);
-}
 
 export function pwshScript(script: string, options?: IProcessInvocationOptions): IProcessResult {
     let fileName  = '';

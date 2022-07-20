@@ -12,7 +12,10 @@
     "cSpell.words": [
         "choco",
         "Deno",
-        "skippable"
+        "kubectl",
+        "pwsh",
+        "skippable",
+        "usql"
     ],
     "deno.codeLens.testArgs": [
         "--allow-all",
