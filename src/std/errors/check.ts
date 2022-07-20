@@ -39,5 +39,6 @@ export function expression(expression: unknown, message?: string): asserts expre
 export const check = {
     expression,
     notNull,
-    notEmpty
+    notEmpty,
+    notNullOrWhiteSpace,
 }

@@ -1,7 +1,7 @@
 import { Version } from './version.ts';
 import { globalScope } from './global.ts';
 import type { IRuntimeEnvironment, Browser, Engine, RuntimeArch } from './interfaces.ts';
-export * from './semantic_version.ts';
+export * from './semantic-version.ts';
 export * from './interfaces.ts';
 
 export { Version, globalScope }

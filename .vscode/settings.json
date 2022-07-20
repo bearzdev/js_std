@@ -14,8 +14,11 @@
         "Deno",
         "kubectl",
         "pwsh",
+        "qunit",
         "skippable",
-        "usql"
+        "SOURCESDIRECTORY",
+        "usql",
+        "winget"
     ],
     "deno.codeLens.testArgs": [
         "--allow-all",
