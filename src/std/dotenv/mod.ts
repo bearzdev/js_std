@@ -9,6 +9,7 @@ import { env } from "../env/mod.ts";
 import { readFile, readFileAsync, FileNotFoundError } from "../fs/mod.ts";
 import { difference, removeEmptyValues } from "./util.ts";
 
+const env2 = env;
  export interface DotenvConfig {
    [key: string]: string;
  }
@@ -58,7 +59,7 @@ import { difference, removeEmptyValues } from "./util.ts";
    }
 
    //https://github.com/motdotla/dotenv-expand/blob/ed5fea5bf517a09fd743ce2c63150e88c8a5f6d1/lib/main.js#L23
-   const variablesMap = { ...env, ...Deno.env.toObject() };
+   const variablesMap = { ...env, ...env2.vars.toObject() };
    keysForExpandCheck.forEach((key) => {
      env[key] = expand(env[key], variablesMap);
    });
@@ -75,7 +76,7 @@ import { difference, removeEmptyValues } from "./util.ts";
    defaults: `.env.defaults`,
  };
 
- export function configSync(options: ConfigOptions = {}): DotenvConfig {
+ export function config(options: ConfigOptions = {}): DotenvConfig {
    const o: Required<ConfigOptions> = { ...defaultConfigOptions, ...options };
 
    const conf = parseFile(o.path);
@@ -104,7 +105,7 @@ import { difference, removeEmptyValues } from "./util.ts";
    return conf;
  }
 
- export async function config(
+ export async function configAsync(
    options: ConfigOptions = {},
  ): Promise<DotenvConfig> {
    const o: Required<ConfigOptions> = { ...defaultConfigOptions, ...options };

@@ -112,7 +112,7 @@ export class DenoStdReader extends StdReader {
                 return str;
             }
 
-            this.#sb += this.#decoder.decode(this.#buffer.slice(0, read));;
+            this.#sb += this.#decoder.decode(this.#buffer.slice(0, read));
         }
     }
 
@@ -157,7 +157,7 @@ export class DenoStdReader extends StdReader {
                 return str;
             }
 
-            this.#sb += this.#decoder.decode(this.#buffer.slice(0, read));;
+            this.#sb += this.#decoder.decode(this.#buffer.slice(0, read));
         }
     }
 

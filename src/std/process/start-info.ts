@@ -24,13 +24,11 @@ export function splitArguments(value: string): string[] {
         if(quote > Quote.None) {
             if(quote === Quote.Single && c === '\'') {
                 quote = Quote.None;
-                token += c;
                 tokens.push(token);
                 token = "";
                 continue;
             } else if(quote === Quote.Double && c === '"') {
-                quote = Quote.None;
-                token += c;
+                quote = Quote.None;  
                 tokens.push(token);
                 token = "";
                 continue;
@@ -76,26 +74,24 @@ export function splitArguments(value: string): string[] {
                         }
                     }
                 }
-                continue;
             }
+
+
             if(token.length > 0) {
                 tokens.push(token);
                 token = "";
             }
             continue;
         }
-
-        
+    
 
         if(token.length === 0) {
             if(c === '\'') {
                 quote = Quote.Single;
-                token += c;
                 continue;
             }
             if(c === '"') {
                 quote = Quote.Double;
-                token += c;
                 continue;
             }
         }
@@ -212,9 +208,22 @@ export class WritableStreamCapture extends ProcessCapture implements IProcessCap
     }
 }
 
+const collapseArgs  = (parameters: IArguments) : string[] => {
+    if(parameters === undefined || parameters.length === 0)
+        return [];
+    if(parameters.length === 1 && Array.isArray(parameters[0])) {
+        return parameters[0];
+    }
+
+    return [...parameters] as string[];
+}
+
 export class ProcessArgs extends Array<string> {
-    constructor(args: string[] = []) {
-        super(...args);
+
+    constructor(args: string[])
+    constructor(...args: string[])
+    constructor() {
+        super(...collapseArgs(arguments));
     }
 
     append(value: string): ProcessArgs;
@@ -225,9 +234,7 @@ export class ProcessArgs extends Array<string> {
         if (arguments.length === 1) {
             const first = arguments[0];
             if (typeof first === 'string') {
-                console.log('first', first);
                 const args = splitArguments(first);
-                console.log('args', args);
                 super.push(...args);
                 return this;
             }

@@ -1,6 +1,5 @@
-import { bash } from './mod.ts';
+import { bash, bashScript } from './mod.ts';
 import { test} from '../dev_deps.ts';
-import { ProcessArgs } from "../../std/process/start-info.ts";
 
 
 test("bash: invoke", (assert) => {
@@ -11,9 +10,13 @@ test("bash: invoke", (assert) => {
 })
 
 test("bash: invoke capture", (assert) => {
-    const args = ProcessArgs.from("-c echo \"hello\"");
-    console.log(args, args.length);
-    const result = bash(['-c', "echo \"hello\""], { capture: true });
+    const result = bash(`-c  'echo "Hello"'`, { capture: true });
     assert.equal(0, result.exitCode);
-    assert.equal("hello", result.standardOut.join(''));
+    assert.equal("Hello", result.standardOut.join(''));
+})
+
+test("baseScript: capture", (assert) => {
+    const result = bashScript(`echo "Hello World"`, { capture: true });
+    assert.equal(0, result.exitCode);
+    assert.equal("Hello World", result.standardOut.join(''));
 })

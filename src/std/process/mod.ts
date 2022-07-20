@@ -145,6 +145,8 @@ export default class Process {
 
         const validator = options?.exitCodeValidator || ((code) => code === 0);
         if (!validator(result.exitCode)) {
+            console.log(startInfo);
+            console.error(result.standardError.join('\n'));
             throw new ProcessError(fileName, result.exitCode);
         }
 

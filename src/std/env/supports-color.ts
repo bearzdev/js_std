@@ -72,17 +72,12 @@ if (isBrowser)
         quickNo = noColor;
     }
 
-    console.log('quickNo', quickNo);
-
     // already set streamSupportsColor values to false, so only focus on the other cases
     if(!quickNo)
     {
         if(isDeno) {
             outRedirected = globalScope.Deno.isatty(globalScope.Deno.stdout.rid);
             errRedirected = globalScope.Deno.isatty(globalScope.Deno.stderr.rid);
-
-            console.log("outRedirected", outRedirected);
-            console.log("errRedirected", errRedirected);
         } 
 
         const getColorLevel = () => {
@@ -168,11 +163,8 @@ if (isBrowser)
 
             return min;
         }
-
-
        
         const level = getColorLevel();
-        console.log('level', level);
         if(level !== 0) {
             streamSupportsColor  ={
                 stdout: outRedirected ? streamSupportsColor.stdout : {

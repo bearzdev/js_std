@@ -10,6 +10,8 @@ import {
     writeFileAsync, 
     registerExecutable, 
     CommandBuilder,
+    isWindows,
+    which,
 } from '../deps.ts';
 
 import { exec, execAsync } from "../util/_exec.ts";
@@ -47,13 +49,21 @@ export function bashScript(script: string, options?: IProcessInvocationOptions):
     try {
         const encoder = new TextEncoder();
         const tmp = tmpDir();
+        
         fileName = join(tmp, randomFileName());
         fileName += '.sh';
         const args = [];
-        args.push('-noprofile', '--norc', '-e', '-o', 'pipefail',  `'${fileName}'`);
 
+        let bashFile = fileName;
+
+        // wsl bash doesn't handle windows style paths, it uses a mount.
+        // git bash does handle windows style paths.
+        if (isWindows && which('bash')?.toLowerCase() === 'c:\\windows\\system32\\bash.exe') {
+            bashFile = '/mnt/' + 'c' + bashFile.substring(1).replaceAll('\\', '/').replace(':', '');
+        }
+
+        args.push('-noprofile', '--norc', '-e', '-o', 'pipefail',  `'${bashFile}'`);
         writeFile(fileName, encoder.encode(script));
-       
         return bash(args, options);
     } finally {
         if (fileName.length > 0)
@@ -67,9 +77,17 @@ export async function bashScriptASync(script: string, options?: IProcessInvocati
         const encoder = new TextEncoder();
         const tmp = tmpDir();
         fileName = join(tmp, randomFileName());
-         fileName += '.sh';
+        fileName += '.sh';
         const args = [];
-        args.push('-noprofile', '--norc', '-e', '-o', 'pipefail',  `'${fileName}'`);
+        let bashFile = fileName;
+
+        // wsl bash doesn't handle windows style paths, it uses a mount.
+        // git bash does handle windows style paths.
+        if (isWindows && which('bash')?.toLowerCase() === 'c:\\windows\\system32\\bash.exe') {
+            bashFile = '/mnt/' + 'c' + bashFile.substring(1).replaceAll('\\', '/').replace(':', '');
+        }
+
+        args.push('-noprofile', '--norc', '-e', '-o', 'pipefail',  `'${bashFile}'`);
         await writeFileAsync(fileName, encoder.encode(script));
         return await bashAsync(args, options);
     } finally {
