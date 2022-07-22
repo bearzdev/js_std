@@ -1,0 +1,9 @@
+import { IProcessInvocationOptions, IProcessResult, CommandBuilder } from '../deps.js';
+export declare function powershell(args: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function powershell(args: string[], options?: IProcessInvocationOptions): IProcessResult;
+export declare function powershell(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult;
+export declare function powershellAsync(args: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function powershellAsync(args: string[], options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function powershellAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function powershellScript(script: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function powershellScriptASync(script: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;

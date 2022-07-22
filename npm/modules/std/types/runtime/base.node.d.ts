@@ -1,0 +1,13 @@
+import { IVersion, IRuntimeEnvironment, Browser, Engine, RuntimeArch, OsFamily, Runtime, Version, globalScope } from "./base.browser.js";
+export type { IRuntimeEnvironment, IVersion, Browser, Engine, RuntimeArch, OsFamily, Runtime, };
+export { Version, globalScope, };
+export declare const DEBUG: boolean;
+export declare const TRACE: boolean;
+export declare const runtimeInfo: IRuntimeEnvironment;
+export declare const isDeno: boolean;
+export declare const isNode: boolean;
+export declare const isBrowser: boolean;
+export declare const isWindows: boolean;
+export declare const isDarwin: boolean;
+export declare const isLinux: boolean;
+export declare const isMobile: boolean;

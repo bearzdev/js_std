@@ -1,6 +1,0 @@
-{
-    "imports": {
-        "https://deno.land/std@$STD_VERSION/": "https://deno.land/std@0.148.0/",
-        "https://deno.land/x/bearz_std@$BEARZ_VERSION/": "./std/"
-    }
-}

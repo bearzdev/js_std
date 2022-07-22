@@ -7,14 +7,14 @@
         },
         "files": {
             "exclude": [
-                "_node/**"
+                "npm/**"
             ]
         }
     },
     "lint": {
         "files": {
             "exclude": [
-                "_node/**"
+                "npm/**"
             ]
         }
     },
@@ -32,6 +32,8 @@
     "importMap": "./import_mappings.json",
     "tasks": {
        "fmt": "deno fmt --unstable src/",
-       "build:std": "deno run --unstable --allow-all ./build/npm_build_std.ts"
+       "build:std": "deno run --unstable --allow-all ./build/npm_build_std.ts",
+       "build:buildfx": "deno run --unstable --allow-all ./build/npm_build_buildfx.ts",
+       "test": "deno run --allow-all --unstable src/"
     }
 }

@@ -1,0 +1,9 @@
+import { IProcessInvocationOptions, IProcessResult, CommandBuilder } from '../deps.js';
+export declare function pwsh(args: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function pwsh(args: string[], options?: IProcessInvocationOptions): IProcessResult;
+export declare function pwsh(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult;
+export declare function pwshAsync(args: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function pwshAsync(args: string[], options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function pwshAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function pwshScript(script: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function pwshScriptAsync(script: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;

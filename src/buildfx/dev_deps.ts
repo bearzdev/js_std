@@ -1,1 +1,1 @@
-export * from 'https://deno.land/x/bearz_std@$BEARZ_VERSION/testing/mod.ts';
+export * from '../std/testing/mod.ts';

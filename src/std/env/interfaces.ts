@@ -1,6 +1,17 @@
-import { IRuntimeEnvironment, IVersion, OsFamily, RuntimeArch } from "../runtime/interfaces.ts";
+import { IRuntimeEnvironment, IVersion, OsFamily, RuntimeArch } from '../runtime/interfaces.ts';
 
-export type CiType = "circleci" | "github" | "gitlab" | "travisci" | 'jenkins' | 'azure' | 'appveyor' | 'bitbucket' | 'bamboo' | 'teamcity' | 'harness' ;
+export type CiType =
+    | 'circleci'
+    | 'github'
+    | 'gitlab'
+    | 'travisci'
+    | 'jenkins'
+    | 'azure'
+    | 'appveyor'
+    | 'bitbucket'
+    | 'bamboo'
+    | 'teamcity'
+    | 'harness';
 
 export interface IVariableGetter {
     (name: string): string | undefined;
@@ -13,8 +24,6 @@ export interface IColorSupport {
     readonly has256: boolean;
     readonly has16m: boolean;
 }
-
-
 
 export interface IStreamColorSupport {
     readonly stdout: IColorSupport;

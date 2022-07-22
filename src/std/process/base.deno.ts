@@ -1,8 +1,8 @@
-import { StopWatch } from "../diagnostics/stop-watch.ts";
-import { notNullOrWhiteSpace } from "../errors/check.ts";
-import  { processRunner } from './base.ts';
-import type { IProcessInvocationContext, IProcessResult } from "./interfaces.ts";
-import { ProcessResult } from "./start-info.ts";
+import { StopWatch } from '../diagnostics/stop-watch.ts';
+import { notNullOrWhiteSpace } from '../errors/check.ts';
+import { processRunner } from './base.ts';
+import type { IProcessInvocationContext, IProcessResult } from './interfaces.ts';
+import { ProcessResult } from './start-info.ts';
 import { writeCommand } from './write-command.ts';
 
 processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
@@ -14,11 +14,13 @@ processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
     const stopWatch = new StopWatch();
 
     const { outCaptures, errorCaptures } = context;
-    if (si.outCaptures)
+    if (si.outCaptures) {
         outCaptures.push(...si.outCaptures);
+    }
 
-    if (si.errorCaptures)
+    if (si.errorCaptures) {
         errorCaptures.push(...si.errorCaptures);
+    }
 
     writeCommand(si.fileName, si.args);
     stopWatch.start();
@@ -57,7 +59,7 @@ processRunner.run = (context: IProcessInvocationContext): IProcessResult => {
         startedAt: stopWatch.at(0)?.startTime,
         stoppedAt: stopWatch.at(0)?.endTime,
     });
-}
+};
 
 processRunner.runAsync = async (context: IProcessInvocationContext): Promise<IProcessResult> => {
     const si = context.startInfo;
@@ -142,6 +144,6 @@ processRunner.runAsync = async (context: IProcessInvocationContext): Promise<IPr
         startedAt: stopWatch.at(0)?.startTime,
         stoppedAt: stopWatch.at(0)?.endTime,
     });
-}
+};
 
 export { processRunner };

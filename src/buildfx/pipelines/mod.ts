@@ -1,23 +1,23 @@
-import { env, join } from '../deps.ts'
+import { env, join } from '../deps.ts';
 
 export function getArtifactsDirectory() {
-    const azDoArtifacts = "BUILD_STAGINGDIRECTORY"
-    const userEnv = "PROJECT_ARTIFACTS_DIR"
+    const azDoArtifacts = 'BUILD_STAGINGDIRECTORY';
+    const userEnv = 'PROJECT_ARTIFACTS_DIR';
 
-    let artifactsDir = env.get(userEnv)
+    let artifactsDir = env.get(userEnv);
     if (artifactsDir) {
         return artifactsDir;
     }
 
-    artifactsDir = env.get(azDoArtifacts)
+    artifactsDir = env.get(azDoArtifacts);
     if (artifactsDir) {
-        env.set(userEnv, artifactsDir)
+        env.set(userEnv, artifactsDir);
         return artifactsDir;
     }
 
     const root = getProjectRoot();
     if (root) {
-        artifactsDir = join(root, "artifacts");
+        artifactsDir = join(root, 'artifacts');
         env.set(userEnv, artifactsDir);
 
         return artifactsDir;
@@ -27,17 +27,17 @@ export function getArtifactsDirectory() {
 }
 
 export function getProjectRoot() {
-    const azDoSource = "BUILD_SOURCESDIRECTORY"
-    const userEnv = "PROJECT_ROOT_DIR"
+    const azDoSource = 'BUILD_SOURCESDIRECTORY';
+    const userEnv = 'PROJECT_ROOT_DIR';
 
-    let projectRoot = env.get(userEnv)
+    let projectRoot = env.get(userEnv);
     if (projectRoot) {
         return projectRoot;
     }
 
-    projectRoot = env.get(azDoSource)
+    projectRoot = env.get(azDoSource);
     if (projectRoot) {
-        env.set(userEnv, projectRoot)
+        env.set(userEnv, projectRoot);
         return projectRoot;
     }
 

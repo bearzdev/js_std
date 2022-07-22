@@ -1,5 +1,4 @@
-import { IProcessInvocationOptions, IProcessResult, run, runAsync } from "../deps.ts";
-
+import { IProcessInvocationOptions, IProcessResult, run, runAsync } from '../deps.ts';
 
 export function terraform(args: string[] = [], options?: IProcessInvocationOptions): IProcessResult {
     return run('terraform', args, options);

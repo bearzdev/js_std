@@ -1,14 +1,14 @@
-import { secretGenerator, readJsonFile, writeJsonFile } from '../deps.ts';
+import { readJsonFile, secretGenerator, writeJsonFile } from '../deps.ts';
 
 export interface SecretStoreEntry {
-    name: string,
-    value: string,
+    name: string;
+    value: string;
 
-    createdAt: Date,
+    createdAt: Date;
 
-    expiresAt: Date | undefined,
+    expiresAt: Date | undefined;
 
-    tags: { [key: string]: string },
+    tags: { [key: string]: string };
 }
 
 export class SecretStore {
@@ -18,18 +18,19 @@ export class SecretStore {
     constructor(fileName: string, data?: { [key: string]: SecretStoreEntry }) {
         this.#store = new Map();
         this.#fileName = fileName;
-        if(data) {
-            Object.keys(data || {}).forEach(key => {
+        if (data) {
+            Object.keys(data || {}).forEach((key) => {
                 const value = data[key];
-                if(value)
+                if (value) {
                     this.#store.set(key, value);
+                }
             });
         }
     }
 
     static loadFromFile(fileName: string): SecretStore {
         const data = readJsonFile(fileName);
-        if(!data) {
+        if (!data) {
             return new SecretStore(fileName);
         }
 
@@ -52,7 +53,7 @@ export class SecretStore {
 
         const next = secretGenerator.generate(length);
         this.set(key, next);
-       
+
         return next;
     }
 
@@ -61,7 +62,7 @@ export class SecretStore {
     }
 
     getEntry(key: string): SecretStoreEntry | undefined {
-        // TODO: decrypt entry 
+        // TODO: decrypt entry
         key = key.toLowerCase();
         return this.#store.get(key);
     }
@@ -70,14 +71,14 @@ export class SecretStore {
         // TODO: encrypt secure store entry
 
         key = key.toLowerCase();
-        let entry : SecretStoreEntry = this.getEntry(key) || {
+        let entry: SecretStoreEntry = this.getEntry(key) || {
             name: key,
             value: '',
             createdAt: new Date(),
             expiresAt: undefined,
             tags: {},
         };
-        if(data.createdAt) {
+        if (data.createdAt) {
             delete data['createdAt'];
         }
 
@@ -88,7 +89,7 @@ export class SecretStore {
     set(key: string, value: string): void {
         key = key.toLowerCase();
         this.setEntry(key, {
-            value: value
+            value: value,
         });
     }
 
@@ -96,8 +97,8 @@ export class SecretStore {
         this.#store.delete(key);
     }
 
-    toObject() : { [key: string]: SecretStoreEntry } {
-        const obj : { [key: string] : SecretStoreEntry } = {};
+    toObject(): { [key: string]: SecretStoreEntry } {
+        const obj: { [key: string]: SecretStoreEntry } = {};
         this.#store.forEach((value, key) => {
             obj[key] = value;
         });
@@ -105,11 +106,11 @@ export class SecretStore {
         return obj;
     }
 
-    toJson() : string {
+    toJson(): string {
         return JSON.stringify(this.toObject(), null, 4);
     }
 
-    save() : void {
+    save(): void {
         writeJsonFile(this.#fileName, this.toObject());
     }
 }

@@ -35,10 +35,8 @@ function parse(variable: string): Function {
     };
 }
 
-
 export default function expandTemplate(
     str: string,
-
     // deno-lint-ignore no-explicit-any
     locals: { [key: string]: any },
 ): string {

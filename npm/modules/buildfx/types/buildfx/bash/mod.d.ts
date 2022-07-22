@@ -1,0 +1,9 @@
+import { IProcessInvocationOptions, IProcessResult, CommandBuilder } from '../deps.js';
+export declare function bash(args: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function bash(args: string[], options?: IProcessInvocationOptions): IProcessResult;
+export declare function bash(command: CommandBuilder, options?: IProcessInvocationOptions): IProcessResult;
+export declare function bashAsync(args: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function bashAsync(args: string[], options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function bashAsync(command: CommandBuilder, options?: IProcessInvocationOptions): Promise<IProcessResult>;
+export declare function bashScript(script: string, options?: IProcessInvocationOptions): IProcessResult;
+export declare function bashScriptASync(script: string, options?: IProcessInvocationOptions): Promise<IProcessResult>;

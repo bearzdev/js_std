@@ -1,19 +1,20 @@
-import { isWindows, run} from '../deps.ts'
+import { isWindows } from 'https://deno.land/x/js_std@$JS_VERSION/runtime/mod.ts';
+import { run } from 'https://deno.land/x/js_std@$JS_VERSION/process/mod.ts';
 
-let isUserAdminProcess : boolean | undefined = undefined;
-let isRootAdminProcess : boolean | undefined = undefined;
+let isUserAdminProcess: boolean | undefined = undefined;
+let isRootAdminProcess: boolean | undefined = undefined;
 
 export function isAdmin() {
-    if(!isWindows) {
+    if (!isWindows) {
         return false;
     }
 
-    if(isUserAdminProcess === undefined) {
+    if (isUserAdminProcess === undefined) {
         const result = run('net', ['session'], {
             exitCodeValidator: (_) => {
-                 return true;
-            }
-        })
+                return true;
+            },
+        });
 
         // net session returns 2 if the user is not an admin
         isUserAdminProcess = result.exitCode === 0;
@@ -22,20 +23,20 @@ export function isAdmin() {
 }
 
 export function isRoot() {
-    if(isWindows) {
+    if (isWindows) {
         return false;
     }
 
-    if(isRootAdminProcess === undefined) {
-        let result = run("id", ["-u"], {
-           capture: true, 
+    if (isRootAdminProcess === undefined) {
+        let result = run('id', ['-u'], {
+            capture: true,
         });
 
         isRootAdminProcess = result.standardOut && result.standardOut.length > 0 && result.standardOut[0] === '0';
 
-        if(!isRootAdminProcess) {
-            result = run("id", ["-g"], {
-               capture: true, 
+        if (!isRootAdminProcess) {
+            result = run('id', ['-g'], {
+                capture: true,
             });
 
             isRootAdminProcess = result.standardOut && result.standardOut.length > 0 && result.standardOut[0] === '0';
@@ -46,7 +47,7 @@ export function isRoot() {
 }
 
 export function isProcessElevated() {
-    if(isWindows) {
+    if (isWindows) {
         return isAdmin();
     }
 

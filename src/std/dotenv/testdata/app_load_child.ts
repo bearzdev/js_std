@@ -2,4 +2,4 @@
 // This file is imported from ./app_load_parent.ts
 import { env } from '../../env/mod.ts';
 
-console.log(env.get("GREETING"));
+console.log(env.get('GREETING'));

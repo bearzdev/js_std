@@ -1,25 +1,25 @@
-import { toHexString, randomBytes } from '../deps.ts';
+import { randomBytes, toHexString } from '../deps.ts';
 
 export enum DecryptionTypes {
-    "AES" = "AES",
-    "DES" = "DES",
-    "TripleDES" = "3DES",
+    'AES' = 'AES',
+    'DES' = 'DES',
+    'TripleDES' = '3DES',
 }
 
 export enum ValidationTypes {
-    "HMACMD5" = "HMACMD5",
-    "HMACSHA1" = "HMACSHA1",
-    "HMACSHA256" = "HMACSHA256",
-    "HMACSHA384" = "HMACSHA384",
-    "HMACSHA512" = "HMACSHA512",
+    'HMACMD5' = 'HMACMD5',
+    'HMACSHA1' = 'HMACSHA1',
+    'HMACSHA256' = 'HMACSHA256',
+    'HMACSHA384' = 'HMACSHA384',
+    'HMACSHA512' = 'HMACSHA512',
 }
 
 export function createMachineKey(
     decryptionType: DecryptionTypes = DecryptionTypes.AES,
-    validationType: ValidationTypes = ValidationTypes.HMACSHA256) {
-
-    let decryptionKeySize = 0
-    let validationKeySize = 0
+    validationType: ValidationTypes = ValidationTypes.HMACSHA256,
+) {
+    let decryptionKeySize = 0;
+    let validationKeySize = 0;
     switch (decryptionType) {
         case DecryptionTypes.AES:
             decryptionKeySize = 32;
@@ -49,6 +49,6 @@ export function createMachineKey(
 
     return {
         decryptionKey: toHexString(randomBytes(decryptionKeySize)),
-        validationKey: toHexString(randomBytes(validationKeySize))
+        validationKey: toHexString(randomBytes(validationKeySize)),
     };
 }

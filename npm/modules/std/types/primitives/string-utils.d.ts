@@ -1,0 +1,11 @@
+import "../_dnt.polyfills.js";
+import "../_dnt.polyfills.js";
+import { Char } from "./char.js";
+export declare const EMPTY = "";
+export declare function trimEnd(str: string, chars?: string): string;
+export declare function toCharacterArray(str: string): string[];
+export declare function toCharArray(str: string): Char[];
+export declare function toCharCodeArray(str: string): number[];
+export declare function toCodePointArray(str: string): number[];
+export declare function isNullOrWhiteSpace(str: string | null | undefined): boolean;
+export declare function isNullOrEmpty(str: string | null | undefined): boolean;

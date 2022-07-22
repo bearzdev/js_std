@@ -36,15 +36,15 @@ export function validate(data: Uint8Array) {
 }
 
 export interface ISecretGenerator {
-    setValidator(validator: (value: Uint8Array) => boolean) : void
-    add(value: string) : ISecretGenerator;
+    setValidator(validator: (value: Uint8Array) => boolean): void;
+    add(value: string): ISecretGenerator;
     generate(length: number): string;
-    generateAsUint8Array(length: number) : Uint8Array;
+    generateAsUint8Array(length: number): Uint8Array;
 }
 
 export default class SecretGenerator {
     #codes: number[];
-    #validator: (value: Uint8Array) => boolean
+    #validator: (value: Uint8Array) => boolean;
 
     constructor() {
         this.#codes = [];
@@ -79,7 +79,7 @@ export default class SecretGenerator {
         return this;
     }
 
-    generateAsUint8Array(length: number) : Uint8Array {
+    generateAsUint8Array(length: number): Uint8Array {
         // useful for generating as password that can be cleared from memory
         // as strings are immutable in javascript
         let valid = false;
@@ -93,7 +93,6 @@ export default class SecretGenerator {
                 const bit = (Math.abs(bytes[i]) % this.#codes.length);
                 chars[i] = this.#codes[bit];
             }
-
 
             valid = this.#validator(chars);
         }
@@ -111,12 +110,10 @@ export function generateSecret(length: number, characters?: string) {
     const generator = new SecretGenerator();
     if (characters) {
         generator.add(characters);
-    }
-    else
-    {
+    } else {
         generator.addDefaults();
     }
-    
+
     return generator.generate(length);
 }
 

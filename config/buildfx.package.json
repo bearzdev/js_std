@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "@bearz/buildfx",
+    "version": "0.0.1",
+    "description": "",
+    "license": "MIT",
+    "readme": "README.md",
+    "author": {
+        "name": "Bearz Dev",
+        "email": "devbearz@protonmail.com",
+        "url": "https://bearz.dev"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "scripts": {
+        
+    },
+    "devDependencies": {
+        "typescript": "^4.7.4",
+        "ts-node": "^10.9.1"
+    }
+}
+

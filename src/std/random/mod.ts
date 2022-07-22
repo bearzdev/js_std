@@ -12,9 +12,11 @@ let randomUUID = (): string => {
 };
 
 if (isNode) {
-    const c = globalScope.crypto.webcrypto;
-    getRandomValues = <T extends ArrayBufferView | null>(array: T): T => c.getRandomValues(array);
-    randomUUID = (): string => c.randomUUID();
+    // deno-lint-ignore no-explicit-any
+    const c = await import(`crypto`) as any;
+    const wc = c.webcrypto;
+    getRandomValues = <T extends ArrayBufferView | null>(array: T): T => wc.getRandomValues(array);
+    randomUUID = (): string => wc.randomUUID();
 } else {
     getRandomValues = <T extends ArrayBufferView | null>(array: T): T => crypto.getRandomValues(array);
     randomUUID = (): string => crypto.randomUUID();
@@ -26,16 +28,16 @@ const randomBytes = (length: number): Uint8Array => {
     return buffer;
 };
 
-const codes : number[] = [];
+const codes: number[] = [];
 const validChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
 
-for(let i = 0; i < validChars.length; i++) {
+for (let i = 0; i < validChars.length; i++) {
     codes.push(validChars.codePointAt(i)!);
 }
 
 function randomFileName() {
     // useful for generating as password that can be cleared from memory
-        // as strings are immutable in javascript
+    // as strings are immutable in javascript
     const chars: Uint8Array = new Uint8Array(12);
 
     chars.fill(0);
@@ -49,9 +51,4 @@ function randomFileName() {
     return String.fromCodePoint(...chars);
 }
 
-export {
-    randomBytes,
-    getRandomValues,
-    randomFileName,
-    randomUUID,
-};
+export { getRandomValues, randomBytes, randomFileName, randomUUID };

@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "workspaces": [
+        "modules/*"
+    ],
+    
+    "devDependencies": {
+        "ts-node": "^10.9.1"
+    }
+}

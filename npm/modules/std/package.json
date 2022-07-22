@@ -1,0 +1,200 @@
+{
+  "module": "./esm/mod.js",
+  "types": "./types/mod.d.ts",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@bearz/std",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "author": {
+    "name": "Bearz Dev",
+    "email": "devbearz@protonmail.com",
+    "url": "https://bearz.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.37",
+    "chalk": "4.1.2",
+    "@deno/shim-deno-test": "~0.3.2",
+    "typescript": "^4.7.4",
+    "ts-node": "^10.9.1"
+  },
+  "exports": {
+    ".": {
+      "import": "./esm/mod.js",
+      "types": "./types/mod.d.ts"
+    },
+    "./errors": {
+      "import": "./esm/errors/mod.js",
+      "types": "./types/errors/mod.d.ts"
+    },
+    "./errors/mod.js": {
+      "import": "./esm/errors/mod.js",
+      "types": "./types/errors/mod.d.ts"
+    },
+    "./g11n": {
+      "import": "./esm/g11n/mod.js",
+      "types": "./types/g11n/mod.d.ts"
+    },
+    "./g11n/mod.js": {
+      "import": "./esm/g11n/mod.js",
+      "types": "./types/g11n/mod.d.ts"
+    },
+    "./random": {
+      "import": "./esm/random/mod.js",
+      "types": "./types/random/mod.d.ts"
+    },
+    "./random/mod.js": {
+      "import": "./esm/random/mod.js",
+      "types": "./types/random/mod.d.ts"
+    },
+    "./secrets": {
+      "import": "./esm/secrets/mod.js",
+      "types": "./types/secrets/mod.d.ts"
+    },
+    "./secrets/mod.js": {
+      "import": "./esm/secrets/mod.js",
+      "types": "./types/secrets/mod.d.ts"
+    },
+    "./templating": {
+      "import": "./esm/templating/mod.js",
+      "types": "./types/templating/mod.d.ts"
+    },
+    "./templating/mod.js": {
+      "import": "./esm/templating/mod.js",
+      "types": "./types/templating/mod.d.ts"
+    },
+    "./text/string-builder": {
+      "import": "./esm/text/string-builder.js",
+      "types": "./types/text/string-builder.d.ts"
+    },
+    "./text/string-builder.js": {
+      "import": "./esm/text/string-builder.js",
+      "types": "./types/text/string-builder.d.ts"
+    },
+    "./text/encoding/hex": {
+      "import": "./esm/text/encoding/hex.js",
+      "types": "./types/text/encoding/hex.d.ts"
+    },
+    "./text/encoding/hex.js": {
+      "import": "./esm/text/encoding/hex.js",
+      "types": "./types/text/encoding/hex.d.ts"
+    },
+    "./primitives/char": {
+      "import": "./esm/primitives/char.js",
+      "types": "./types/primitives/char.d.ts"
+    },
+    "./primitives/char.js": {
+      "import": "./esm/primitives/char.js",
+      "types": "./types/primitives/char.d.ts"
+    },
+    "./primitives/uuid": {
+      "import": "./esm/primitives/uuid.js",
+      "types": "./types/primitives/uuid.d.ts"
+    },
+    "./primitives/uuid.js": {
+      "import": "./esm/primitives/uuid.js",
+      "types": "./types/primitives/uuid.d.ts"
+    },
+    "./primitives/string-utils": {
+      "import": "./esm/primitives/string-utils.js",
+      "types": "./types/primitives/string-utils.d.ts"
+    },
+    "./primitives/string-utils.js": {
+      "import": "./esm/primitives/string-utils.js",
+      "types": "./types/primitives/string-utils.d.ts"
+    },
+    "./runtime": {
+      "import": "./esm/runtime/mod.js",
+      "types": "./types/runtime/mod.d.ts"
+    },
+    "./runtime/mod.js": {
+      "import": "./esm/runtime/mod.js",
+      "types": "./types/runtime/mod.d.ts"
+    },
+    "./runtime/version": {
+      "import": "./esm/runtime/version.js",
+      "types": "./types/runtime/version.d.ts"
+    },
+    "./runtime/version.js": {
+      "import": "./esm/runtime/version.js",
+      "types": "./types/runtime/version.d.ts"
+    },
+    "./runtime/semantic-version": {
+      "import": "./esm/runtime/semantic-version.js",
+      "types": "./types/runtime/semantic-version.d.ts"
+    },
+    "./runtime/semantic-version.js": {
+      "import": "./esm/runtime/semantic-version.js",
+      "types": "./types/runtime/semantic-version.d.ts"
+    },
+    "./path": {
+      "import": "./esm/path/mod.js",
+      "types": "./types/path/mod.d.ts"
+    },
+    "./path/mod.js": {
+      "import": "./esm/path/mod.js",
+      "types": "./types/path/mod.d.ts"
+    },
+    "./env": {
+      "import": "./esm/env/mod.js",
+      "types": "./types/env/mod.d.ts"
+    },
+    "./env/mod.js": {
+      "import": "./esm/env/mod.js",
+      "types": "./types/env/mod.d.ts"
+    },
+    "./env/variables": {
+      "import": "./esm/env/variables.js",
+      "types": "./types/env/variables.d.ts"
+    },
+    "./env/variables.js": {
+      "import": "./esm/env/variables.js",
+      "types": "./types/env/variables.d.ts"
+    },
+    "./env/supports-color": {
+      "import": "./esm/env/supports-color.js",
+      "types": "./types/env/supports-color.d.ts"
+    },
+    "./env/supports-color.js": {
+      "import": "./esm/env/supports-color.js",
+      "types": "./types/env/supports-color.d.ts"
+    },
+    "./fs": {
+      "import": "./esm/fs/mod.js",
+      "types": "./types/fs/mod.d.ts"
+    },
+    "./fs/mod.js": {
+      "import": "./esm/fs/mod.js",
+      "types": "./types/fs/mod.d.ts"
+    },
+    "./process": {
+      "import": "./esm/process/mod.js",
+      "types": "./types/process/mod.d.ts"
+    },
+    "./process/mod.js": {
+      "import": "./esm/process/mod.js",
+      "types": "./types/process/mod.d.ts"
+    },
+    "./process/which": {
+      "import": "./esm/process/which.js",
+      "types": "./types/process/which.d.ts"
+    },
+    "./process/which.js": {
+      "import": "./esm/process/which.js",
+      "types": "./types/process/which.d.ts"
+    }
+  },
+  "dependencies": {
+    "@deno/sham-weakref": "~0.1.0"
+  }
+}

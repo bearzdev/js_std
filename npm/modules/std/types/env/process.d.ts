@@ -1,0 +1,10 @@
+declare let cwd: () => string;
+declare let chdir: (path: string) => void;
+declare let exit: (code?: number) => void;
+declare let commandLine: string;
+declare let commandLineArgs: string[];
+declare let processId: number;
+export declare const newLine: string;
+export declare const setExitCode: (code: number) => number;
+export declare const getExitCode: () => number;
+export { cwd, chdir, exit, processId, commandLine, commandLineArgs };

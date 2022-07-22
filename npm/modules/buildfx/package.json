@@ -1,0 +1,195 @@
+{
+  "module": "./esm/buildfx/mod.js",
+  "types": "./types/buildfx/mod.d.ts",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@bearz/buildfx",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "readme": "README.md",
+  "author": {
+    "name": "Bearz Dev",
+    "email": "devbearz@protonmail.com",
+    "url": "https://bearz.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.37",
+    "chalk": "4.1.2",
+    "@deno/shim-deno-test": "~0.3.2",
+    "@deno/sham-weakref": "~0.1.0",
+    "typescript": "^4.7.4",
+    "ts-node": "^10.9.1"
+  },
+  "@bearz/std": "0.0.1",
+  "exports": {
+    ".": {
+      "import": "./esm/buildfx/mod.js",
+      "types": "./types/buildfx/mod.d.ts"
+    },
+    "./apt": {
+      "import": "./esm/buildfx/bash/mod.js",
+      "types": "./types/buildfx/bash/mod.d.ts"
+    },
+    "./apt/mod.js": {
+      "import": "./esm/buildfx/bash/mod.js",
+      "types": "./types/buildfx/bash/mod.d.ts"
+    },
+    "./bash": {
+      "import": "./esm/buildfx/bash/mod.js",
+      "types": "./types/buildfx/bash/mod.d.ts"
+    },
+    "./bash/mod.js": {
+      "import": "./esm/buildfx/bash/mod.js",
+      "types": "./types/buildfx/bash/mod.d.ts"
+    },
+    "./util": {
+      "import": "./esm/buildfx/util/mod.js",
+      "types": "./types/buildfx/util/mod.d.ts"
+    },
+    "./util/mod.js": {
+      "import": "./esm/buildfx/util/mod.js",
+      "types": "./types/buildfx/util/mod.d.ts"
+    },
+    "./choco": {
+      "import": "./esm/buildfx/choco/mod.js",
+      "types": "./types/buildfx/choco/mod.d.ts"
+    },
+    "./choco/mod.js": {
+      "import": "./esm/buildfx/choco/mod.js",
+      "types": "./types/buildfx/choco/mod.d.ts"
+    },
+    "./docker": {
+      "import": "./esm/buildfx/docker/mod.js",
+      "types": "./types/buildfx/docker/mod.d.ts"
+    },
+    "./docker/mod.js": {
+      "import": "./esm/buildfx/docker/mod.js",
+      "types": "./types/buildfx/docker/mod.d.ts"
+    },
+    "./docker-compose": {
+      "import": "./esm/buildfx/docker/mod.js",
+      "types": "./types/buildfx/docker/mod.d.ts"
+    },
+    "./docker-compose/mod.js": {
+      "import": "./esm/buildfx/docker/mod.js",
+      "types": "./types/buildfx/docker/mod.d.ts"
+    },
+    "./dotnet": {
+      "import": "./esm/buildfx/dotnet/mod.js",
+      "types": "./types/buildfx/dotnet/mod.d.ts"
+    },
+    "./dotnet/mod.js": {
+      "import": "./esm/buildfx/dotnet/mod.js",
+      "types": "./types/buildfx/dotnet/mod.d.ts"
+    },
+    "./git": {
+      "import": "./esm/buildfx/git/mod.js",
+      "types": "./types/buildfx/git/mod.d.ts"
+    },
+    "./git/mod.js": {
+      "import": "./esm/buildfx/git/mod.js",
+      "types": "./types/buildfx/git/mod.d.ts"
+    },
+    "./node": {
+      "import": "./esm/buildfx/node/mod.js",
+      "types": "./types/buildfx/node/mod.d.ts"
+    },
+    "./node/mod.js": {
+      "import": "./esm/buildfx/node/mod.js",
+      "types": "./types/buildfx/node/mod.d.ts"
+    },
+    "./nvs": {
+      "import": "./esm/buildfx/nvs/mod.js",
+      "types": "./types/buildfx/nvs/mod.d.ts"
+    },
+    "./nvs/mod.js": {
+      "import": "./esm/buildfx/nvs/mod.js",
+      "types": "./types/buildfx/nvs/mod.d.ts"
+    },
+    "./pipelines": {
+      "import": "./esm/buildfx/pipelines/mod.js",
+      "types": "./types/buildfx/pipelines/mod.d.ts"
+    },
+    "./pipelines/mod.js": {
+      "import": "./esm/buildfx/pipelines/mod.js",
+      "types": "./types/buildfx/pipelines/mod.d.ts"
+    },
+    "./powershell": {
+      "import": "./esm/buildfx/powershell/mod.js",
+      "types": "./types/buildfx/powershell/mod.d.ts"
+    },
+    "./powershell/mod.js": {
+      "import": "./esm/buildfx/powershell/mod.js",
+      "types": "./types/buildfx/powershell/mod.d.ts"
+    },
+    "./pwsh": {
+      "import": "./esm/buildfx/pwsh/mod.js",
+      "types": "./types/buildfx/pwsh/mod.d.ts"
+    },
+    "./pwsh/mod.js": {
+      "import": "./esm/buildfx/pwsh/mod.js",
+      "types": "./types/buildfx/pwsh/mod.d.ts"
+    },
+    "./scoop": {
+      "import": "./esm/buildfx/scoop/mod.js",
+      "types": "./types/buildfx/scoop/mod.d.ts"
+    },
+    "./scoop/mod.js": {
+      "import": "./esm/buildfx/scoop/mod.js",
+      "types": "./types/buildfx/scoop/mod.d.ts"
+    },
+    "./scripting": {
+      "import": "./esm/buildfx/scripting/mod.js",
+      "types": "./types/buildfx/scripting/mod.d.ts"
+    },
+    "./scripting/mod.js": {
+      "import": "./esm/buildfx/scripting/mod.js",
+      "types": "./types/buildfx/scripting/mod.d.ts"
+    },
+    "./secret-store": {
+      "import": "./esm/buildfx/secret-store/mod.js",
+      "types": "./types/buildfx/secret-store/mod.d.ts"
+    },
+    "./secret-store/mod.js": {
+      "import": "./esm/buildfx/secret-store/mod.js",
+      "types": "./types/buildfx/secret-store/mod.d.ts"
+    },
+    "./terraform": {
+      "import": "./esm/buildfx/terraform/mod.js",
+      "types": "./types/buildfx/terraform/mod.d.ts"
+    },
+    "./terraform/mod.js": {
+      "import": "./esm/buildfx/terraform/mod.js",
+      "types": "./types/buildfx/terraform/mod.d.ts"
+    },
+    "./usql": {
+      "import": "./esm/buildfx/usql/mod.js",
+      "types": "./types/buildfx/usql/mod.d.ts"
+    },
+    "./usql/mod.js": {
+      "import": "./esm/buildfx/usql/mod.js",
+      "types": "./types/buildfx/usql/mod.d.ts"
+    },
+    "./winget": {
+      "import": "./esm/buildfx/winget/mod.js",
+      "types": "./types/buildfx/winget/mod.d.ts"
+    },
+    "./winget/mod.js": {
+      "import": "./esm/buildfx/winget/mod.js",
+      "types": "./types/buildfx/winget/mod.d.ts"
+    }
+  },
+  "dependencies": {
+    "@bearz/std": "0.0.1"
+  }
+}

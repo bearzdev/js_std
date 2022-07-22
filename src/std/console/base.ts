@@ -1,5 +1,5 @@
-import { IAsyncTextReader, IAsyncTextWriter, IHandle, ITextReader, ITextWriter } from "../io/interfaces.ts";
-import { StreamReader, StreamWriter } from "../io/stream-io.ts";
+import { IAsyncTextReader, IAsyncTextWriter, IHandle, ITextReader, ITextWriter } from '../io/interfaces.ts';
+import { StreamReader, StreamWriter } from '../io/stream-io.ts';
 
 export abstract class StdWriter extends StreamWriter implements IHandle, ITextWriter, IAsyncTextWriter {
     #supportsColor: boolean;
@@ -9,7 +9,7 @@ export abstract class StdWriter extends StreamWriter implements IHandle, ITextWr
     constructor(handle: number, supportsSync: boolean) {
         super(supportsSync);
         this.#handle = handle;
-        this.newLine = "\n";
+        this.newLine = '\n';
         this.#supportsColor = false;
     }
 
@@ -49,7 +49,7 @@ export abstract class StdReader extends StreamReader implements IHandle, ITextRe
     constructor(handle: number, supportsSync: boolean) {
         super(supportsSync);
         this.#handle = handle;
-        this.newLine = "\n";
+        this.newLine = '\n';
     }
 
     get handle(): number {

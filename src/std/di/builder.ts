@@ -1,11 +1,11 @@
-import { AnyConstructor, IDisposable, IServiceProvider } from "../primitives/interfaces.ts";
+import { AnyConstructor, IDisposable, IServiceProvider } from '../primitives/interfaces.ts';
 
-export type ActivatorDelegate = (serviceProvider: IServiceProvider, ...args: unknown[]) => AnyConstructor; 
+export type ActivatorDelegate = (serviceProvider: IServiceProvider, ...args: unknown[]) => AnyConstructor;
 
 export enum ServiceLifetime {
-   Singleton = 0,
-   Scoped = 1,
-   Transient = 2,
+    Singleton = 0,
+    Scoped = 1,
+    Transient = 2,
 }
 
 export interface IServiceScope extends IDisposable {
@@ -24,8 +24,7 @@ export interface IServiceCollection extends Array<IServiceDescriptor> {
     add(serviceType: string, implementationType: AnyConstructor, lifetime: ServiceLifetime): void;
 }
 
-export interface IServiceProviderFactory<TContainerBuilder> 
-{
+export interface IServiceProviderFactory<TContainerBuilder> {
     createBuilder(services: ServiceCollection): TContainerBuilder;
     createServiceProvider(builder: TContainerBuilder): IServiceProvider;
 }
@@ -35,4 +34,3 @@ export class ServiceCollection extends Array<IServiceDescriptor> {
         this.push(serviceDescriptor);
     }
 }
-

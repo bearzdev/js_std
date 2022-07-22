@@ -1,6 +1,6 @@
-import { ArgumentError } from "../errors/errors.ts";
-import type { IEnvironmentVariables, IVariableGetter, IExpandOptions } from "./interfaces.ts";
-import { isNode, isDeno, globalScope } from "../runtime/mod.ts";
+import { ArgumentError } from '../errors/errors.ts';
+import type { IEnvironmentVariables, IExpandOptions, IVariableGetter } from './interfaces.ts';
+import { globalScope, isDeno, isNode } from '../runtime/mod.ts';
 
 export default function expandVariables(
     template: string,
@@ -58,31 +58,28 @@ export default function expandVariables(
 export class EnvironmentVariables implements IEnvironmentVariables {
     #env: { [key: string]: string };
     #secrets: string[];
-    /** 
-     * Notates that environments variables are using a custom map and is virtualized. 
+    /**
+     * Notates that environments variables are using a custom map and is virtualized.
      * This is helpful if you want to clone the environment variables for the current process
      * and then update it without affecting the original environment variables.
-    */
+     */
     #custom: boolean;
 
     constructor(env?: { [key: string]: string }) {
         this.#custom = env === undefined;
-        if(env) {
+        if (env) {
             this.#env = env;
             this.#custom = true;
-        }
-        else 
-        {
+        } else {
             this.#custom = false;
-            this.#env = isNode ? globalScope.process.env : { 'PATH': ''};
+            this.#env = isNode ? globalScope.process.env : { 'PATH': '' };
         }
 
         this.#secrets = [];
     }
 
     get keys(): string[] {
-        if(!this.#custom && isDeno)
-        {
+        if (!this.#custom && isDeno) {
             return Object.keys(this.toObject());
         }
 
@@ -103,23 +100,24 @@ export class EnvironmentVariables implements IEnvironmentVariables {
     }
 
     has(name: string): boolean {
-        if(!this.#custom && isDeno)
+        if (!this.#custom && isDeno) {
             return globalScope.Deno.env.get(name) !== undefined;
+        }
 
         return this.#env[name] !== undefined;
     }
 
     toObject(): { [key: string]: string } {
-        if(!this.#custom && isDeno)
-        {
+        if (!this.#custom && isDeno) {
             return globalScope.Deno.env.toObject();
         }
 
         const obj: { [key: string]: string } = {};
         for (const key of this.keys) {
             const value = this.#env[key];
-            if(value === undefined)
+            if (value === undefined) {
                 continue;
+            }
 
             obj[key] = value;
         }
@@ -130,8 +128,7 @@ export class EnvironmentVariables implements IEnvironmentVariables {
         return expandVariables(value, (name) => this.get(name));
     }
 
-    *[Symbol.iterator](): Iterator<[key: string,value: string]> {
-        
+    *[Symbol.iterator](): Iterator<[key: string, value: string]> {
         const data = this.toObject();
 
         for (const key of Object.keys(data)) {
@@ -141,8 +138,7 @@ export class EnvironmentVariables implements IEnvironmentVariables {
     }
 
     delete(name: string): void {
-        if(!this.#custom && isDeno)
-        {
+        if (!this.#custom && isDeno) {
             globalScope.Deno.env.delete(name);
             return;
         }
@@ -153,8 +149,7 @@ export class EnvironmentVariables implements IEnvironmentVariables {
     }
 
     get(name: string): string | undefined {
-        if(!this.#custom && isDeno)
-        {
+        if (!this.#custom && isDeno) {
             return globalScope.Deno.env.get(name);
         }
 
@@ -162,14 +157,16 @@ export class EnvironmentVariables implements IEnvironmentVariables {
     }
 
     dump(): void {
-        const data : { [key: string]: string } = {};
+        const data: { [key: string]: string } = {};
         for (const key of this.keys) {
             let value = this.get(key);
-            if(value === undefined)
+            if (value === undefined) {
                 continue;
+            }
 
-            if(this.#secrets.includes(key))
+            if (this.#secrets.includes(key)) {
                 value = '*****';
+            }
 
             data[key] = value;
         }
@@ -190,12 +187,11 @@ export class EnvironmentVariables implements IEnvironmentVariables {
             }
         }
 
-        if(!this.#custom && isDeno)
-        {
+        if (!this.#custom && isDeno) {
             globalScope.Deno.env.set(key, value);
             return;
         }
-        
+
         this.#env[key] = value;
     }
 }

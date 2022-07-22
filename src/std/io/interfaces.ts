@@ -1,9 +1,9 @@
-import { Char } from "../primitives/char.ts";
-import { IDisposable } from "../primitives/interfaces.ts";
-import { SeekMode } from "./enums.ts";
+import { Char } from '../primitives/char.ts';
+import { IDisposable } from '../primitives/interfaces.ts';
+import { SeekMode } from './enums.ts';
 
-export interface IWriter{
-    write(buf: Uint8Array) : number;
+export interface IWriter {
+    write(buf: Uint8Array): number;
 }
 
 export interface ITextWriter {
@@ -46,21 +46,18 @@ export interface IHandle {
     readonly handle: number;
 }
 
-
 export interface ISeeker {
     seek(offset: number, whence: SeekMode): number;
 }
 
 export interface ISeekerAsync {
-   
     seekAsync(offset: number, whence: SeekMode): Promise<number>;
 }
 
 export interface IStreamWriter extends IWriter, IAsyncWriter, IDisposable {
     readonly supportsSync: boolean;
-} 
+}
 
 export interface IStreamReader extends IReader, IAsyncReader, IDisposable {
     readonly supportsSync: boolean;
 }
-

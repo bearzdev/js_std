@@ -1,6 +1,11 @@
 {
     "imports": {
         "https://deno.land/std@$STD_VERSION/": "https://deno.land/std@0.148.0/",
-        "https://deno.land/x/bearz_std@$BEARZ_VERSION/": "./src/std/"
+        "https://deno.land/x/bearz_std@$BEARZ_STD_VERSION/": "./src/std/",
+        "https://deno.land/x/js_std@$JS_VERSION/": "./src/std/",
+        
+        "./js-std/": "./src/std/", 
+        "/js-std/": "./src/std/",
+        "../src/std/": "./src/std/"
     }
 }

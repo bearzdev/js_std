@@ -30,8 +30,8 @@ export interface IReadOnlyListOf<T> extends IReadOnlyCollectionOf<T> {
 }
 
 export interface IReadOnlyDictionaryOf<TKey, TValue> extends IReadOnlyCollectionOf<KeyValuePair<TKey, TValue>> {
-    keys() : Iterator<TKey>
-    values() : Iterator<TValue>
+    keys(): Iterator<TKey>;
+    values(): Iterator<TValue>;
     has(key: TKey): boolean;
     get(key: TKey): TValue | undefined;
     getOrThrow(key: TKey): TValue;
@@ -49,16 +49,16 @@ export interface ICollectionOf<T> extends Iterable<T> {
 
 export interface IListOf<T> extends ICollectionOf<T> {
     item: { [index: number]: T };
-    at(index: number) : T;
-    insert(index: number, value: T) : void;
-    deleteAt(index: number, value: T) : void;
+    at(index: number): T;
+    insert(index: number, value: T): void;
+    deleteAt(index: number, value: T): void;
     indexOf(item: T): number;
     lastIndexOf(item: T): number;
 }
 
 export interface IDictionary<TKey, TValue> extends ICollectionOf<KeyValuePair<TKey, TValue>> {
-    keys() : Iterator<TKey>
-    values() : Iterator<TValue>
+    keys(): Iterator<TKey>;
+    values(): Iterator<TValue>;
     add(key: TKey, value: TValue): void;
     add(item: KeyValuePair<TKey, TValue>): void;
     tryAdd(key: TKey, value: TValue): boolean;

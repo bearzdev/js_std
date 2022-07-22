@@ -1,15 +1,16 @@
 // deno-lint-ignore-file no-unused-vars
-import { NotImplementedError } from "../errors/errors.ts";
-import type { 
-    IFileSystem, 
-    ICreateDirectoryOptions, 
-    IRemoveOptions, 
-    ICopyOptions, 
-    IMoveOptions, 
-    IWriteOptions, 
-    IWriteJsonOptions, 
-    IFileInfo, 
-IDirectoryInfo} from './interfaces.ts';
+import { NotImplementedError } from '../errors/errors.ts';
+import type {
+    ICopyOptions,
+    ICreateDirectoryOptions,
+    IDirectoryInfo,
+    IFileInfo,
+    IFileSystem,
+    IMoveOptions,
+    IRemoveOptions,
+    IWriteJsonOptions,
+    IWriteOptions,
+} from './interfaces.ts';
 
 export const fs: IFileSystem = {
     createDirectory(
@@ -195,7 +196,6 @@ export const fs: IFileSystem = {
 
     writeJsonFile: function (
         path: string | URL,
-        
         // deno-lint-ignore no-explicit-any
         data: any,
         options?: IWriteJsonOptions,
@@ -205,7 +205,7 @@ export const fs: IFileSystem = {
 
     writeJsonFileAsync: function (
         path: string | URL,
-        // deno-lint-ignore no-explicit-any        
+        // deno-lint-ignore no-explicit-any
         data: any,
         options?: IWriteJsonOptions,
     ): Promise<void> {

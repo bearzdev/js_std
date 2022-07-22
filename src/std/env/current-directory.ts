@@ -1,22 +1,23 @@
-import { isNode, isDeno, isBrowser, globalScope } from "../runtime/mod.ts";
+import { globalScope, isBrowser, isDeno, isNode } from '../runtime/mod.ts';
 
+let cwd: () => string;
+let chdir: (path: string) => void;
 
-let cwd : () => string;
-let chdir : (path: string) => void;
-
-if(isDeno) {
-    cwd = () =>  globalScope.Deno.cwd();
+if (isDeno) {
+    cwd = () => globalScope.Deno.cwd();
     chdir = (path: string) => globalScope.Deno.chdir(path);
-} else if(isNode) {
+} else if (isNode) {
     cwd = () => globalScope.process.cwd();
     chdir = (path: string) => globalScope.process.chdir(path);
-} else if(isBrowser) {
+} else if (isBrowser) {
     cwd = () => globalScope.location.pathname;
     chdir = (path: string) => globalScope.location.pathname = path;
 } else {
-    let currentDirectory = "/";
+    let currentDirectory = '/';
     cwd = () => currentDirectory;
-    chdir = (path: string) => { currentDirectory = path; };
+    chdir = (path: string) => {
+        currentDirectory = path;
+    };
 }
 
-export { cwd, chdir };
+export { chdir, cwd };
