@@ -68,17 +68,17 @@ export interface IFileSystem {
         options?: ICreateDirectoryOptions,
     ): Promise<void>;
 
-    copyDirectory(src: string, dest: string, options?: ICopyOptions): void;
+    copyDirectory(src: string | URL, dest: string | URL, options?: ICopyOptions): void;
 
     copyDirectoryAsync(
-        src: string,
-        dest: string,
+        src: string | URL,
+        dest: string |URL,
         options?: ICopyOptions,
     ): Promise<void>;
 
-    copyFile(src: string, dest: string): void;
+    copyFile(src: string | URL, dest: string): void;
 
-    copyFileAsync(src: string, dest: string): Promise<void>;
+    copyFileAsync(src: string | URL, dest: string): Promise<void>;
 
     exists(path: string | URL): boolean;
 
@@ -96,35 +96,39 @@ export interface IFileSystem {
 
     lstatAsync(path: string | URL): Promise<IFileInfo>;
 
-    move(src: string, dest: string, options?: IMoveOptions): void;
+    move(src: string | URL, dest: string, options?: IMoveOptions): void;
 
-    moveAsync(src: string, dest: string, options?: IMoveOptions): Promise<void>;
+    moveAsync(src: string | URL, dest: string, options?: IMoveOptions): Promise<void>;
 
     readFile(path: string | URL): Uint8Array;
 
     readFileAsync(path: string | URL): Promise<Uint8Array>;
 
-    readDirectory(path: string): Array<IDirectoryInfo>;
+    readDirectory(path: string | URL): Iterable<IDirectoryInfo>;
 
-    readDirectoryAsync(path: string): Promise<Array<IDirectoryInfo>>;
-
-    // deno-lint-ignore no-explicit-any
-    readJsonFile(path: string): any;
+    readDirectoryAsync(path: string | URL): AsyncIterable<IDirectoryInfo>;
 
     // deno-lint-ignore no-explicit-any
-    readJsonFileAsync(path: string): Promise<any>;
+    readJsonFile(path: string | URL): any;
 
-    readTextFile(path: string): string;
+    // deno-lint-ignore no-explicit-any
+    readJsonFileAsync(path: string | URL): Promise<any>;
 
-    readTextFileAsync(path: string): Promise<string>;
+    readTextFile(path: string | URL): string;
 
-    removeFile(path: string): void;
+    readTextFileAsync(path: string | URL): Promise<string>;
 
-    removeFileAsync(path: string): Promise<void>;
+    realPath(path: string | URL) : string;
 
-    removeDirectory(path: string, options?: IRemoveOptions): void;
+    realPathAsync(path: string | URL): Promise<string>;
 
-    removeDirectoryAsync(path: string, options?: IRemoveOptions): Promise<void>;
+    removeFile(path: string | URL): void;
+
+    removeFileAsync(path: string | URL): Promise<void>;
+
+    removeDirectory(path: string | URL, options?: IRemoveOptions): void;
+
+    removeDirectoryAsync(path: string | URL, options?: IRemoveOptions): Promise<void>;
 
     rename(src: string | URL, dest: string | URL): void;
 

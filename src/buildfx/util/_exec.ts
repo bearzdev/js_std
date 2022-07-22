@@ -1,11 +1,11 @@
-import { ArgumentError } from 'https://deno.land/x/js_std@$JS_VERSION/errors/mod.ts';
 import {
+    ArgumentError,
     CommandBuilder,
     fromArgs,
     IProcessInvocationOptions,
     IProcessResult,
     run,
-} from 'https://deno.land/x/js_std@$JS_VERSION/process/mod.ts';
+} from '../deps.ts';
 
 export function exec(
     exe: string,

@@ -29,6 +29,7 @@ export function validate(data: Uint8Array) {
             continue;
         }
 
+        
         isSpecial = true;
     }
 
@@ -84,8 +85,10 @@ export default class SecretGenerator {
         // as strings are immutable in javascript
         let valid = false;
         const chars: Uint8Array = new Uint8Array(length);
+        const maxAttempts = 5000;
+        let attempts = 0;
 
-        while (!valid) {
+        while (!valid && attempts <  maxAttempts) {
             chars.fill(0);
             const bytes = randomBytes(length);
 
@@ -94,7 +97,12 @@ export default class SecretGenerator {
                 chars[i] = this.#codes[bit];
             }
 
+            attempts++;
             valid = this.#validator(chars);
+        }
+
+        if(!valid) {
+            throw new Error('Failed to generate secret');
         }
 
         return chars;
@@ -117,4 +125,4 @@ export function generateSecret(length: number, characters?: string) {
     return generator.generate(length);
 }
 
-export const secretGenerator = new SecretGenerator();
+export const secretGenerator = new SecretGenerator().addDefaults();

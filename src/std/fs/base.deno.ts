@@ -234,6 +234,14 @@ if (isDeno) {
         });
     };
 
+    fs.realPath = function (path: string | URL): string {
+        return Deno.realPathSync(path);
+    };
+
+    fs.realPathAsync = function (path: string | URL): Promise<string> {
+        return Deno.realPath(path);
+    };
+
     fs.removeFile = function (path: string | URL): void {
         Deno.removeSync(path);
     };
@@ -256,24 +264,14 @@ if (isDeno) {
         return Deno.remove(path, options);
     };
 
-    fs.readDirectory = function (path: string | URL): Array<IDirectoryInfo> {
-        const set = [];
-        for (const info of Deno.readDirSync(path)) {
-            set.push(info);
-        }
-
-        return set;
+    fs.readDirectory = function (path: string | URL): Iterable<IDirectoryInfo> {
+         return Deno.readDirSync(path);
     };
 
-    fs.readDirectoryAsync = async function (
+    fs.readDirectoryAsync = function (
         path: string | URL,
-    ): Promise<Array<IDirectoryInfo>> {
-        const set = [];
-        for await (const info of Deno.readDir(path)) {
-            set.push(info);
-        }
-
-        return set;
+    ): AsyncIterable<IDirectoryInfo> {
+        return Deno.readDir(path);
     };
 
     fs.rename = function (src: string | URL, dest: string | URL): void {
@@ -398,6 +396,9 @@ export const {
     isDirectoryAsync,
     isFile,
     isFileAsync,
+
+    lstat,
+    lstatAsync,
     move,
     moveAsync,
     readDirectory,
@@ -408,6 +409,8 @@ export const {
     readTextFileAsync,
     readJsonFile,
     readJsonFileAsync,
+    realPath,
+    realPathAsync,
     removeDirectory,
     removeDirectoryAsync,
     removeFile,

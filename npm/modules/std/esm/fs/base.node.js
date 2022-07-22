@@ -291,6 +291,19 @@ if (isNode) {
             });
         });
     };
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFile = function (path) {
+        let text = fs.readTextFile(path);
+        text = text.replace(/^\ufeff/g, '');
+        return JSON.parse(text);
+    };
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFileAsync = function (path) {
+        return fs.readTextFileAsync(path).then((text) => {
+            text = text.replace(/^\ufeff/g, '');
+            return JSON.parse(text);
+        });
+    };
     fs.readTextFile = function (path) {
         return nodeFs.readFileSync(path, 'utf8');
     };

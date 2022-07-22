@@ -2,6 +2,7 @@ import { env as envDefault, IEnvironment } from '../env/mod.ts';
 import { filename, filenameWithoutExtension, isAbsolute, join, PATH_SEPARATOR, resolve, tmpDir } from '../path/mod.ts';
 import { randomFileName } from '../random/mod.ts';
 import {
+IDirectoryInfo,
     isDirectory,
     isDirectoryAsync,
     isFile,
@@ -104,12 +105,13 @@ export function which(
 
             if (hasPathExt) {
                 try {
-                    const first = readDirectory(pathSegment)
-                        .find((dirInfo) => {
-                            if (dirInfo.isFile && dirInfo.name) {
-                                return dirInfo.name.toLowerCase() === baseNameLowered;
-                            }
-                        });
+                    let first : IDirectoryInfo | undefined;
+                    for(const entry of readDirectory(pathSegment)) {
+                        if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                            first = entry;
+                            break;
+                        }
+                    }
 
                     if (first?.name) {
                         location = join(pathSegment, first.name);
@@ -124,12 +126,13 @@ export function which(
                 }
             } else {
                 try {
-                    const first = readDirectory(pathSegment)
-                        .find((dirInfo) => {
-                            if (dirInfo.isFile && dirInfo.name) {
-                                return filenameWithoutExtension(dirInfo.name).toLowerCase() === baseNameLowered;
-                            }
-                        });
+                    let first : IDirectoryInfo | undefined;
+                    for(const entry of readDirectory(pathSegment)) {
+                        if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                            first = entry;
+                            break;
+                        }
+                    }
 
                     if (first?.name) {
                         location = join(pathSegment, first.name);
@@ -144,12 +147,13 @@ export function which(
             }
         } else {
             try {
-                const first = readDirectory(pathSegment)
-                    .find((dirInfo) => {
-                        if (dirInfo.isFile && dirInfo.name) {
-                            return dirInfo.name === baseName;
-                        }
-                    });
+                let first : IDirectoryInfo | undefined;
+                for(const entry of readDirectory(pathSegment)) {
+                    if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                        first = entry;
+                        break;
+                    }
+                }
 
                 if (first?.name) {
                     location = join(pathSegment, first.name);
@@ -254,13 +258,14 @@ export async function whichAsync(
 
             if (hasPathExt) {
                 try {
-                    const dirs = await readDirectoryAsync(pathSegment);
-                    const first = dirs
-                        .find((dirInfo) => {
-                            if (dirInfo.isFile && dirInfo.name) {
-                                return dirInfo.name.toLowerCase() === baseNameLowered;
-                            }
-                        });
+                   
+                    let first : IDirectoryInfo | undefined;
+                    for await(const entry of readDirectoryAsync(pathSegment)) {
+                        if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                            first = entry;
+                            break;
+                        }
+                    }
 
                     if (first?.name) {
                         location = join(pathSegment, first.name);
@@ -275,13 +280,13 @@ export async function whichAsync(
                 }
             } else {
                 try {
-                    const dirs = await readDirectoryAsync(pathSegment);
-                    const first = dirs
-                        .find((dirInfo) => {
-                            if (dirInfo.isFile && dirInfo.name) {
-                                return filenameWithoutExtension(dirInfo.name).toLowerCase() === baseNameLowered;
-                            }
-                        });
+                    let first : IDirectoryInfo | undefined;
+                    for await(const entry of readDirectoryAsync(pathSegment)) {
+                        if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                            first = entry;
+                            break;
+                        }
+                    }
 
                     if (first?.name) {
                         location = join(pathSegment, first.name);
@@ -296,13 +301,13 @@ export async function whichAsync(
             }
         } else {
             try {
-                const dirs = await readDirectoryAsync(pathSegment);
-                const first = dirs
-                    .find((dirInfo) => {
-                        if (dirInfo.isFile && dirInfo.name) {
-                            return dirInfo.name === baseName;
-                        }
-                    });
+                let first : IDirectoryInfo | undefined;
+                for await(const entry of readDirectoryAsync(pathSegment)) {
+                    if(entry.isFile && entry.name?.toLowerCase() === baseNameLowered) {
+                        first = entry;
+                        break;
+                    }
+                }
 
                 if (first?.name) {
                     location = join(pathSegment, first.name);

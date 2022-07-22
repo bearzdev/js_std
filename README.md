@@ -44,6 +44,7 @@ Deno:
 - Focuses on using web standards APIs where possible like AbortSignal, fetch, etc.
 - ES6 enables you to write larger modules.
 - Enables test modules to live next to the source modules similar to go.
+- Tests written in Deno can be executed in node with a shim.
 
 This pushes the written code to use standards and it is faster to iterate on. The downside
 is that Deno doesn't yet have full compatibility with Node Js.

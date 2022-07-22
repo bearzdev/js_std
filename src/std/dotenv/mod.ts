@@ -170,8 +170,7 @@ function assertSafe(
     confExample: DotenvConfig,
     allowEmptyValues: boolean,
 ) {
-    const currentEnv = Deno.env.toObject();
-
+    const currentEnv = env.vars.toObject();
     // Not all the variables have to be defined in .env, they can be supplied externally
     const confWithEnv = Object.assign({}, currentEnv, conf);
 

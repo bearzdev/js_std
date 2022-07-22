@@ -366,6 +366,21 @@ if (isNode) {
         });
     };
 
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFile = function (path: string | URL): any {
+        let text = fs.readTextFile(path);
+        text = text.replace(/^\ufeff/g, '');
+        return JSON.parse(text);
+    };
+
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFileAsync = function (path: string | URL): Promise<any> {
+        return fs.readTextFileAsync(path).then((text) => {
+            text = text.replace(/^\ufeff/g, '');
+            return JSON.parse(text);
+        });
+    };
+
     fs.readTextFile = function (path: string | URL): string {
         return nodeFs.readFileSync(path, 'utf8');
     };

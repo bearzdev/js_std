@@ -34,7 +34,7 @@ export class SecretStore {
             return new SecretStore(fileName);
         }
 
-        return new SecretStore(fileName, JSON.parse(data));
+        return new SecretStore(fileName, data);
     }
 
     keys(): Iterator<string> {
@@ -84,6 +84,7 @@ export class SecretStore {
 
         entry = Object.assign(entry, data);
         this.#store.set(key, entry);
+        this.save();
     }
 
     set(key: string, value: string): void {

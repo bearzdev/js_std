@@ -10,7 +10,7 @@ import {
     IWriteOptions,
 } from './interfaces.ts';
 import { fs } from './base.ts';
-import { basename, join } from '../path/mod.ts';
+import { basename, join, fromFileUrl } from '../path/mod.ts';
 import * as nodeFs from 'https://deno.land/std@0.147.0/node/fs.ts';
 import { isNode } from '../runtime/mod.ts';
 
@@ -54,7 +54,7 @@ if (isNode) {
         // Copy
         if (fs.lstat(src).isDirectory) {
             const files = fs.readDirectory(src);
-            files.forEach(function (file) {
+            for (const file of files) {
                 const n = file.name;
                 if (n === null) {
                     throw Error('File name is null');
@@ -66,48 +66,41 @@ if (isNode) {
                 } else {
                     fs.copyFile(curSource, targetFolder);
                 }
-            });
+            }
         }
     };
 
-    fs.copyDirectoryAsync = function (
+    fs.copyDirectoryAsync = async function (
         src: string,
         dest: string,
         options?: ICopyOptions,
     ): Promise<void> {
         const targetFolder = join(dest, basename(src));
 
-        return new Promise(function (resolve, reject) {
-            try {
-                if (!fs.exists(targetFolder)) {
-                    fs.createDirectory(targetFolder, { recursive: true });
-                } else if (options?.overwrite) {
-                    fs.removeDirectory(targetFolder, { recursive: true });
-                    fs.createDirectory(targetFolder, { recursive: true });
+        if (!fs.exists(targetFolder)) {
+            await fs.createDirectoryAsync(targetFolder, { recursive: true });
+        } else if (options?.overwrite) {
+            await fs.removeDirectoryAsync(targetFolder, { recursive: true });
+            await fs.createDirectory(targetFolder, { recursive: true });
+        }
+
+        // Copy
+        if (fs.lstat(src).isDirectory) {
+        
+            for await (const file of readDirectoryAsync(src)) {
+                const n = file.name;
+                if (n === null) {
+                    throw Error('File name is null');
                 }
 
-                // Copy
-                if (fs.lstat(src).isDirectory) {
-                    const files = fs.readDirectory(src);
-                    files.forEach(function (file) {
-                        const n = file.name;
-                        if (n === null) {
-                            throw Error('File name is null');
-                        }
-
-                        const curSource = join(src, n);
-                        if (fs.lstat(curSource).isDirectory) {
-                            fs.copyDirectory(curSource, targetFolder, options);
-                        } else {
-                            fs.copyFile(curSource, targetFolder);
-                        }
-                    });
+                const curSource = join(src, n);
+                if (fs.lstat(curSource).isDirectory) {
+                    fs.copyDirectory(curSource, targetFolder, options);
+                } else {
+                    fs.copyFile(curSource, targetFolder);
                 }
-                resolve();
-            } catch (ex) {
-                reject(ex);
             }
-        });
+        }
     };
 
     fs.exists = function (path: string | URL): boolean {
@@ -308,7 +301,7 @@ if (isNode) {
         });
     };
 
-    fs.readDirectory = function (path: string | URL): IDirectoryInfo[] {
+    fs.readDirectory = function (path: string | URL): Iterable<IDirectoryInfo> {
         return nodeFs.readdirSync(path, { withFileTypes: true }).map(
             (dirent) => {
                 const di: IDirectoryInfo = {
@@ -323,10 +316,10 @@ if (isNode) {
         );
     };
 
-    fs.readDirectoryAsync = function (
+    fs.readDirectoryAsync = async function* (
         path: string | URL,
-    ): Promise<IDirectoryInfo[]> {
-        return new Promise(function (resolve, reject) {
+    ): AsyncIterable<IDirectoryInfo> {
+        const p = new Promise<IDirectoryInfo[]>(function (resolve, reject) {
             nodeFs.readdir(
                 path,
                 { withFileTypes: true },
@@ -348,6 +341,12 @@ if (isNode) {
                 },
             );
         });
+
+        const results = await p;
+        for(const result of results) {
+            yield result;
+        }
+
     };
 
     fs.readFile = function (path: string | URL): Uint8Array {
@@ -366,6 +365,21 @@ if (isNode) {
         });
     };
 
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFile = function (path: string | URL): any {
+        let text = fs.readTextFile(path);
+        text = text.replace(/^\ufeff/g, '');
+        return JSON.parse(text);
+    };
+
+    // deno-lint-ignore no-explicit-any
+    fs.readJsonFileAsync = function (path: string | URL): Promise<any> {
+        return fs.readTextFileAsync(path).then((text) => {
+            text = text.replace(/^\ufeff/g, '');
+            return JSON.parse(text);
+        });
+    };
+
     fs.readTextFile = function (path: string | URL): string {
         return nodeFs.readFileSync(path, 'utf8');
     };
@@ -378,6 +392,28 @@ if (isNode) {
                     return;
                 }
                 resolve(data);
+            });
+        });
+    };
+
+    fs.realPath = function (path: string | URL): string {
+        if(path instanceof URL) 
+            path = fromFileUrl(path);
+
+        return nodeFs.realpathSync(path);
+    };
+
+    fs.realPathAsync = function (path: string | URL): Promise<string> {
+        
+        return new Promise<string>(function (resolve, reject) {
+            if(path instanceof URL)
+            path = fromFileUrl(path);
+            nodeFs.realpath(path, function (error, realPath) {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(realPath || '');
             });
         });
     };
@@ -621,10 +657,20 @@ if (isNode) {
         const json = JSON.stringify(
             data,
             null,
-            options ? options.spaces : undefined,
+            options ? options.spaces : 4,
         );
         fs.writeTextFile(path, json, options);
     };
+
+    fs.writeJsonFileAsync = async function (
+        path: string | URL,
+        // deno-lint-ignore no-explicit-any
+        data: any,
+        options?: IWriteJsonOptions,
+    ): Promise<void> {
+        const json = JSON.stringify(data, null, options?.spaces || 4);
+        await fs.writeTextFileAsync(path, json, options);
+    }
 }
 
 export const {
@@ -640,6 +686,8 @@ export const {
     isDirectoryAsync,
     isFile,
     isFileAsync,
+    lstat,
+    lstatAsync,
     move,
     moveAsync,
     readDirectory,
@@ -650,6 +698,8 @@ export const {
     readTextFileAsync,
     readJsonFile,
     readJsonFileAsync,
+    realPath,
+    realPathAsync,
     removeDirectory,
     removeDirectoryAsync,
     removeFile,

@@ -10,7 +10,7 @@ export * from './asserts.ts';
  *
  * @example
  *
- * import { test } from 'https://deno.land/x/bearz_std@$BEARZ_VERSION/testing/mod.ts';
+ * import { test } from 'https://deno.land/x/org_std@$ORG_STD_VERSION/testing/mod.ts';
  *
  * test("demo: equals", (assert) => {
  *   assert.equal("hello", "hello");
@@ -37,16 +37,17 @@ export function test(
  * This is useful for tests that may fail in some environments.
  * @example
  *
- * import { test } from 'https://deno.land/x/bearz_std@$BEARZ_VERSION/testing/mod.ts';
+ * import { test } from 'https://deno.land/x/org_std@$ORG_STD_VERSION/testing/mod.ts';
  *
  * test("demo: equals", (assert) => {
  *   assert.equal("hello", "hello");
  * });
  */
-// deno-lint-ignore no-explicit-any
+
 export function testWhen(
     predicate: boolean | (() => boolean),
     name: string,
+    // deno-lint-ignore no-explicit-any
     fn: (assert: AssertContext, t: any) => void | Promise<void>,
 ): void {
     if (typeof predicate === 'function') {

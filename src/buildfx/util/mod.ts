@@ -1,5 +1,4 @@
-import { isWindows } from 'https://deno.land/x/js_std@$JS_VERSION/runtime/mod.ts';
-import { run } from 'https://deno.land/x/js_std@$JS_VERSION/process/mod.ts';
+import { isWindows, run } from '../deps.ts';
 
 let isUserAdminProcess: boolean | undefined = undefined;
 let isRootAdminProcess: boolean | undefined = undefined;

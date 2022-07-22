@@ -91,13 +91,13 @@ export const fs: IFileSystem = {
         throw new NotImplementedError();
     },
 
-    readDirectory: function (path: string): Array<IDirectoryInfo> {
+    readDirectory: function (path: string): Iterable<IDirectoryInfo> {
         throw new NotImplementedError();
     },
 
     readDirectoryAsync: function (
         path: string,
-    ): Promise<Array<IDirectoryInfo>> {
+    ): AsyncIterable<IDirectoryInfo> {
         throw new NotImplementedError();
     },
 
@@ -123,7 +123,15 @@ export const fs: IFileSystem = {
     },
 
     // deno-lint-ignore no-explicit-any
-    readJsonFileAsync: function (path: string): Promise<any> {
+    readJsonFileAsync: function (path: string | URL): Promise<any> {
+        throw new NotImplementedError();
+    },
+
+    realPath: function (path: string | URL): string {
+        throw new NotImplementedError();
+    },
+
+    realPathAsync: function (path: string | URL): Promise<string> {
         throw new NotImplementedError();
     },
 
