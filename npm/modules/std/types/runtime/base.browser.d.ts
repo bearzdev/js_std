@@ -1,5 +1,5 @@
-import type { IRuntimeEnvironment, Browser, Engine, RuntimeArch, IVersion, OsFamily, Runtime } from './interfaces.js';
+import type { Browser, Engine, IRuntimeEnvironment, IVersion, OsFamily, Runtime, RuntimeArch } from './interfaces.js';
 import { Version } from './version.js';
 import { globalScope } from './global.js';
-export { Version, IVersion, IRuntimeEnvironment, Browser, Engine, RuntimeArch, OsFamily, Runtime, globalScope, };
+export { Browser, Engine, globalScope, IRuntimeEnvironment, IVersion, OsFamily, Runtime, RuntimeArch, Version };
 export declare function getBrowserRuntimeInformation(): Promise<IRuntimeEnvironment>;

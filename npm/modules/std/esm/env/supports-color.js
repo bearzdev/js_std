@@ -1,10 +1,10 @@
 // based on chalk
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { isBrowser, globalScope, isDeno, isNode, isWindows, runtimeInfo } from '../runtime/mod.js';
+import { globalScope, isBrowser, isDeno, isNode, isWindows, runtimeInfo } from '../runtime/mod.js';
 import { ciMap } from './ci.js';
 import { commandLineArgs } from './process.js';
-import { envVars } from "./variables.js";
+import { envVars } from './variables.js';
 let streamSupportsColor = {
     stderr: {
         off: true,
@@ -22,9 +22,9 @@ let streamSupportsColor = {
     },
 };
 if (isBrowser) {
-    const isBlinkBasedBrowser = globalScope.navigator.userAgentData ?
-        globalScope.navigator.userAgentData.brands.some((next) => next.brand === 'Chromium') :
-        /\b(Chrome|Chromium)\//.test(navigator.userAgent);
+    const isBlinkBasedBrowser = globalScope.navigator.userAgentData
+        ? globalScope.navigator.userAgentData.brands.some((next) => next.brand === 'Chromium')
+        : /\b(Chrome|Chromium)\//.test(navigator.userAgent);
     if (isBlinkBasedBrowser) {
         const colorSupport = {
             off: false,
@@ -44,15 +44,26 @@ else if (isDeno || isNode) {
     let outRedirected = false;
     let errRedirected = false;
     let quickNo = false;
-    if (isDeno && globalScope.Deno.noColors)
+    if (isDeno && globalScope.Deno.noColors) {
         quickNo = true;
+    }
     const forceColor = envVars.get('FORCE_COLOR');
-    if (!quickNo && forceColor && forceColor.toLowerCase() === 'false')
+    if (!quickNo && forceColor && forceColor.toLowerCase() === 'false') {
         quickNo = true;
+    }
     const args = commandLineArgs;
     if (!quickNo && args.length > 0) {
-        const noColorValues = ['--no-color', '-no-color', '--no-colors', '-no-colors', '-color=false', '--color=false', '-color=never', '--color=never'];
-        const noColor = args.some(value => noColorValues.includes(value));
+        const noColorValues = [
+            '--no-color',
+            '-no-color',
+            '--no-colors',
+            '-no-colors',
+            '-color=false',
+            '--color=false',
+            '-color=never',
+            '--color=never',
+        ];
+        const noColor = args.some((value) => noColorValues.includes(value));
         quickNo = noColor;
     }
     // already set streamSupportsColor values to false, so only focus on the other cases
@@ -68,26 +79,43 @@ else if (isDeno || isNode) {
             errRedirected = isatty(globalScope.process.stderr);
         }
         const getColorLevel = () => {
-            const trueColorValues = ['--color=16m', '-color=16m', '--color=full', '-color=full', '--color=truecolor', '-color=truecolor'];
-            if (args.some(value => trueColorValues.includes(value))) {
+            const trueColorValues = [
+                '--color=16m',
+                '-color=16m',
+                '--color=full',
+                '-color=full',
+                '--color=truecolor',
+                '-color=truecolor',
+            ];
+            if (args.some((value) => trueColorValues.includes(value))) {
                 return 3;
             }
-            if (args.some(value => value === '--color=256' || value === '-color=256'))
+            if (args.some((value) => value === '--color=256' || value === '-color=256')) {
                 return 2;
+            }
             let useForceColor = false;
-            if (forceColor && forceColor.toLowerCase() === 'true')
+            if (forceColor && forceColor.toLowerCase() === 'true') {
                 useForceColor = true;
+            }
             if (!useForceColor) {
-                const someColorValues = ['--color', '-color', '--color=true', '-color=true', '--color=always', '-color=always'];
-                useForceColor = args.some(value => someColorValues.includes(value));
+                const someColorValues = [
+                    '--color',
+                    '-color',
+                    '--color=true',
+                    '-color=true',
+                    '--color=always',
+                    '-color=always',
+                ];
+                useForceColor = args.some((value) => someColorValues.includes(value));
             }
             const min = useForceColor ? 1 : 0;
             // if you're using CI, then it will override term defaults
             for (const ci of ciMap.values()) {
-                if (typeof ci.supportsColor === 'undefined')
+                if (typeof ci.supportsColor === 'undefined') {
                     continue;
-                if ((typeof ci.test === 'function' && ci.test())
-                    || typeof (ci.test) === 'string' && envVars.has(ci.test)) {
+                }
+                if ((typeof ci.test === 'function' && ci.test()) ||
+                    typeof (ci.test) === 'string' && envVars.has(ci.test)) {
                     if (typeof ci.supportsColor === 'function') {
                         return ci.supportsColor() || min;
                     }
@@ -102,12 +130,13 @@ else if (isDeno || isNode) {
             }
             // works on vscode / linux
             const colorTerm = envVars.get('COLORTERM');
-            if (colorTerm && colorTerm === 'truecolor')
+            if (colorTerm && colorTerm === 'truecolor') {
                 return 3;
+            }
             if (isWindows) {
                 const osRelease = runtimeInfo.osVersion.split('.');
-                if (Number(osRelease[0]) >= 10
-                    && Number(osRelease[2]) >= 10586) {
+                if (Number(osRelease[0]) >= 10 &&
+                    Number(osRelease[2]) >= 10586) {
                     return Number(osRelease[2]) >= 14931 ? 3 : 2;
                 }
                 return 1;
@@ -148,7 +177,7 @@ else if (isDeno || isNode) {
                     hasBasic: true,
                     has256: level >= 2,
                     has16m: level >= 3,
-                }
+                },
             };
         }
     }

@@ -7,4 +7,4 @@ declare let processId: number;
 export declare const newLine: string;
 export declare const setExitCode: (code: number) => number;
 export declare const getExitCode: () => number;
-export { cwd, chdir, exit, processId, commandLine, commandLineArgs };
+export { chdir, commandLine, commandLineArgs, cwd, exit, processId };

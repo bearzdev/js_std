@@ -1,4 +1,4 @@
-import type { IDisposable } from "../primitives/interfaces.js";
+import type { IDisposable } from '../primitives/interfaces.js';
 export interface IProcessCapture extends IDisposable {
     write(data: Uint8Array): void;
     writeLine(line: string): void;

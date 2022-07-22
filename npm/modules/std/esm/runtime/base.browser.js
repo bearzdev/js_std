@@ -1,6 +1,6 @@
 import { Version } from './version.js';
 import { globalScope } from './global.js';
-export { Version, globalScope, };
+export { globalScope, Version };
 let re;
 // deno-lint-ignore no-explicit-any
 const data = {};
@@ -94,10 +94,12 @@ export async function getBrowserRuntimeInformation() {
                 browser = 'chromium';
             }
         }
-        if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true)
+        if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true) {
             debug = globalScope['_DEBUG'];
-        if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true)
+        }
+        if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true) {
             trace = globalScope['_TRACE'];
+        }
         const re = {
             version: Version.parse(uaData.version),
             engine: uaData.engine,
@@ -109,13 +111,13 @@ export async function getBrowserRuntimeInformation() {
             is64bitProcess: is64bit,
             debug: debug,
             trace: trace,
-            data: data
+            data: data,
         };
         return re;
     }
     else if (!versionString && !browser) {
         const parts = userAgent.split(' ');
-        const browsers = parts.filter(p => p.includes('/'));
+        const browsers = parts.filter((p) => p.includes('/'));
         let stop = false;
         for (const next of browsers) {
             const [name, version] = next.split('/');
@@ -136,7 +138,7 @@ export async function getBrowserRuntimeInformation() {
                     data['platform'] = name;
                     stop = true;
                     break;
-                case "EdgiOS":
+                case 'EdgiOS':
                     browser = 'edge';
                     engine = 'v8';
                     mobile = true;
@@ -153,7 +155,7 @@ export async function getBrowserRuntimeInformation() {
                     stop = true;
                     break;
                 case 'Edg':
-                case "Edge":
+                case 'Edge':
                     browser = 'edge';
                     engine = 'v8';
                     versionString = version;
@@ -202,10 +204,12 @@ export async function getBrowserRuntimeInformation() {
     catch (e) {
         console.debug(e);
     }
-    if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true)
+    if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true) {
         debug = globalScope['_DEBUG'];
-    if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true)
+    }
+    if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true) {
         trace = globalScope['_TRACE'];
+    }
     re = {
         version: v,
         engine: engine || 'unknown',
@@ -218,7 +222,7 @@ export async function getBrowserRuntimeInformation() {
         is64bitProcess: is64bit,
         debug: debug,
         trace: trace,
-        data: data
+        data: data,
     };
     return re;
 }

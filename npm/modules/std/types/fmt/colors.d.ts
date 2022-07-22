@@ -13,7 +13,7 @@
  *
  * @module
  */
-import { supportsColor } from "../env/supports-color.js";
+import { supportsColor } from '../env/supports-color.js';
 export { supportsColor };
 /** RGB 8-bits per channel. Each in range `0->255` or `0x00->0xff` */
 interface Rgb {

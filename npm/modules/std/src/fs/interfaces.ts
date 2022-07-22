@@ -165,7 +165,6 @@ export interface IFileSystem {
         options?: IWriteJsonOptions,
     ): void;
 
-    
     writeJsonFileAsync(
         path: string | URL,
         // deno-lint-ignore no-explicit-any

@@ -27,13 +27,21 @@ with `choco install deno -y`.
 
 ## Rationale
 
+Only es6 modules are generated for Node so that top-level async can be used. Js does not
+have synchronous equivalents for its newer APIs which can lead to race conditions
+without the ability to use async/await.
+
+Only named exports are used to enable tree shaking.
+
+### Why Deno
+
 Deno:
 
-- runs typescript directly
-- has a single executable
-- runs tests quickly
-- can convert a Deno ES6 module into an npm package using the Deno-To-Node ("DNT") tool. 
-- focuses on using web standards APIs where possible like AbortSignal, fetch, etc.
+- Runs typescript directly.
+- Has a single executable
+- Runs tests quickly
+- Can convert a Deno ES6 module into an npm package using the Deno-To-Node ("DNT") tool.
+- Focuses on using web standards APIs where possible like AbortSignal, fetch, etc.
 - ES6 enables you to write larger modules.
 - Enables test modules to live next to the source modules similar to go.
 

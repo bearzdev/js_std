@@ -1,5 +1,5 @@
-import { AssertContext } from "./asserts.js";
-export * from "./asserts.js";
+import { AssertContext } from './asserts.js';
+export * from './asserts.js';
 /**
  * Register a test which will be run when `deno test` is used on the command line
  * and the containing module looks like a test module. fn can be async if required.

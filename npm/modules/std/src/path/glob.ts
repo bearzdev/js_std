@@ -1,48 +1,48 @@
 // Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import { isWindows, OsFamily, runtimeInfo } from "../runtime/mod.js";
-import { SEP, SEP_PATTERN } from "./separator.js";
-import * as _win32 from "./win32.js";
-import * as _posix from "./posix.js";
+import { isWindows, OsFamily, runtimeInfo } from '../runtime/mod.js';
+import { SEP, SEP_PATTERN } from './separator.js';
+import * as _win32 from './win32.js';
+import * as _posix from './posix.js';
 
 const path = isWindows ? _win32 : _posix;
 const { join, normalize } = path;
 
 export interface GlobOptions {
-  /** Extended glob syntax.
-   * See https://www.linuxjournal.com/content/bash-extended-globbing. Defaults
-   * to true. */
-  extended?: boolean;
-  /** Globstar syntax.
-   * See https://www.linuxjournal.com/content/globstar-new-bash-globbing-option.
-   * If false, `**` is treated like `*`. Defaults to true. */
-  globstar?: boolean;
-  /** Whether globstar should be case insensitive. */
-  caseInsensitive?: boolean;
-  /** Operating system. Defaults to the native OS. */
-  os?: OsFamily;
+    /** Extended glob syntax.
+     * See https://www.linuxjournal.com/content/bash-extended-globbing. Defaults
+     * to true. */
+    extended?: boolean;
+    /** Globstar syntax.
+     * See https://www.linuxjournal.com/content/globstar-new-bash-globbing-option.
+     * If false, `**` is treated like `*`. Defaults to true. */
+    globstar?: boolean;
+    /** Whether globstar should be case insensitive. */
+    caseInsensitive?: boolean;
+    /** Operating system. Defaults to the native OS. */
+    os?: OsFamily;
 }
 
 export type GlobToRegExpOptions = GlobOptions;
 
 const regExpEscapeChars = [
-  "!",
-  "$",
-  "(",
-  ")",
-  "*",
-  "+",
-  ".",
-  "=",
-  "?",
-  "[",
-  "\\",
-  "^",
-  "{",
-  "|",
+    '!',
+    '$',
+    '(',
+    ')',
+    '*',
+    '+',
+    '.',
+    '=',
+    '?',
+    '[',
+    '\\',
+    '^',
+    '{',
+    '|',
 ];
-const rangeEscapeChars = ["-", "\\", "]"];
+const rangeEscapeChars = ['-', '\\', ']'];
 
 /** Convert a glob string to a regular expression.
  *
@@ -100,313 +100,310 @@ const rangeEscapeChars = ["-", "\\", "]"];
  *   `!(foo|bar)` is treated like `!(@(foo|bar)*)`. This will work correctly if
  *   the group occurs not nested at the end of the segment. */
 export function globToRegExp(
-  glob: string,
-  {
-    extended = true,
-    globstar: globstarOption = true,
-    os = runtimeInfo.osFamily,
-    caseInsensitive = false,
-  }: GlobToRegExpOptions = {},
+    glob: string,
+    {
+        extended = true,
+        globstar: globstarOption = true,
+        os = runtimeInfo.osFamily,
+        caseInsensitive = false,
+    }: GlobToRegExpOptions = {},
 ): RegExp {
-  if (glob == "") {
-    return /(?!)/;
-  }
+    if (glob == '') {
+        return /(?!)/;
+    }
 
-  const sep = os == "windows" ? "(?:\\\\|/)+" : "/+";
-  const sepMaybe = os == "windows" ? "(?:\\\\|/)*" : "/*";
-  const seps = os == "windows" ? ["\\", "/"] : ["/"];
-  const globstar = os == "windows"
-    ? "(?:[^\\\\/]*(?:\\\\|/|$)+)*"
-    : "(?:[^/]*(?:/|$)+)*";
-  const wildcard = os == "windows" ? "[^\\\\/]*" : "[^/]*";
-  const escapePrefix = os == "windows" ? "`" : "\\";
+    const sep = os == 'windows' ? '(?:\\\\|/)+' : '/+';
+    const sepMaybe = os == 'windows' ? '(?:\\\\|/)*' : '/*';
+    const seps = os == 'windows' ? ['\\', '/'] : ['/'];
+    const globstar = os == 'windows' ? '(?:[^\\\\/]*(?:\\\\|/|$)+)*' : '(?:[^/]*(?:/|$)+)*';
+    const wildcard = os == 'windows' ? '[^\\\\/]*' : '[^/]*';
+    const escapePrefix = os == 'windows' ? '`' : '\\';
 
-  // Remove trailing separators.
-  let newLength = glob.length;
-  for (; newLength > 1 && seps.includes(glob[newLength - 1]); newLength--);
-  glob = glob.slice(0, newLength);
+    // Remove trailing separators.
+    let newLength = glob.length;
+    for (; newLength > 1 && seps.includes(glob[newLength - 1]); newLength--);
+    glob = glob.slice(0, newLength);
 
-  let regExpString = "";
+    let regExpString = '';
 
-  // Terminates correctly. Trust that `j` is incremented every iteration.
-  for (let j = 0; j < glob.length;) {
-    let segment = "";
-    const groupStack: string[] = [];
-    let inRange = false;
-    let inEscape = false;
-    let endsWithSep = false;
-    let i = j;
+    // Terminates correctly. Trust that `j` is incremented every iteration.
+    for (let j = 0; j < glob.length;) {
+        let segment = '';
+        const groupStack: string[] = [];
+        let inRange = false;
+        let inEscape = false;
+        let endsWithSep = false;
+        let i = j;
 
-    // Terminates with `i` at the non-inclusive end of the current segment.
-    for (; i < glob.length && !seps.includes(glob[i]); i++) {
-      if (inEscape) {
-        inEscape = false;
-        const escapeChars = inRange ? rangeEscapeChars : regExpEscapeChars;
-        segment += escapeChars.includes(glob[i]) ? `\\${glob[i]}` : glob[i];
-        continue;
-      }
+        // Terminates with `i` at the non-inclusive end of the current segment.
+        for (; i < glob.length && !seps.includes(glob[i]); i++) {
+            if (inEscape) {
+                inEscape = false;
+                const escapeChars = inRange ? rangeEscapeChars : regExpEscapeChars;
+                segment += escapeChars.includes(glob[i]) ? `\\${glob[i]}` : glob[i];
+                continue;
+            }
 
-      if (glob[i] == escapePrefix) {
-        inEscape = true;
-        continue;
-      }
+            if (glob[i] == escapePrefix) {
+                inEscape = true;
+                continue;
+            }
 
-      if (glob[i] == "[") {
-        if (!inRange) {
-          inRange = true;
-          segment += "[";
-          if (glob[i + 1] == "!") {
-            i++;
-            segment += "^";
-          } else if (glob[i + 1] == "^") {
-            i++;
-            segment += "\\^";
-          }
-          continue;
-        } else if (glob[i + 1] == ":") {
-          let k = i + 1;
-          let value = "";
-          while (glob[k + 1] != null && glob[k + 1] != ":") {
-            value += glob[k + 1];
-            k++;
-          }
-          if (glob[k + 1] == ":" && glob[k + 2] == "]") {
-            i = k + 2;
-            if (value == "alnum") segment += "\\dA-Za-z";
-            else if (value == "alpha") segment += "A-Za-z";
-            else if (value == "ascii") segment += "\x00-\x7F";
-            else if (value == "blank") segment += "\t ";
-            else if (value == "cntrl") segment += "\x00-\x1F\x7F";
-            else if (value == "digit") segment += "\\d";
-            else if (value == "graph") segment += "\x21-\x7E";
-            else if (value == "lower") segment += "a-z";
-            else if (value == "print") segment += "\x20-\x7E";
-            else if (value == "punct") {
-              segment += "!\"#$%&'()*+,\\-./:;<=>?@[\\\\\\]^_‘{|}~";
-            } else if (value == "space") segment += "\\s\v";
-            else if (value == "upper") segment += "A-Z";
-            else if (value == "word") segment += "\\w";
-            else if (value == "xdigit") segment += "\\dA-Fa-f";
-            continue;
-          }
+            if (glob[i] == '[') {
+                if (!inRange) {
+                    inRange = true;
+                    segment += '[';
+                    if (glob[i + 1] == '!') {
+                        i++;
+                        segment += '^';
+                    } else if (glob[i + 1] == '^') {
+                        i++;
+                        segment += '\\^';
+                    }
+                    continue;
+                } else if (glob[i + 1] == ':') {
+                    let k = i + 1;
+                    let value = '';
+                    while (glob[k + 1] != null && glob[k + 1] != ':') {
+                        value += glob[k + 1];
+                        k++;
+                    }
+                    if (glob[k + 1] == ':' && glob[k + 2] == ']') {
+                        i = k + 2;
+                        if (value == 'alnum') segment += '\\dA-Za-z';
+                        else if (value == 'alpha') segment += 'A-Za-z';
+                        else if (value == 'ascii') segment += '\x00-\x7F';
+                        else if (value == 'blank') segment += '\t ';
+                        else if (value == 'cntrl') segment += '\x00-\x1F\x7F';
+                        else if (value == 'digit') segment += '\\d';
+                        else if (value == 'graph') segment += '\x21-\x7E';
+                        else if (value == 'lower') segment += 'a-z';
+                        else if (value == 'print') segment += '\x20-\x7E';
+                        else if (value == 'punct') {
+                            segment += '!"#$%&\'()*+,\\-./:;<=>?@[\\\\\\]^_‘{|}~';
+                        } else if (value == 'space') segment += '\\s\v';
+                        else if (value == 'upper') segment += 'A-Z';
+                        else if (value == 'word') segment += '\\w';
+                        else if (value == 'xdigit') segment += '\\dA-Fa-f';
+                        continue;
+                    }
+                }
+            }
+
+            if (glob[i] == ']' && inRange) {
+                inRange = false;
+                segment += ']';
+                continue;
+            }
+
+            if (inRange) {
+                if (glob[i] == '\\') {
+                    segment += `\\\\`;
+                } else {
+                    segment += glob[i];
+                }
+                continue;
+            }
+
+            if (
+                glob[i] == ')' && groupStack.length > 0 &&
+                groupStack[groupStack.length - 1] != 'BRACE'
+            ) {
+                segment += ')';
+                const type = groupStack.pop()!;
+                if (type == '!') {
+                    segment += wildcard;
+                } else if (type != '@') {
+                    segment += type;
+                }
+                continue;
+            }
+
+            if (
+                glob[i] == '|' && groupStack.length > 0 &&
+                groupStack[groupStack.length - 1] != 'BRACE'
+            ) {
+                segment += '|';
+                continue;
+            }
+
+            if (glob[i] == '+' && extended && glob[i + 1] == '(') {
+                i++;
+                groupStack.push('+');
+                segment += '(?:';
+                continue;
+            }
+
+            if (glob[i] == '@' && extended && glob[i + 1] == '(') {
+                i++;
+                groupStack.push('@');
+                segment += '(?:';
+                continue;
+            }
+
+            if (glob[i] == '?') {
+                if (extended && glob[i + 1] == '(') {
+                    i++;
+                    groupStack.push('?');
+                    segment += '(?:';
+                } else {
+                    segment += '.';
+                }
+                continue;
+            }
+
+            if (glob[i] == '!' && extended && glob[i + 1] == '(') {
+                i++;
+                groupStack.push('!');
+                segment += '(?!';
+                continue;
+            }
+
+            if (glob[i] == '{') {
+                groupStack.push('BRACE');
+                segment += '(?:';
+                continue;
+            }
+
+            if (glob[i] == '}' && groupStack[groupStack.length - 1] == 'BRACE') {
+                groupStack.pop();
+                segment += ')';
+                continue;
+            }
+
+            if (glob[i] == ',' && groupStack[groupStack.length - 1] == 'BRACE') {
+                segment += '|';
+                continue;
+            }
+
+            if (glob[i] == '*') {
+                if (extended && glob[i + 1] == '(') {
+                    i++;
+                    groupStack.push('*');
+                    segment += '(?:';
+                } else {
+                    const prevChar = glob[i - 1];
+                    let numStars = 1;
+                    while (glob[i + 1] == '*') {
+                        i++;
+                        numStars++;
+                    }
+                    const nextChar = glob[i + 1];
+                    if (
+                        globstarOption && numStars == 2 &&
+                        [...seps, undefined].includes(prevChar) &&
+                        [...seps, undefined].includes(nextChar)
+                    ) {
+                        segment += globstar;
+                        endsWithSep = true;
+                    } else {
+                        segment += wildcard;
+                    }
+                }
+                continue;
+            }
+
+            segment += regExpEscapeChars.includes(glob[i]) ? `\\${glob[i]}` : glob[i];
         }
-      }
 
-      if (glob[i] == "]" && inRange) {
-        inRange = false;
-        segment += "]";
-        continue;
-      }
-
-      if (inRange) {
-        if (glob[i] == "\\") {
-          segment += `\\\\`;
-        } else {
-          segment += glob[i];
+        // Check for unclosed groups or a dangling backslash.
+        if (groupStack.length > 0 || inRange || inEscape) {
+            // Parse failure. Take all characters from this segment literally.
+            segment = '';
+            for (const c of glob.slice(j, i)) {
+                segment += regExpEscapeChars.includes(c) ? `\\${c}` : c;
+                endsWithSep = false;
+            }
         }
-        continue;
-      }
 
-      if (
-        glob[i] == ")" && groupStack.length > 0 &&
-        groupStack[groupStack.length - 1] != "BRACE"
-      ) {
-        segment += ")";
-        const type = groupStack.pop()!;
-        if (type == "!") {
-          segment += wildcard;
-        } else if (type != "@") {
-          segment += type;
-        }
-        continue;
-      }
-
-      if (
-        glob[i] == "|" && groupStack.length > 0 &&
-        groupStack[groupStack.length - 1] != "BRACE"
-      ) {
-        segment += "|";
-        continue;
-      }
-
-      if (glob[i] == "+" && extended && glob[i + 1] == "(") {
-        i++;
-        groupStack.push("+");
-        segment += "(?:";
-        continue;
-      }
-
-      if (glob[i] == "@" && extended && glob[i + 1] == "(") {
-        i++;
-        groupStack.push("@");
-        segment += "(?:";
-        continue;
-      }
-
-      if (glob[i] == "?") {
-        if (extended && glob[i + 1] == "(") {
-          i++;
-          groupStack.push("?");
-          segment += "(?:";
-        } else {
-          segment += ".";
-        }
-        continue;
-      }
-
-      if (glob[i] == "!" && extended && glob[i + 1] == "(") {
-        i++;
-        groupStack.push("!");
-        segment += "(?!";
-        continue;
-      }
-
-      if (glob[i] == "{") {
-        groupStack.push("BRACE");
-        segment += "(?:";
-        continue;
-      }
-
-      if (glob[i] == "}" && groupStack[groupStack.length - 1] == "BRACE") {
-        groupStack.pop();
-        segment += ")";
-        continue;
-      }
-
-      if (glob[i] == "," && groupStack[groupStack.length - 1] == "BRACE") {
-        segment += "|";
-        continue;
-      }
-
-      if (glob[i] == "*") {
-        if (extended && glob[i + 1] == "(") {
-          i++;
-          groupStack.push("*");
-          segment += "(?:";
-        } else {
-          const prevChar = glob[i - 1];
-          let numStars = 1;
-          while (glob[i + 1] == "*") {
-            i++;
-            numStars++;
-          }
-          const nextChar = glob[i + 1];
-          if (
-            globstarOption && numStars == 2 &&
-            [...seps, undefined].includes(prevChar) &&
-            [...seps, undefined].includes(nextChar)
-          ) {
-            segment += globstar;
+        regExpString += segment;
+        if (!endsWithSep) {
+            regExpString += i < glob.length ? sep : sepMaybe;
             endsWithSep = true;
-          } else {
-            segment += wildcard;
-          }
         }
-        continue;
-      }
 
-      segment += regExpEscapeChars.includes(glob[i]) ? `\\${glob[i]}` : glob[i];
+        // Terminates with `i` at the start of the next segment.
+        while (seps.includes(glob[i])) i++;
+
+        // Check that the next value of `j` is indeed higher than the current value.
+        if (!(i > j)) {
+            throw new Error('Assertion failure: i > j (potential infinite loop)');
+        }
+        j = i;
     }
 
-    // Check for unclosed groups or a dangling backslash.
-    if (groupStack.length > 0 || inRange || inEscape) {
-      // Parse failure. Take all characters from this segment literally.
-      segment = "";
-      for (const c of glob.slice(j, i)) {
-        segment += regExpEscapeChars.includes(c) ? `\\${c}` : c;
-        endsWithSep = false;
-      }
-    }
-
-    regExpString += segment;
-    if (!endsWithSep) {
-      regExpString += i < glob.length ? sep : sepMaybe;
-      endsWithSep = true;
-    }
-
-    // Terminates with `i` at the start of the next segment.
-    while (seps.includes(glob[i])) i++;
-
-    // Check that the next value of `j` is indeed higher than the current value.
-    if (!(i > j)) {
-      throw new Error("Assertion failure: i > j (potential infinite loop)");
-    }
-    j = i;
-  }
-
-  regExpString = `^${regExpString}$`;
-  return new RegExp(regExpString, caseInsensitive ? "i" : "");
+    regExpString = `^${regExpString}$`;
+    return new RegExp(regExpString, caseInsensitive ? 'i' : '');
 }
 
 /** Test whether the given string is a glob */
 export function isGlob(str: string): boolean {
-  const chars: Record<string, string> = { "{": "}", "(": ")", "[": "]" };
-  const regex =
-    /\\(.)|(^!|\*|\?|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\))/;
+    const chars: Record<string, string> = { '{': '}', '(': ')', '[': ']' };
+    const regex = /\\(.)|(^!|\*|\?|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\))/;
 
-  if (str === "") {
-    return false;
-  }
-
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(str))) {
-    if (match[2]) return true;
-    let idx = match.index + match[0].length;
-
-    // if an open bracket/brace/paren is escaped,
-    // set the index to the next closing character
-    const open = match[1];
-    const close = open ? chars[open] : null;
-    if (open && close) {
-      const n = str.indexOf(close, idx);
-      if (n !== -1) {
-        idx = n + 1;
-      }
+    if (str === '') {
+        return false;
     }
 
-    str = str.slice(idx);
-  }
+    let match: RegExpExecArray | null;
 
-  return false;
+    while ((match = regex.exec(str))) {
+        if (match[2]) return true;
+        let idx = match.index + match[0].length;
+
+        // if an open bracket/brace/paren is escaped,
+        // set the index to the next closing character
+        const open = match[1];
+        const close = open ? chars[open] : null;
+        if (open && close) {
+            const n = str.indexOf(close, idx);
+            if (n !== -1) {
+                idx = n + 1;
+            }
+        }
+
+        str = str.slice(idx);
+    }
+
+    return false;
 }
 
 /** Like normalize(), but doesn't collapse "**\/.." when `globstar` is true. */
 export function normalizeGlob(
-  glob: string,
-  { globstar = false }: GlobOptions = {},
+    glob: string,
+    { globstar = false }: GlobOptions = {},
 ): string {
-  if (glob.match(/\0/g)) {
-    throw new Error(`Glob contains invalid characters: "${glob}"`);
-  }
-  if (!globstar) {
-    return normalize(glob);
-  }
-  const s = SEP_PATTERN.source;
-  const badParentPattern = new RegExp(
-    `(?<=(${s}|^)\\*\\*${s})\\.\\.(?=${s}|$)`,
-    "g",
-  );
-  return normalize(glob.replace(badParentPattern, "\0")).replace(/\0/g, "..");
+    if (glob.match(/\0/g)) {
+        throw new Error(`Glob contains invalid characters: "${glob}"`);
+    }
+    if (!globstar) {
+        return normalize(glob);
+    }
+    const s = SEP_PATTERN.source;
+    const badParentPattern = new RegExp(
+        `(?<=(${s}|^)\\*\\*${s})\\.\\.(?=${s}|$)`,
+        'g',
+    );
+    return normalize(glob.replace(badParentPattern, '\0')).replace(/\0/g, '..');
 }
 
 /** Like join(), but doesn't collapse "**\/.." when `globstar` is true. */
 export function joinGlobs(
-  globs: string[],
-  { extended = true, globstar = false }: GlobOptions = {},
+    globs: string[],
+    { extended = true, globstar = false }: GlobOptions = {},
 ): string {
-  if (!globstar || globs.length == 0) {
-    return join(...globs);
-  }
-  if (globs.length === 0) return ".";
-  let joined: string | undefined;
-  for (const glob of globs) {
-    const path = glob;
-    if (path.length > 0) {
-      if (!joined) joined = path;
-      else joined += `${SEP}${path}`;
+    if (!globstar || globs.length == 0) {
+        return join(...globs);
     }
-  }
-  if (!joined) return ".";
-  return normalizeGlob(joined, { extended, globstar });
+    if (globs.length === 0) return '.';
+    let joined: string | undefined;
+    for (const glob of globs) {
+        const path = glob;
+        if (path.length > 0) {
+            if (!joined) joined = path;
+            else joined += `${SEP}${path}`;
+        }
+    }
+    if (!joined) return '.';
+    return normalizeGlob(joined, { extended, globstar });
 }

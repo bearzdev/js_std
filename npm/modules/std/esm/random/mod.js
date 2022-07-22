@@ -42,5 +42,5 @@ function randomFileName() {
     }
     return String.fromCodePoint(...chars);
 }
-export { randomBytes, getRandomValues, randomFileName, randomUUID, };
+export { getRandomValues, randomBytes, randomFileName, randomUUID };
 //# sourceMappingURL=mod.js.map

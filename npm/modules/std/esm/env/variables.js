@@ -12,8 +12,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _EnvironmentVariables_env, _EnvironmentVariables_secrets, _EnvironmentVariables_custom;
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { ArgumentError } from "../errors/errors.js";
-import { isNode, isDeno, globalScope } from "../runtime/mod.js";
+import { ArgumentError } from '../errors/errors.js';
+import { globalScope, isDeno, isNode } from '../runtime/mod.js';
 export default function expandVariables(template, getVariable, options) {
     // %variable%
     const windows = options?.windows || true;
@@ -57,7 +57,7 @@ export class EnvironmentVariables {
          * Notates that environments variables are using a custom map and is virtualized.
          * This is helpful if you want to clone the environment variables for the current process
          * and then update it without affecting the original environment variables.
-        */
+         */
         _EnvironmentVariables_custom.set(this, void 0);
         __classPrivateFieldSet(this, _EnvironmentVariables_custom, env === undefined, "f");
         if (env) {
@@ -88,8 +88,9 @@ export class EnvironmentVariables {
         return this.keys.length;
     }
     has(name) {
-        if (!__classPrivateFieldGet(this, _EnvironmentVariables_custom, "f") && isDeno)
+        if (!__classPrivateFieldGet(this, _EnvironmentVariables_custom, "f") && isDeno) {
             return globalScope.Deno.env.get(name) !== undefined;
+        }
         return __classPrivateFieldGet(this, _EnvironmentVariables_env, "f")[name] !== undefined;
     }
     toObject() {
@@ -99,8 +100,9 @@ export class EnvironmentVariables {
         const obj = {};
         for (const key of this.keys) {
             const value = __classPrivateFieldGet(this, _EnvironmentVariables_env, "f")[key];
-            if (value === undefined)
+            if (value === undefined) {
                 continue;
+            }
             obj[key] = value;
         }
         return obj;
@@ -134,10 +136,12 @@ export class EnvironmentVariables {
         const data = {};
         for (const key of this.keys) {
             let value = this.get(key);
-            if (value === undefined)
+            if (value === undefined) {
                 continue;
-            if (__classPrivateFieldGet(this, _EnvironmentVariables_secrets, "f").includes(key))
+            }
+            if (__classPrivateFieldGet(this, _EnvironmentVariables_secrets, "f").includes(key)) {
                 value = '*****';
+            }
             data[key] = value;
         }
         console.log(JSON.stringify(data, null, 4));

@@ -1,6 +1,6 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { Char } from "./char.js";
+import { Char } from './char.js';
 export declare const EMPTY = "";
 export declare function trimEnd(str: string, chars?: string): string;
 export declare function toCharacterArray(str: string): string[];

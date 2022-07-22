@@ -7,7 +7,7 @@
         "start": "node index.js"
     },
     "dependencies": {
-        "js-std": "*",
-        "js-buildfx": "*"
+        "@bearz/std": "*",
+        "@bearz/buildfx": "*"
     }
 }

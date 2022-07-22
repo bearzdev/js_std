@@ -1,6 +1,6 @@
 import * as dntShim from "../_dnt.test_shims.js";
-import { AssertContext } from "./asserts.js";
-export * from "./asserts.js";
+import { AssertContext } from './asserts.js';
+export * from './asserts.js';
 /**
  * Register a test which will be run when `deno test` is used on the command line
  * and the containing module looks like a test module. fn can be async if required.
@@ -51,7 +51,7 @@ export function testWhen(predicate, name, fn) {
         fn: (t) => {
             const assert = new AssertContext();
             fn(assert, t);
-        }
+        },
     });
 }
 //# sourceMappingURL=mod.js.map

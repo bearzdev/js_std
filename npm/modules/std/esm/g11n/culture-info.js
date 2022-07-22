@@ -44,7 +44,8 @@ export class CultureInfo {
     }
 }
 _CultureInfo_locale = new WeakMap();
-if (typeof dntShim.dntGlobalThis !== 'undefined' && typeof globalThis.navigator !== 'undefined' && typeof globalThis.navigator.language !== 'undefined') {
+if (typeof dntShim.dntGlobalThis !== 'undefined' && typeof globalThis.navigator !== 'undefined' &&
+    typeof globalThis.navigator.language !== 'undefined') {
     cc = new CultureInfo(globalThis.navigator.language);
 }
 else {

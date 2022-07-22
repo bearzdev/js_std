@@ -1,5 +1,5 @@
-import { NotImplementedError } from "../errors/errors.js";
-import { resolveScript, resolveScriptAsync } from "./which.js";
+import { NotImplementedError } from '../errors/errors.js';
+import { resolveScript, resolveScriptAsync } from './which.js';
 export const processRunner = {
     // deno-lint-ignore no-unused-vars
     run(context) {
@@ -10,6 +10,6 @@ export const processRunner = {
         throw new NotImplementedError();
     },
     resolveShellScript: resolveScript,
-    resolveShellScriptAsync: resolveScriptAsync
+    resolveShellScriptAsync: resolveScriptAsync,
 };
 //# sourceMappingURL=base.js.map

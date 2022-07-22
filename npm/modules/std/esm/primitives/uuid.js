@@ -12,12 +12,13 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _Uuid_value;
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { ArgumentError, NotSupportedError } from "../errors/errors.js";
+import { ArgumentError, NotSupportedError } from '../errors/errors.js';
 export class Uuid {
     constructor() {
         _Uuid_value.set(this, void 0);
-        if (arguments.length)
+        if (arguments.length) {
             throw new ArgumentError('Uuid constructor does not allow empty arguments.');
+        }
         const first = arguments[0];
         if (typeof first === 'string') {
             // TODO handle validation

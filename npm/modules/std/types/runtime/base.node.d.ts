@@ -1,6 +1,6 @@
-import { IVersion, IRuntimeEnvironment, Browser, Engine, RuntimeArch, OsFamily, Runtime, Version, globalScope } from "./base.browser.js";
-export type { IRuntimeEnvironment, IVersion, Browser, Engine, RuntimeArch, OsFamily, Runtime, };
-export { Version, globalScope, };
+import { Browser, Engine, globalScope, IRuntimeEnvironment, IVersion, OsFamily, Runtime, RuntimeArch, Version } from './base.browser.js';
+export type { Browser, Engine, IRuntimeEnvironment, IVersion, OsFamily, Runtime, RuntimeArch };
+export { globalScope, Version };
 export declare const DEBUG: boolean;
 export declare const TRACE: boolean;
 export declare const runtimeInfo: IRuntimeEnvironment;

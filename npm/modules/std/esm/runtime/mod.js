@@ -4,5 +4,5 @@ import { Version } from './version.js';
 import { globalScope } from './global.js';
 export * from './base.node.js';
 export * from './semantic-version.js';
-export { Version, globalScope };
+export { globalScope, Version };
 //# sourceMappingURL=mod.js.map

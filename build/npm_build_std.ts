@@ -7,14 +7,12 @@ const root = resolve(__dirname, '..');
 const moduleDir = resolve(root, 'npm/modules');
 const src = resolve(__dirname, "../src");
 const std = join(src, 'std');
-console.log('src', src);
-console.log('std', std);
-console.log('moduleDir', moduleDir);
 
 function fromStd(path: string) {
     return join(std, path);
 }
 
+Deno.copyFileSync(`${root}/LICENSE`, `${std}/LICENSE`);
 const text = await Deno.readTextFile(join(root, 'config', 'std.package.json'));
 const packageJson = JSON.parse(text);
 

@@ -12,6 +12,8 @@ function fromStd(path: string) {
     return join(std, path);
 }
 
+Deno.copyFileSync(`${root}/LICENSE`, `${std}/LICENSE`);
+
 let text = await Deno.readTextFile(join(root, 'config', 'buildfx.package.json'));
 const packageJson = JSON.parse(text);
 

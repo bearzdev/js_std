@@ -12,13 +12,13 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _Process_outCaptures, _Process_errorCaptures;
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { cancelAfter } from "../async/cancellation-token.js";
-import { notNullOrWhiteSpace } from "../errors/check.js";
-import { ArgumentNullError } from "../errors/errors.js";
-import { ProcessError, NotFoundOnPathError } from "./errors.js";
-import { ProcessStartInfo, ArrayCapture, ProcessCapture, ProcessArgs, CommandBuilder, } from "./start-info.js";
-import { pathFinder, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, registerExecutable, which, whichAsync, resolveScript, resolveScriptAsync, removeFile, removeFileAsync } from "./which.js";
-import { processRunner } from "./base.node.js";
+import { cancelAfter } from '../async/cancellation-token.js';
+import { notNullOrWhiteSpace } from '../errors/check.js';
+import { ArgumentNullError } from '../errors/errors.js';
+import { NotFoundOnPathError, ProcessError } from './errors.js';
+import { ArrayCapture, CommandBuilder, ProcessArgs, ProcessCapture, ProcessStartInfo } from './start-info.js';
+import { findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, pathFinder, registerExecutable, removeFile, removeFileAsync, resolveScript, resolveScriptAsync, which, whichAsync, } from './which.js';
+import { processRunner } from './base.node.js';
 function createStartInfo(fileName, args, options) {
     options ||= {};
     options.fileName = fileName;
@@ -36,8 +36,9 @@ export default class Process {
         });
         _Process_outCaptures.set(this, void 0);
         _Process_errorCaptures.set(this, void 0);
-        if (arguments.length === 0)
+        if (arguments.length === 0) {
             throw new ArgumentNullError('options');
+        }
         __classPrivateFieldSet(this, _Process_outCaptures, [], "f");
         __classPrivateFieldSet(this, _Process_errorCaptures, [], "f");
         const first = arguments[0];
@@ -241,12 +242,12 @@ export default class Process {
         const ctx = {
             startInfo: this.startInfo,
             signal: this.startInfo.signal,
-            outCaptures: this.startInfo.outCaptures === undefined ?
-                __classPrivateFieldGet(this, _Process_outCaptures, "f") :
-                this.startInfo.outCaptures.concat(__classPrivateFieldGet(this, _Process_outCaptures, "f")),
-            errorCaptures: this.startInfo.errorCaptures === undefined ?
-                __classPrivateFieldGet(this, _Process_errorCaptures, "f") :
-                this.startInfo.errorCaptures.concat(__classPrivateFieldGet(this, _Process_errorCaptures, "f")),
+            outCaptures: this.startInfo.outCaptures === undefined
+                ? __classPrivateFieldGet(this, _Process_outCaptures, "f")
+                : this.startInfo.outCaptures.concat(__classPrivateFieldGet(this, _Process_outCaptures, "f")),
+            errorCaptures: this.startInfo.errorCaptures === undefined
+                ? __classPrivateFieldGet(this, _Process_errorCaptures, "f")
+                : this.startInfo.errorCaptures.concat(__classPrivateFieldGet(this, _Process_errorCaptures, "f")),
         };
         return processRunner.run(ctx);
     }
@@ -268,12 +269,12 @@ export default class Process {
         const ctx = {
             startInfo: this.startInfo,
             signal: this.startInfo.signal,
-            outCaptures: this.startInfo.outCaptures === undefined ?
-                __classPrivateFieldGet(this, _Process_outCaptures, "f") :
-                this.startInfo.outCaptures.concat(__classPrivateFieldGet(this, _Process_outCaptures, "f")),
-            errorCaptures: this.startInfo.errorCaptures === undefined ?
-                __classPrivateFieldGet(this, _Process_errorCaptures, "f") :
-                this.startInfo.errorCaptures.concat(__classPrivateFieldGet(this, _Process_errorCaptures, "f")),
+            outCaptures: this.startInfo.outCaptures === undefined
+                ? __classPrivateFieldGet(this, _Process_outCaptures, "f")
+                : this.startInfo.outCaptures.concat(__classPrivateFieldGet(this, _Process_outCaptures, "f")),
+            errorCaptures: this.startInfo.errorCaptures === undefined
+                ? __classPrivateFieldGet(this, _Process_errorCaptures, "f")
+                : this.startInfo.errorCaptures.concat(__classPrivateFieldGet(this, _Process_errorCaptures, "f")),
         };
         return processRunner.runAsync(ctx);
     }
@@ -332,6 +333,6 @@ Object.defineProperty(Process, "whichAsync", {
     value: whichAsync
 });
 export const { run, runAsync, runScript, runScriptAsync, capture, captureAsync, captureScript, captureScriptAsync, } = Process;
-export { pathFinder, CommandBuilder, ProcessArgs, ProcessError, NotFoundOnPathError, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, registerExecutable, resolveScript, resolveScriptAsync, which, whichAsync, };
+export { CommandBuilder, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, NotFoundOnPathError, pathFinder, ProcessArgs, ProcessError, registerExecutable, resolveScript, resolveScriptAsync, which, whichAsync, };
 export const fromArgs = ProcessArgs.from;
 //# sourceMappingURL=mod.js.map

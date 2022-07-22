@@ -1,15 +1,15 @@
-import { secretMasker, ISecretMasker } from "../secrets/masker.js";
+import { ISecretMasker, secretMasker } from '../secrets/masker.js';
 import { cyan } from '../fmt/colors.js';
 
 export const writeCommandOptions = {
     enabled: true,
     masker: secretMasker as ISecretMasker,
-}
+};
 
 export function writeCommand(fileName: string, args: string[]) {
     // write commands to the console to make it easier to follow along
     // with what is being executed
-    if(!writeCommandOptions.enabled) {
+    if (!writeCommandOptions.enabled) {
         return;
     }
 

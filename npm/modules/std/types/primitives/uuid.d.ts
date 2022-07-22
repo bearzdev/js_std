@@ -1,6 +1,6 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { IEquatableOf } from "./interfaces.js";
+import { IEquatableOf } from './interfaces.js';
 export declare class Uuid implements IEquatableOf<Uuid> {
     #private;
     constructor(value: string);

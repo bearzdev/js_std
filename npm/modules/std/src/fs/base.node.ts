@@ -10,11 +10,11 @@ import {
     IWriteOptions,
 } from './interfaces.js';
 import { fs } from './base.js';
-import { join, basename } from '../path/mod.js';
+import { basename, join } from '../path/mod.js';
 import * as nodeFs from 'fs';
 import { isNode } from '../runtime/mod.js';
 
-if(isNode) {
+if (isNode) {
     fs.createDirectory = function (
         path: string | URL,
         options?: ICreateDirectoryOptions,
@@ -614,7 +614,6 @@ if(isNode) {
 
     fs.writeJsonFile = function (
         path: string | URL,
-
         // deno-lint-ignore no-explicit-any
         data: any,
         options?: IWriteJsonOptions,
@@ -664,5 +663,5 @@ export const {
     writeTextFile,
     writeTextFileAsync,
     writeJsonFile,
-    writeJsonFileAsync, 
+    writeJsonFileAsync,
 } = fs;

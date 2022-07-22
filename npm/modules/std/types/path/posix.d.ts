@@ -1,4 +1,4 @@
-import type { FormatInputPathObject, ParsedPath } from "./_interface.js";
+import type { FormatInputPathObject, ParsedPath } from './_interface.js';
 export declare const sep = "/";
 export declare const delimiter = ":";
 /**

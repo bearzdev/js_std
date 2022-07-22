@@ -2,7 +2,7 @@ import { StringBuilder } from '../text/string-builder.js';
 import type { IDisposable } from '../primitives/interfaces.js';
 import type { IProcessCapture, IProcessResult, IProcessStartInfo } from './interfaces.js';
 export declare function splitArguments(value: string): string[];
-export type { IProcessCapture, IProcessResult, IProcessStartInfo, };
+export type { IProcessCapture, IProcessResult, IProcessStartInfo };
 export declare abstract class ProcessCapture implements IProcessCapture, IDisposable {
     abstract write(data: Uint8Array | undefined): void;
     abstract writeLine(line: string | undefined): void;

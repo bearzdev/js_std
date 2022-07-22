@@ -1,4 +1,4 @@
-import { isNode, isDeno, isBrowser, globalScope } from "../runtime/mod.js";
+import { globalScope, isBrowser, isDeno, isNode } from '../runtime/mod.js';
 let cwd;
 let chdir;
 if (isDeno) {
@@ -14,9 +14,11 @@ else if (isBrowser) {
     chdir = (path) => globalScope.location.pathname = path;
 }
 else {
-    let currentDirectory = "/";
+    let currentDirectory = '/';
     cwd = () => currentDirectory;
-    chdir = (path) => { currentDirectory = path; };
+    chdir = (path) => {
+        currentDirectory = path;
+    };
 }
-export { cwd, chdir };
+export { chdir, cwd };
 //# sourceMappingURL=current-directory.js.map

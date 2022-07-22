@@ -1,9 +1,9 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { ProcessError, NotFoundOnPathError } from "./errors.js";
-import type { IProcessInvocationOptions, IProcessStartInfo, IProcessResult, IProcessCapture, IParameterBuilder } from "./interfaces.js";
-import { ProcessStartInfo, ProcessArgs, CommandBuilder } from "./start-info.js";
-import { pathFinder, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, registerExecutable, which, whichAsync, resolveScript, resolveScriptAsync } from "./which.js";
+import { NotFoundOnPathError, ProcessError } from './errors.js';
+import type { IParameterBuilder, IProcessCapture, IProcessInvocationOptions, IProcessResult, IProcessStartInfo } from './interfaces.js';
+import { CommandBuilder, ProcessArgs, ProcessStartInfo } from './start-info.js';
+import { findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, pathFinder, registerExecutable, resolveScript, resolveScriptAsync, which, whichAsync } from './which.js';
 export default class Process {
     #private;
     startInfo: IProcessStartInfo;
@@ -43,5 +43,5 @@ export default class Process {
     teeAsync(): Promise<IProcessResult>;
 }
 export declare const run: typeof Process.run, runAsync: typeof Process.runAsync, runScript: typeof Process.runScript, runScriptAsync: typeof Process.runScriptAsync, capture: typeof Process.capture, captureAsync: typeof Process.captureAsync, captureScript: typeof Process.captureScript, captureScriptAsync: typeof Process.captureScriptAsync;
-export { pathFinder, IProcessStartInfo, IProcessCapture, IProcessInvocationOptions, IProcessResult, IParameterBuilder, CommandBuilder, ProcessArgs, ProcessError, NotFoundOnPathError, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, registerExecutable, resolveScript, resolveScriptAsync, which, whichAsync, };
+export { CommandBuilder, findExecutable, findExecutableAsync, findExecutableOrThrow, findExecutableOrThrowAsync, IParameterBuilder, IProcessCapture, IProcessInvocationOptions, IProcessResult, IProcessStartInfo, NotFoundOnPathError, pathFinder, ProcessArgs, ProcessError, registerExecutable, resolveScript, resolveScriptAsync, which, whichAsync, };
 export declare const fromArgs: typeof ProcessArgs.from;

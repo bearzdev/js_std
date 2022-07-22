@@ -3,44 +3,41 @@ import { ArgumentError, ArgumentNullError } from '../errors/errors.js';
 import type { IDisposable } from '../primitives/interfaces.js';
 import type { IProcessCapture, IProcessResult, IProcessStartInfo } from './interfaces.js';
 
-
 // based on System.CommandLine.ArgumentStringSplitter
 export function splitArguments(value: string): string[] {
-    
     enum Quote {
         None = 0,
         Single = 1,
         Double = 2,
     }
 
-    let token = "";
+    let token = '';
     let quote = Quote.None;
     const tokens = [];
 
-    for(let i = 0; i < value.length; i++) {
+    for (let i = 0; i < value.length; i++) {
         const c = value[i];
 
-        if(quote > Quote.None) {
-            if(quote === Quote.Single && c === '\'') {
+        if (quote > Quote.None) {
+            if (quote === Quote.Single && c === '\'') {
                 quote = Quote.None;
                 tokens.push(token);
-                token = "";
+                token = '';
                 continue;
-            } else if(quote === Quote.Double && c === '"') {
-                quote = Quote.None;  
+            } else if (quote === Quote.Double && c === '"') {
+                quote = Quote.None;
                 tokens.push(token);
-                token = "";
+                token = '';
                 continue;
             }
-            
+
             token += c;
             continue;
         }
 
-        if(c === ' ') {
+        if (c === ' ') {
             const remaining = (value.length - 1) - i;
-            if(remaining > 2) {
-
+            if (remaining > 2) {
                 // if the line ends with characters that normally allow for scripts with multiline
                 // statements, consume token and skip characters.
                 // ' \\\n'
@@ -49,47 +46,43 @@ export function splitArguments(value: string): string[] {
                 // ' `\r\n'
                 const j = value[i + 1];
                 const k = value[i + 2];
-                if(j === '\'' || j === '`') 
-                {
-                    if(k === '\n')
-                    {
+                if (j === '\'' || j === '`') {
+                    if (k === '\n') {
                         i += 2;
-                        if(token.length > 0)
+                        if (token.length > 0) {
                             tokens.push(token);
-                        token = "";
+                        }
+                        token = '';
                         continue;
                     }
-                    
-                    if(remaining > 3)
-                    {
+
+                    if (remaining > 3) {
                         const l = value[i + 3];
-                        if(k === '\r' && l === '\n')
-                        {
+                        if (k === '\r' && l === '\n') {
                             i += 3;
-                            if(token.length > 0)
+                            if (token.length > 0) {
                                 tokens.push(token);
-                            token = "";
+                            }
+                            token = '';
                             continue;
                         }
                     }
                 }
             }
 
-
-            if(token.length > 0) {
+            if (token.length > 0) {
                 tokens.push(token);
-                token = "";
+                token = '';
             }
             continue;
         }
-    
 
-        if(token.length === 0) {
-            if(c === '\'') {
+        if (token.length === 0) {
+            if (c === '\'') {
                 quote = Quote.Single;
                 continue;
             }
-            if(c === '"') {
+            if (c === '"') {
                 quote = Quote.Double;
                 continue;
             }
@@ -98,20 +91,14 @@ export function splitArguments(value: string): string[] {
         token += c;
     }
 
-    if(token.length > 0) {
+    if (token.length > 0) {
         tokens.push(token);
     }
-
 
     return tokens;
 }
 
-export type {
-    IProcessCapture,
-    IProcessResult,
-    IProcessStartInfo,
-}
-
+export type { IProcessCapture, IProcessResult, IProcessStartInfo };
 
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
@@ -207,20 +194,20 @@ export class WritableStreamCapture extends ProcessCapture implements IProcessCap
     }
 }
 
-const collapseArgs  = (parameters: IArguments) : string[] => {
-    if(parameters === undefined || parameters.length === 0)
+const collapseArgs = (parameters: IArguments): string[] => {
+    if (parameters === undefined || parameters.length === 0) {
         return [];
-    if(parameters.length === 1 && Array.isArray(parameters[0])) {
+    }
+    if (parameters.length === 1 && Array.isArray(parameters[0])) {
         return parameters[0];
     }
 
     return [...parameters] as string[];
-}
+};
 
 export class ProcessArgs extends Array<string> {
-
-    constructor(args: string[])
-    constructor(...args: string[])
+    constructor(args: string[]);
+    constructor(...args: string[]);
     constructor() {
         super(...collapseArgs(arguments));
     }
@@ -244,7 +231,7 @@ export class ProcessArgs extends Array<string> {
             }
 
             if (first instanceof StringBuilder) {
-                super.push(...splitArguments(first.toString()))
+                super.push(...splitArguments(first.toString()));
                 return this;
             }
 
@@ -254,7 +241,6 @@ export class ProcessArgs extends Array<string> {
             }
 
             if (Object.prototype.toString.call(first) === '[object Object]') {
-             
                 Object.keys(first).forEach((key) => {
                     super.push(key);
                     super.push(first[key]);
@@ -291,24 +277,22 @@ export class ProcessArgs extends Array<string> {
 }
 
 export class CommandBuilder {
-    #parameters: ProcessArgs; 
-    
+    #parameters: ProcessArgs;
 
-    constructor()
-    {
+    constructor() {
         this.#parameters = new ProcessArgs();
     }
 
-    addArgument(value: number) : this
-    addArgument(value: string) : this
-    addArgument() : this {
+    addArgument(value: number): this;
+    addArgument(value: string): this;
+    addArgument(): this {
         const first = arguments[0];
-        if(typeof first === 'string') {
+        if (typeof first === 'string') {
             this.#parameters.push(first);
             return this;
         }
 
-        if(typeof first === 'number') {
+        if (typeof first === 'number') {
             this.#parameters.push(first.toString());
             return this;
         }
@@ -316,11 +300,11 @@ export class CommandBuilder {
         throw new TypeError(`Cannot convert ${first} to string`);
     }
 
-    addOption(name: string, value: number) : this
-    addOption(name: string, value: boolean) : this 
-    addOption(name: string, value: string) : this 
-    addOption() : this {
-        if(arguments.length != 2) {
+    addOption(name: string, value: number): this;
+    addOption(name: string, value: boolean): this;
+    addOption(name: string, value: string): this;
+    addOption(): this {
+        if (arguments.length != 2) {
             throw new ArgumentError(
                 `CommandBuilder.addOption() takes 2 arguments, but got ${arguments.length}`,
             );
@@ -329,30 +313,29 @@ export class CommandBuilder {
         const name = arguments[0] as string;
         const value = arguments[1];
 
-        if(typeof name !== 'string') {
+        if (typeof name !== 'string') {
             throw new TypeError(`Cannot convert ${name} to string`);
         }
 
-        if(typeof value === 'string') {
+        if (typeof value === 'string') {
             this.#parameters.push(name, value);
             return this;
         }
 
-        if(typeof value === 'number') {
+        if (typeof value === 'number') {
             this.#parameters.push(name, value.toString());
             return this;
         }
 
-        if(typeof value === 'boolean') {
+        if (typeof value === 'boolean') {
             this.#parameters.push(name);
             return this;
         }
 
-        throw new TypeError(`Argument value type is not supported ${typeof(value)}`);
+        throw new TypeError(`Argument value type is not supported ${typeof (value)}`);
     }
-    
-    build(): string[]
-    {
+
+    build(): string[] {
         return this.#parameters;
     }
 
@@ -360,135 +343,131 @@ export class CommandBuilder {
         return this.#parameters;
     }
 
-    toString() 
-    {
+    toString() {
         return this.#parameters.join(' ');
     }
 }
 
-    
- export class ProcessResult implements IProcessResult {
-        exitCode = 0;
-        standardOut: string[];
-        standardError: string[];
-        fileName: string;
-        args: string[];
-        startedAt?: Date;
-        stoppedAt?: Date;
-    
-        constructor(options?: Partial<IProcessResult>) {
-            this.standardOut = [];
-            this.standardError = [];
-            this.args = [];
-            this.fileName = '';
-    
-            this.set(options);
+export class ProcessResult implements IProcessResult {
+    exitCode = 0;
+    standardOut: string[];
+    standardError: string[];
+    fileName: string;
+    args: string[];
+    startedAt?: Date;
+    stoppedAt?: Date;
+
+    constructor(options?: Partial<IProcessResult>) {
+        this.standardOut = [];
+        this.standardError = [];
+        this.args = [];
+        this.fileName = '';
+
+        this.set(options);
+    }
+
+    set(options?: Partial<IProcessResult>) {
+        if (options) {
+            Object.assign(this, options);
+        }
+        return this;
+    }
+}
+
+export class ProcessStartInfo implements IProcessStartInfo {
+    env?: { [key: string]: string };
+    args: string[];
+    workingDirectory?: string;
+    userId?: number;
+    groupId?: number;
+    fileName = '';
+    outCaptures?: IProcessCapture[];
+    errorCaptures?: IProcessCapture[];
+    timeout?: number;
+    signal?: AbortSignal;
+
+    constructor(fileName: string, ...args: string[]);
+    constructor(options: Partial<IProcessStartInfo>);
+    constructor();
+    constructor() {
+        this.outCaptures = [];
+        this.errorCaptures = [];
+        this.args = [];
+        this.fileName = '';
+        if (arguments.length === 0) {
+            return;
         }
 
-        set (options?: Partial<IProcessResult>) {
-            if (options) {
-                Object.assign(this, options);
-            }
+        const first = arguments[0];
+        if (typeof (first) === 'object') {
+            this.set(first);
+            return;
+        }
+
+        if (typeof (first) === 'string') {
+            this.fileName = first || '';
+            this.args = arguments.length >= 2 ? [...arguments].slice(1) : this.args;
+        }
+    }
+
+    set(options?: Partial<IProcessStartInfo>) {
+        if (options) {
+            Object.assign(this, options);
+        }
+
+        return this;
+    }
+
+    redirectTo(array: string[]): void;
+    redirectTo(capture: IProcessCapture): void;
+    redirectTo() {
+        if (arguments.length === 0) {
+            throw new Error('No arguments');
+        }
+        const first = arguments[0];
+        if (first === undefined || first === null) {
+            throw new ArgumentNullError('capture');
+        }
+
+        this.outCaptures ||= [];
+
+        if (first instanceof ProcessCapture) {
+            this.outCaptures.push(arguments[0]);
+            return this;
+        }
+
+        if (Array.isArray(first)) {
+            this.outCaptures.push(new ArrayCapture(first));
             return this;
         }
     }
-    
-    export class ProcessStartInfo implements IProcessStartInfo {
-        env?: { [key: string]: string };
-        args: string[];
-        workingDirectory?: string;
-        userId?: number;
-        groupId?: number;
-        fileName = '';
-        outCaptures?: IProcessCapture[];
-        errorCaptures?: IProcessCapture[];
-        timeout?: number;
-        signal?: AbortSignal;
-    
-    
-        constructor(fileName: string, ...args: string[])
-        constructor(options: Partial<IProcessStartInfo>)
-        constructor()
-        constructor() {
-            this.outCaptures = [];
-            this.errorCaptures = [];
-            this.args = [];
-            this.fileName = '';
-            if(arguments.length === 0) {
-                return;
-            }
 
-            const first = arguments[0];
-            if(typeof (first) === 'object') {
-                this.set(first);
-                return;
-            }
-
-            if(typeof (first) === 'string') {
-                this.fileName = first || '';
-                this.args = arguments.length >= 2 ? [...arguments].slice(1) : this.args;
-            }
-
+    redirectErrorTo(array: string[]): void;
+    redirectErrorTo(capture: IProcessCapture): void;
+    redirectErrorTo() {
+        if (arguments.length === 0) {
+            throw new Error('No arguments');
         }
-    
-        set(options?: Partial<IProcessStartInfo>)  {
-            if(options) {
-                Object.assign(this, options);
-            }
-    
+        const first = arguments[0];
+        if (first === undefined || first === null) {
+            throw new ArgumentNullError('capture');
+        }
+
+        this.errorCaptures ||= [];
+
+        if (first instanceof ProcessCapture) {
+            this.errorCaptures.push(arguments[0]);
             return this;
         }
-    
-        redirectTo(array: string[]): void;
-        redirectTo(capture: IProcessCapture): void;
-        redirectTo() {
-            if (arguments.length === 0) {
-                throw new Error('No arguments');
-            }
-            const first = arguments[0];
-            if(first === undefined || first === null) {
-                throw new ArgumentNullError('capture');
-            }
-    
-            this.outCaptures ||= [];
-    
-            if (first instanceof ProcessCapture) {
-                this.outCaptures.push(arguments[0]);
-                return this;
-            }
-    
-            if (Array.isArray(first)) {
-                this.outCaptures.push(new ArrayCapture(first));
-                return this;
-            }
-        }
-    
-        redirectErrorTo(array: string[]): void;
-        redirectErrorTo(capture: IProcessCapture): void;
-        redirectErrorTo() {
-            if (arguments.length === 0) {
-                throw new Error('No arguments');
-            }
-            const first = arguments[0];
-            if(first === undefined || first === null) {
-                throw new ArgumentNullError('capture');
-            }
-    
-            this.errorCaptures ||= [];
-    
-            if (first instanceof ProcessCapture) {
-                this.errorCaptures.push(arguments[0]);
-                return this;
-            }
-    
-            if (Array.isArray(first)) {
-                this.errorCaptures.push(new ArrayCapture(first));
-                return this;
-            }
-        }
-    
-        push(...args: string[]) {
-            this.args.push(...args);
+
+        if (Array.isArray(first)) {
+            this.errorCaptures.push(new ArrayCapture(first));
             return this;
         }
     }
+
+    push(...args: string[]) {
+        this.args.push(...args);
+        return this;
+    }
+}

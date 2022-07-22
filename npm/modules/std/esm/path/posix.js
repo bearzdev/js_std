@@ -2,26 +2,26 @@
 // Copyright the Browserify authors. MIT License.
 // Ported from https://github.com/browserify/path-browserify/
 // This module is browser compatible.
-import { CHAR_DOT, CHAR_FORWARD_SLASH } from "./_constants.js";
+import { CHAR_DOT, CHAR_FORWARD_SLASH } from './_constants.js';
 import { cwd } from '../env/current-directory.js';
-import { _format, assertPath, encodeWhitespace, isPosixPathSeparator, normalizeString, } from "./_util.js";
-export const sep = "/";
-export const delimiter = ":";
+import { _format, assertPath, encodeWhitespace, isPosixPathSeparator, normalizeString } from './_util.js';
+export const sep = '/';
+export const delimiter = ':';
 // path.resolve([from ...], to)
 /**
  * Resolves `pathSegments` into an absolute path.
  * @param pathSegments an array of path segments
  */
 export function resolve(...pathSegments) {
-    let resolvedPath = "";
+    let resolvedPath = '';
     let resolvedAbsolute = false;
     for (let i = pathSegments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
         let path;
         if (i >= 0)
             path = pathSegments[i];
         else {
-            if (typeof cwd !== "function") {
-                throw new TypeError("Resolved a relative path without a CWD.");
+            if (typeof cwd !== 'function') {
+                throw new TypeError('Resolved a relative path without a CWD.');
             }
             path = cwd();
         }
@@ -36,17 +36,17 @@ export function resolve(...pathSegments) {
     // At this point the path should be resolved to a full absolute path, but
     // handle relative paths to be safe (might happen when process.cwd() fails)
     // Normalize the path
-    resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute, "/", isPosixPathSeparator);
+    resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute, '/', isPosixPathSeparator);
     if (resolvedAbsolute) {
         if (resolvedPath.length > 0)
             return `/${resolvedPath}`;
         else
-            return "/";
+            return '/';
     }
     else if (resolvedPath.length > 0)
         return resolvedPath;
     else
-        return ".";
+        return '.';
 }
 /**
  * Normalize the `path`, resolving `'..'` and `'.'` segments.
@@ -55,15 +55,15 @@ export function resolve(...pathSegments) {
 export function normalize(path) {
     assertPath(path);
     if (path.length === 0)
-        return ".";
+        return '.';
     const isAbsolute = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
     const trailingSeparator = path.charCodeAt(path.length - 1) === CHAR_FORWARD_SLASH;
     // Normalize the path
-    path = normalizeString(path, !isAbsolute, "/", isPosixPathSeparator);
+    path = normalizeString(path, !isAbsolute, '/', isPosixPathSeparator);
     if (path.length === 0 && !isAbsolute)
-        path = ".";
+        path = '.';
     if (path.length > 0 && trailingSeparator)
-        path += "/";
+        path += '/';
     if (isAbsolute)
         return `/${path}`;
     return path;
@@ -82,7 +82,7 @@ export function isAbsolute(path) {
  */
 export function join(...paths) {
     if (paths.length === 0)
-        return ".";
+        return '.';
     let joined;
     for (let i = 0, len = paths.length; i < len; ++i) {
         const path = paths[i];
@@ -95,7 +95,7 @@ export function join(...paths) {
         }
     }
     if (!joined)
-        return ".";
+        return '.';
     return normalize(joined);
 }
 /**
@@ -107,11 +107,11 @@ export function relative(from, to) {
     assertPath(from);
     assertPath(to);
     if (from === to)
-        return "";
+        return '';
     from = resolve(from);
     to = resolve(to);
     if (from === to)
-        return "";
+        return '';
     // Trim any leading backslashes
     let fromStart = 1;
     const fromEnd = from.length;
@@ -167,15 +167,15 @@ export function relative(from, to) {
         else if (fromCode === CHAR_FORWARD_SLASH)
             lastCommonSep = i;
     }
-    let out = "";
+    let out = '';
     // Generate the relative path based on the path difference between `to`
     // and `from`
     for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
         if (i === fromEnd || from.charCodeAt(i) === CHAR_FORWARD_SLASH) {
             if (out.length === 0)
-                out += "..";
+                out += '..';
             else
-                out += "/..";
+                out += '/..';
         }
     }
     // Lastly, append the rest of the destination (`to`) path that comes after
@@ -204,7 +204,7 @@ export function toNamespacedPath(path) {
 export function dirname(path) {
     assertPath(path);
     if (path.length === 0)
-        return ".";
+        return '.';
     const hasRoot = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
     let end = -1;
     let matchedSlash = true;
@@ -221,9 +221,9 @@ export function dirname(path) {
         }
     }
     if (end === -1)
-        return hasRoot ? "/" : ".";
+        return hasRoot ? '/' : '.';
     if (hasRoot && end === 1)
-        return "//";
+        return '//';
     return path.slice(0, end);
 }
 /**
@@ -231,8 +231,8 @@ export function dirname(path) {
  * @param path to process
  * @param ext of path directory
  */
-export function basename(path, ext = "") {
-    if (ext !== undefined && typeof ext !== "string") {
+export function basename(path, ext = '') {
+    if (ext !== undefined && typeof ext !== 'string') {
         throw new TypeError('"ext" argument must be a string');
     }
     assertPath(path);
@@ -242,7 +242,7 @@ export function basename(path, ext = "") {
     let i;
     if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
         if (ext.length === path.length && ext === path)
-            return "";
+            return '';
         let extIdx = ext.length - 1;
         let firstNonSlashEnd = -1;
         for (i = path.length - 1; i >= 0; --i) {
@@ -304,7 +304,7 @@ export function basename(path, ext = "") {
             }
         }
         if (end === -1)
-            return "";
+            return '';
         return path.slice(start, end);
     }
 }
@@ -358,7 +358,7 @@ export function extname(path) {
         preDotState === 0 ||
         // The (right-most) trimmed path component is exactly '..'
         (preDotState === 1 && startDot === end - 1 && startDot === startPart + 1)) {
-        return "";
+        return '';
     }
     return path.slice(startDot, end);
 }
@@ -367,10 +367,10 @@ export function extname(path) {
  * @param pathObject with path
  */
 export function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== "object") {
+    if (pathObject === null || typeof pathObject !== 'object') {
         throw new TypeError(`The "pathObject" argument must be of type Object. Received type ${typeof pathObject}`);
     }
-    return _format("/", pathObject);
+    return _format('/', pathObject);
 }
 /**
  * Return a `ParsedPath` object of the `path`.
@@ -378,13 +378,13 @@ export function format(pathObject) {
  */
 export function parse(path) {
     assertPath(path);
-    const ret = { root: "", dir: "", base: "", ext: "", name: "" };
+    const ret = { root: '', dir: '', base: '', ext: '', name: '' };
     if (path.length === 0)
         return ret;
     const isAbsolute = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
     let start;
     if (isAbsolute) {
-        ret.root = "/";
+        ret.root = '/';
         start = 1;
     }
     else {
@@ -458,7 +458,7 @@ export function parse(path) {
     if (startPart > 0)
         ret.dir = path.slice(0, startPart - 1);
     else if (isAbsolute)
-        ret.dir = "/";
+        ret.dir = '/';
     return ret;
 }
 /**
@@ -472,10 +472,10 @@ export function parse(path) {
  */
 export function fromFileUrl(url) {
     url = url instanceof URL ? url : new URL(url);
-    if (url.protocol != "file:") {
-        throw new TypeError("Must be a file URL.");
+    if (url.protocol != 'file:') {
+        throw new TypeError('Must be a file URL.');
     }
-    return decodeURIComponent(url.pathname.replace(/%(?![0-9A-Fa-f]{2})/g, "%25"));
+    return decodeURIComponent(url.pathname.replace(/%(?![0-9A-Fa-f]{2})/g, '%25'));
 }
 /**
  * Converts a path string to a file URL.
@@ -488,10 +488,10 @@ export function fromFileUrl(url) {
  */
 export function toFileUrl(path) {
     if (!isAbsolute(path)) {
-        throw new TypeError("Must be an absolute path.");
+        throw new TypeError('Must be an absolute path.');
     }
-    const url = new URL("file:///");
-    url.pathname = encodeWhitespace(path.replace(/%/g, "%25").replace(/\\/g, "%5C"));
+    const url = new URL('file:///');
+    url.pathname = encodeWhitespace(path.replace(/%/g, '%25').replace(/\\/g, '%5C'));
     return url;
 }
 //# sourceMappingURL=posix.js.map

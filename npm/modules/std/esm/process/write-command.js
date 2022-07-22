@@ -1,4 +1,4 @@
-import { secretMasker } from "../secrets/masker.js";
+import { secretMasker } from '../secrets/masker.js';
 import { cyan } from '../fmt/colors.js';
 export const writeCommandOptions = {
     enabled: true,

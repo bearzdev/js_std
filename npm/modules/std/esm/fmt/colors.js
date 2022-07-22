@@ -16,7 +16,7 @@
  *
  * @module
  */
-import { supportsColor } from "../env/supports-color.js";
+import { supportsColor } from '../env/supports-color.js';
 const noColor = supportsColor.stdout.off;
 export { supportsColor };
 let enabled = !noColor;
@@ -41,9 +41,9 @@ export function getColorEnabled() {
  */
 function code(open, close) {
     return {
-        open: `\x1b[${open.join(";")}m`,
+        open: `\x1b[${open.join(';')}m`,
         close: `\x1b[${close}m`,
-        regexp: new RegExp(`\\x1b\\[${close}m`, "g"),
+        regexp: new RegExp(`\\x1b\\[${close}m`, 'g'),
     };
 }
 /**
@@ -52,9 +52,7 @@ function code(open, close) {
  * @param code color code to apply
  */
 function run(str, code) {
-    return enabled
-        ? `${code.open}${str.replace(code.regexp, code.open)}${code.close}`
-        : str;
+    return enabled ? `${code.open}${str.replace(code.regexp, code.open)}${code.close}` : str;
 }
 /**
  * Reset the text modified
@@ -387,7 +385,7 @@ export function bgRgb8(str, color) {
  * @param color code
  */
 export function rgb24(str, color) {
-    if (typeof color === "number") {
+    if (typeof color === 'number') {
         return run(str, code([38, 2, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff], 39));
     }
     return run(str, code([
@@ -414,7 +412,7 @@ export function rgb24(str, color) {
  * @param color code
  */
 export function bgRgb24(str, color) {
-    if (typeof color === "number") {
+    if (typeof color === 'number') {
         return run(str, code([48, 2, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff], 49));
     }
     return run(str, code([
@@ -427,14 +425,14 @@ export function bgRgb24(str, color) {
 }
 // https://github.com/chalk/ansi-regex/blob/02fa893d619d3da85411acc8fd4e2eea0e95a9d9/index.js
 const ANSI_PATTERN = new RegExp([
-    "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
-    "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))",
-].join("|"), "g");
+    '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+    '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))',
+].join('|'), 'g');
 /**
  * Remove ANSI escape codes from the string.
  * @param string to remove ANSI escape codes from
  */
 export function stripColor(string) {
-    return string.replace(ANSI_PATTERN, "");
+    return string.replace(ANSI_PATTERN, '');
 }
 //# sourceMappingURL=colors.js.map

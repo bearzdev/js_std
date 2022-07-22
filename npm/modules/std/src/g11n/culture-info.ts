@@ -1,13 +1,11 @@
 import * as dntShim from "../_dnt.shims.js";
+let cc: CultureInfo;
 
-let cc : CultureInfo;
-
-export class CultureInfo 
-{
+export class CultureInfo {
     #locale: Intl.Locale;
 
     constructor(locale: string | Intl.Locale) {
-        if(typeof locale === 'string') {
+        if (typeof locale === 'string') {
             this.#locale = new Intl.Locale(locale);
             return;
         }
@@ -19,7 +17,7 @@ export class CultureInfo
         return cc;
     }
 
-    static set (culture: CultureInfo) {
+    static set(culture: CultureInfo) {
         cc = culture;
     }
 
@@ -31,25 +29,26 @@ export class CultureInfo
         return this.#locale.baseName;
     }
 
-    valueOf() : string {
+    valueOf(): string {
         return this.#locale.toString();
     }
 
-    toLocale() : Intl.Locale {
+    toLocale(): Intl.Locale {
         return this.#locale;
     }
 
-    toString() : string {
+    toString(): string {
         return this.#locale.toString();
     }
-    
 }
 
-if(typeof dntShim.dntGlobalThis !== 'undefined' && typeof globalThis.navigator !== 'undefined' && typeof globalThis.navigator.language !== 'undefined') {
+if (
+    typeof dntShim.dntGlobalThis !== 'undefined' && typeof globalThis.navigator !== 'undefined' &&
+    typeof globalThis.navigator.language !== 'undefined'
+) {
     cc = new CultureInfo(globalThis.navigator.language);
-}
-else {
-    const currentLocale =  new Intl.NumberFormat().resolvedOptions().locale;
+} else {
+    const currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
     cc = new CultureInfo(currentLocale);
 }
 

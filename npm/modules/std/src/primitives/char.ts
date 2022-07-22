@@ -160,7 +160,7 @@ export class Char {
 
     static isLetterOrDigitCodePoint(value: number): boolean {
         return isLetterCodePoint(value) ||
-        Char.isDigitCodePoint(value);
+            Char.isDigitCodePoint(value);
     }
 
     static isLetterOrDigit(value: Char): boolean {
@@ -172,7 +172,7 @@ export class Char {
     }
 
     static isLetterCharCode(value: number): boolean {
-        if(isAsciiCharCode(value)) {
+        if (isAsciiCharCode(value)) {
             return (latin[value] & (latinUpperMask | latinLowerMask)) !== 0;
         }
 
@@ -291,17 +291,16 @@ export class Char {
     }
 }
 
-
 export const {
     isAscii,
     isAsciiCharAt,
     isAsciiCharCode,
     isAsciiCodePoint,
-   isWhiteSpace,
-   isWhiteSpaceCodePoint,
-   isWhiteSpaceAt,
-   isLetter,
-   isLetterCharAt,
-   isLetterCharCode,
-   isLetterCodePoint, 
+    isWhiteSpace,
+    isWhiteSpaceCodePoint,
+    isWhiteSpaceAt,
+    isLetter,
+    isLetterCharAt,
+    isLetterCharCode,
+    isLetterCodePoint,
 } = Char;

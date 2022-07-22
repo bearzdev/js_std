@@ -2,19 +2,19 @@
 // Copyright the Browserify authors. MIT License.
 // Ported from https://github.com/browserify/path-browserify/
 // This module is browser compatible.
-import { CHAR_BACKWARD_SLASH, CHAR_FORWARD_SLASH, CHAR_COLON, CHAR_DOT, CHAR_QUESTION_MARK, } from "./_constants.js";
-import { _format, assertPath, encodeWhitespace, isPathSeparator, isWindowsDeviceRoot, normalizeString, } from "./_util.js";
-import { notNullRef } from "../errors/check.js";
+import { CHAR_BACKWARD_SLASH, CHAR_COLON, CHAR_DOT, CHAR_FORWARD_SLASH, CHAR_QUESTION_MARK } from './_constants.js';
+import { _format, assertPath, encodeWhitespace, isPathSeparator, isWindowsDeviceRoot, normalizeString, } from './_util.js';
+import { notNullRef } from '../errors/check.js';
 import { cwd } from '../env/current-directory.js';
-export const sep = "\\";
-export const delimiter = ";";
+export const sep = '\\';
+export const delimiter = ';';
 /**
  * Resolves path segments into a `path`
  * @param pathSegments to process to path
  */
 export function resolve(...pathSegments) {
-    let resolvedDevice = "";
-    let resolvedTail = "";
+    let resolvedDevice = '';
+    let resolvedTail = '';
     let resolvedAbsolute = false;
     for (let i = pathSegments.length - 1; i >= -1; i--) {
         let path;
@@ -22,8 +22,8 @@ export function resolve(...pathSegments) {
             path = pathSegments[i];
         }
         else if (!resolvedDevice) {
-            if (typeof cwd !== "function") {
-                throw new TypeError("Resolved a drive-letter-less path without a CWD.");
+            if (typeof cwd !== 'function') {
+                throw new TypeError('Resolved a drive-letter-less path without a CWD.');
             }
             path = cwd();
         }
@@ -42,7 +42,7 @@ export function resolve(...pathSegments) {
         if (len === 0)
             continue;
         let rootEnd = 0;
-        let device = "";
+        let device = '';
         let isAbsolute = false;
         const code = path.charCodeAt(0);
         // Try to match a root
@@ -136,8 +136,8 @@ export function resolve(...pathSegments) {
     // but handle relative paths to be safe (might happen when process.cwd()
     // fails)
     // Normalize the tail path
-    resolvedTail = normalizeString(resolvedTail, !resolvedAbsolute, "\\", isPathSeparator);
-    return resolvedDevice + (resolvedAbsolute ? "\\" : "") + resolvedTail || ".";
+    resolvedTail = normalizeString(resolvedTail, !resolvedAbsolute, '\\', isPathSeparator);
+    return resolvedDevice + (resolvedAbsolute ? '\\' : '') + resolvedTail || '.';
 }
 /**
  * Normalizes a `path`
@@ -147,7 +147,7 @@ export function normalize(path) {
     assertPath(path);
     const len = path.length;
     if (len === 0)
-        return ".";
+        return '.';
     let rootEnd = 0;
     let device;
     let isAbsolute = false;
@@ -222,32 +222,32 @@ export function normalize(path) {
     else if (isPathSeparator(code)) {
         // `path` contains just a path separator, exit early to avoid unnecessary
         // work
-        return "\\";
+        return '\\';
     }
     let tail;
     if (rootEnd < len) {
-        tail = normalizeString(path.slice(rootEnd), !isAbsolute, "\\", isPathSeparator);
+        tail = normalizeString(path.slice(rootEnd), !isAbsolute, '\\', isPathSeparator);
     }
     else {
-        tail = "";
+        tail = '';
     }
     if (tail.length === 0 && !isAbsolute)
-        tail = ".";
+        tail = '.';
     if (tail.length > 0 && isPathSeparator(path.charCodeAt(len - 1))) {
-        tail += "\\";
+        tail += '\\';
     }
     if (device === undefined) {
         if (isAbsolute) {
             if (tail.length > 0)
                 return `\\${tail}`;
             else
-                return "\\";
+                return '\\';
         }
         else if (tail.length > 0) {
             return tail;
         }
         else {
-            return "";
+            return '';
         }
     }
     else if (isAbsolute) {
@@ -292,7 +292,7 @@ export function isAbsolute(path) {
 export function join(...paths) {
     const pathsCount = paths.length;
     if (pathsCount === 0)
-        return ".";
+        return '.';
     let joined;
     let firstPart = null;
     for (let i = 0; i < pathsCount; ++i) {
@@ -306,7 +306,7 @@ export function join(...paths) {
         }
     }
     if (joined === undefined)
-        return ".";
+        return '.';
     // Make sure that the joined path doesn't start with two slashes, because
     // normalize() will mistake it for an UNC path then.
     //
@@ -364,26 +364,28 @@ export function relative(from, to) {
     assertPath(from);
     assertPath(to);
     if (from === to)
-        return "";
+        return '';
     const fromOrig = resolve(from);
     const toOrig = resolve(to);
     if (fromOrig === toOrig)
-        return "";
+        return '';
     from = fromOrig.toLowerCase();
     to = toOrig.toLowerCase();
     if (from === to)
-        return "";
+        return '';
     // Trim any leading backslashes
     let fromStart = 0;
     let fromEnd = from.length;
     for (; fromStart < fromEnd; ++fromStart) {
-        if (from.charCodeAt(fromStart) !== CHAR_BACKWARD_SLASH && from.charCodeAt(fromStart) !== CHAR_FORWARD_SLASH)
+        if (from.charCodeAt(fromStart) !== CHAR_BACKWARD_SLASH && from.charCodeAt(fromStart) !== CHAR_FORWARD_SLASH) {
             break;
+        }
     }
     // Trim trailing backslashes (applicable to UNC paths only)
     for (; fromEnd - 1 > fromStart; --fromEnd) {
-        if (from.charCodeAt(fromEnd - 1) !== CHAR_BACKWARD_SLASH && from.charCodeAt(fromEnd - 1) !== CHAR_FORWARD_SLASH)
+        if (from.charCodeAt(fromEnd - 1) !== CHAR_BACKWARD_SLASH && from.charCodeAt(fromEnd - 1) !== CHAR_FORWARD_SLASH) {
             break;
+        }
     }
     const fromLen = fromEnd - fromStart;
     // Trim any leading backslashes
@@ -406,7 +408,8 @@ export function relative(from, to) {
     for (; i <= length; ++i) {
         if (i === length) {
             if (toLen > length) {
-                if (to.charCodeAt(toStart + i) === CHAR_BACKWARD_SLASH || to.charCodeAt(toStart + i) === CHAR_FORWARD_SLASH) {
+                if (to.charCodeAt(toStart + i) === CHAR_BACKWARD_SLASH ||
+                    to.charCodeAt(toStart + i) === CHAR_FORWARD_SLASH) {
                     // We get here if `from` is the exact base path for `to`.
                     // For example: from='C:\\foo\\bar'; to='C:\\foo\\bar\\baz'
                     return toOrig.slice(toStart + i + 1);
@@ -418,7 +421,8 @@ export function relative(from, to) {
                 }
             }
             if (fromLen > length) {
-                if (from.charCodeAt(fromStart + i) === CHAR_BACKWARD_SLASH || from.charCodeAt(fromStart + i) === CHAR_FORWARD_SLASH) {
+                if (from.charCodeAt(fromStart + i) === CHAR_BACKWARD_SLASH ||
+                    from.charCodeAt(fromStart + i) === CHAR_FORWARD_SLASH) {
                     // We get here if `to` is the exact base path for `from`.
                     // For example: from='C:\\foo\\bar'; to='C:\\foo'
                     lastCommonSep = i;
@@ -443,7 +447,7 @@ export function relative(from, to) {
     if (i !== length && lastCommonSep === -1) {
         return toOrig;
     }
-    let out = "";
+    let out = '';
     if (lastCommonSep === -1)
         lastCommonSep = 0;
     // Generate the relative path based on the path difference between `to` and
@@ -451,9 +455,9 @@ export function relative(from, to) {
     for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
         if (i === fromEnd || from.charCodeAt(i) === CHAR_BACKWARD_SLASH || from.charCodeAt(i) === CHAR_FORWARD_SLASH) {
             if (out.length === 0)
-                out += "..";
+                out += '..';
             else
-                out += "\\..";
+                out += '\\..';
         }
     }
     // Lastly, append the rest of the destination (`to`) path that comes after
@@ -463,8 +467,9 @@ export function relative(from, to) {
     }
     else {
         toStart += lastCommonSep;
-        if (toOrig.charCodeAt(toStart) === CHAR_BACKWARD_SLASH || toOrig.charCodeAt(toStart) === CHAR_FORWARD_SLASH)
+        if (toOrig.charCodeAt(toStart) === CHAR_BACKWARD_SLASH || toOrig.charCodeAt(toStart) === CHAR_FORWARD_SLASH) {
             ++toStart;
+        }
         return toOrig.slice(toStart, toEnd);
     }
 }
@@ -474,10 +479,10 @@ export function relative(from, to) {
  */
 export function toNamespacedPath(path) {
     // Note: this will *probably* throw somewhere.
-    if (typeof path !== "string")
+    if (typeof path !== 'string')
         return path;
     if (path.length === 0)
-        return "";
+        return '';
     const resolvedPath = resolve(path);
     if (resolvedPath.length >= 3) {
         if (resolvedPath.charCodeAt(0) === CHAR_BACKWARD_SLASH) {
@@ -509,7 +514,7 @@ export function dirname(path) {
     assertPath(path);
     const len = path.length;
     if (len === 0)
-        return ".";
+        return '.';
     let rootEnd = -1;
     let end = -1;
     let matchedSlash = true;
@@ -589,7 +594,7 @@ export function dirname(path) {
     }
     if (end === -1) {
         if (rootEnd === -1)
-            return ".";
+            return '.';
         else
             end = rootEnd;
     }
@@ -600,8 +605,8 @@ export function dirname(path) {
  * @param path to process
  * @param ext of path directory
  */
-export function basename(path, ext = "") {
-    if (ext !== undefined && typeof ext !== "string") {
+export function basename(path, ext = '') {
+    if (ext !== undefined && typeof ext !== 'string') {
         throw new TypeError('"ext" argument must be a string');
     }
     assertPath(path);
@@ -621,7 +626,7 @@ export function basename(path, ext = "") {
     }
     if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
         if (ext.length === path.length && ext === path)
-            return "";
+            return '';
         let extIdx = ext.length - 1;
         let firstNonSlashEnd = -1;
         for (i = path.length - 1; i >= start; --i) {
@@ -683,7 +688,7 @@ export function basename(path, ext = "") {
             }
         }
         if (end === -1)
-            return "";
+            return '';
         return path.slice(start, end);
     }
 }
@@ -746,7 +751,7 @@ export function extname(path) {
         preDotState === 0 ||
         // The (right-most) trimmed path component is exactly '..'
         (preDotState === 1 && startDot === end - 1 && startDot === startPart + 1)) {
-        return "";
+        return '';
     }
     return path.slice(startDot, end);
 }
@@ -755,10 +760,10 @@ export function extname(path) {
  * @param pathObject with path
  */
 export function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== "object") {
+    if (pathObject === null || typeof pathObject !== 'object') {
         throw new TypeError(`The "pathObject" argument must be of type Object. Received type ${typeof pathObject}`);
     }
-    return _format("\\", pathObject);
+    return _format('\\', pathObject);
 }
 /**
  * Return a `ParsedPath` object of the `path`.
@@ -766,7 +771,7 @@ export function format(pathObject) {
  */
 export function parse(path) {
     assertPath(path);
-    const ret = { root: "", dir: "", base: "", ext: "", name: "" };
+    const ret = { root: '', dir: '', base: '', ext: '', name: '' };
     const len = path.length;
     if (len === 0)
         return ret;
@@ -923,11 +928,11 @@ export function parse(path) {
  */
 export function fromFileUrl(url) {
     url = url instanceof URL ? url : new URL(url);
-    if (url.protocol != "file:") {
-        throw new TypeError("Must be a file URL.");
+    if (url.protocol != 'file:') {
+        throw new TypeError('Must be a file URL.');
     }
-    let path = decodeURIComponent(url.pathname.replace(/\//g, "\\").replace(/%(?![0-9A-Fa-f]{2})/g, "%25")).replace(/^\\*([A-Za-z]:)(\\|$)/, "$1\\");
-    if (url.hostname != "") {
+    let path = decodeURIComponent(url.pathname.replace(/\//g, '\\').replace(/%(?![0-9A-Fa-f]{2})/g, '%25')).replace(/^\\*([A-Za-z]:)(\\|$)/, '$1\\');
+    if (url.hostname != '') {
         // Note: The `URL` implementation guarantees that the drive letter and
         // hostname are mutually exclusive. Otherwise it would not have been valid
         // to append the hostname and path like this.
@@ -948,15 +953,15 @@ export function fromFileUrl(url) {
  */
 export function toFileUrl(path) {
     if (!isAbsolute(path)) {
-        throw new TypeError("Must be an absolute path.");
+        throw new TypeError('Must be an absolute path.');
     }
     const [, hostname, pathname] = path.match(/^(?:[/\\]{2}([^/\\]+)(?=[/\\](?:[^/\\]|$)))?(.*)/);
-    const url = new URL("file:///");
-    url.pathname = encodeWhitespace(pathname.replace(/%/g, "%25"));
-    if (hostname != null && hostname != "localhost") {
+    const url = new URL('file:///');
+    url.pathname = encodeWhitespace(pathname.replace(/%/g, '%25'));
+    if (hostname != null && hostname != 'localhost') {
         url.hostname = hostname;
         if (!url.hostname) {
-            throw new TypeError("Invalid hostname.");
+            throw new TypeError('Invalid hostname.');
         }
     }
     return url;

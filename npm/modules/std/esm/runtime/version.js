@@ -31,8 +31,9 @@ export class Version {
         return this.compareTo(arguments[0]) === 0;
     }
     compareTo() {
-        if (arguments.length === 0)
+        if (arguments.length === 0) {
             throw new Error('compareTo expects at least 1 argument');
+        }
         let other = arguments[0];
         if (Object.is(this, other)) {
             return 0;
@@ -46,19 +47,24 @@ export class Version {
                 if (str.length === other.length && str === other) {
                     return 0;
                 }
-                if (str.length > other.length || str > other)
+                if (str.length > other.length || str > other) {
                     return 1;
+                }
                 return -1;
             }
         }
-        if (__classPrivateFieldGet(this, _Version_major, "f") !== __classPrivateFieldGet(other, _Version_major, "f"))
+        if (__classPrivateFieldGet(this, _Version_major, "f") !== __classPrivateFieldGet(other, _Version_major, "f")) {
             return __classPrivateFieldGet(this, _Version_major, "f") > __classPrivateFieldGet(other, _Version_major, "f") ? 1 : -1;
-        if (__classPrivateFieldGet(this, _Version_minor, "f") !== __classPrivateFieldGet(other, _Version_minor, "f"))
+        }
+        if (__classPrivateFieldGet(this, _Version_minor, "f") !== __classPrivateFieldGet(other, _Version_minor, "f")) {
             return __classPrivateFieldGet(this, _Version_minor, "f") > __classPrivateFieldGet(other, _Version_minor, "f") ? 1 : -1;
-        if (__classPrivateFieldGet(this, _Version_build, "f") !== __classPrivateFieldGet(other, _Version_build, "f"))
+        }
+        if (__classPrivateFieldGet(this, _Version_build, "f") !== __classPrivateFieldGet(other, _Version_build, "f")) {
             return __classPrivateFieldGet(this, _Version_build, "f") > __classPrivateFieldGet(other, _Version_build, "f") ? 1 : -1;
-        if (__classPrivateFieldGet(this, _Version_revision, "f") !== __classPrivateFieldGet(other, _Version_revision, "f"))
+        }
+        if (__classPrivateFieldGet(this, _Version_revision, "f") !== __classPrivateFieldGet(other, _Version_revision, "f")) {
             return __classPrivateFieldGet(this, _Version_revision, "f") > __classPrivateFieldGet(other, _Version_revision, "f") ? 1 : -1;
+        }
         return 0;
     }
     get major() {

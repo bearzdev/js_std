@@ -1,4 +1,4 @@
-import { OsFamily } from "../runtime/mod.js";
+import { OsFamily } from '../runtime/mod.js';
 export interface GlobOptions {
     /** Extended glob syntax.
      * See https://www.linuxjournal.com/content/bash-extended-globbing. Defaults

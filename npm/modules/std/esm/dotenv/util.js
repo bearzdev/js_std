@@ -6,7 +6,7 @@ export function removeEmptyValues(obj) {
             return false;
         if (value === undefined)
             return false;
-        if (value === "")
+        if (value === '')
             return false;
         return true;
     }));

@@ -1,35 +1,34 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { cancelAfter } from "../async/cancellation-token.js";
-import { notNullOrWhiteSpace } from "../errors/check.js";
-import { ArgumentNullError } from "../errors/errors.js";
-import { ProcessError, NotFoundOnPathError } from "./errors.js";
-import type { 
-    IProcessInvocationOptions, 
-    IProcessStartInfo, 
-    IProcessResult, 
-    IProcessInvocationContext, 
-    IProcessCapture,
+import { cancelAfter } from '../async/cancellation-token.js';
+import { notNullOrWhiteSpace } from '../errors/check.js';
+import { ArgumentNullError } from '../errors/errors.js';
+import { NotFoundOnPathError, ProcessError } from './errors.js';
+import type {
     IParameterBuilder,
-} from "./interfaces.js";
-import { ProcessStartInfo, ArrayCapture, ProcessCapture, ProcessArgs, CommandBuilder, } from "./start-info.js";
-import { 
-    pathFinder, 
-    findExecutable, 
-    findExecutableAsync, 
-    findExecutableOrThrow, 
+    IProcessCapture,
+    IProcessInvocationContext,
+    IProcessInvocationOptions,
+    IProcessResult,
+    IProcessStartInfo,
+} from './interfaces.js';
+import { ArrayCapture, CommandBuilder, ProcessArgs, ProcessCapture, ProcessStartInfo } from './start-info.js';
+import {
+    findExecutable,
+    findExecutableAsync,
+    findExecutableOrThrow,
     findExecutableOrThrowAsync,
+    pathFinder,
     registerExecutable,
-    which, 
-    whichAsync,
+    removeFile,
+    removeFileAsync,
     resolveScript,
     resolveScriptAsync,
-    removeFile, 
-    removeFileAsync 
-} from "./which.js";
+    which,
+    whichAsync,
+} from './which.js';
 
-import { processRunner } from "./base.node.js";
-
+import { processRunner } from './base.node.js';
 
 function createStartInfo(fileName: string, args?: string[], options?: IProcessInvocationOptions): ProcessStartInfo {
     options ||= {};
@@ -45,22 +44,21 @@ export default class Process {
     #outCaptures: IProcessCapture[];
     #errorCaptures: IProcessCapture[];
 
-    constructor(startInfo: ProcessStartInfo)
-    constructor(options: Partial<IProcessStartInfo>)
+    constructor(startInfo: ProcessStartInfo);
+    constructor(options: Partial<IProcessStartInfo>);
     constructor() {
-        if(arguments.length === 0)
-           throw new ArgumentNullError('options');
+        if (arguments.length === 0) {
+            throw new ArgumentNullError('options');
+        }
 
         this.#outCaptures = [];
         this.#errorCaptures = [];
         const first = arguments[0];
 
-        if(typeof first === 'object') {
-            if(first instanceof ProcessStartInfo) {
+        if (typeof first === 'object') {
+            if (first instanceof ProcessStartInfo) {
                 this.startInfo = first;
-            }
-            else 
-            {
+            } else {
                 this.startInfo = new ProcessStartInfo(first);
             }
         } else {
@@ -68,7 +66,7 @@ export default class Process {
         }
     }
 
-    static capture(fileName: string, args?: string[], options?: IProcessInvocationOptions) : IProcessResult {
+    static capture(fileName: string, args?: string[], options?: IProcessInvocationOptions): IProcessResult {
         pathFinder.findOrThrow(fileName);
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
@@ -82,7 +80,11 @@ export default class Process {
         return result;
     }
 
-    static async captureAsync(fileName: string, args?: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult> {
+    static async captureAsync(
+        fileName: string,
+        args?: string[],
+        options?: IProcessInvocationOptions,
+    ): Promise<IProcessResult> {
         pathFinder.findOrThrow(fileName);
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
@@ -96,7 +98,7 @@ export default class Process {
         return result;
     }
 
-    static captureScript(script: string, shell?: string, options?: IProcessInvocationOptions) : IProcessResult {
+    static captureScript(script: string, shell?: string, options?: IProcessInvocationOptions): IProcessResult {
         const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = processRunner.resolveShellScript(script, shell, startInfo);
         const process = new Process(startInfo);
@@ -114,7 +116,11 @@ export default class Process {
         }
     }
 
-    static async captureScriptAsync(script: string, shell?: string, options?: IProcessInvocationOptions) : Promise<IProcessResult> {
+    static async captureScriptAsync(
+        script: string,
+        shell?: string,
+        options?: IProcessInvocationOptions,
+    ): Promise<IProcessResult> {
         const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = await processRunner.resolveShellScriptAsync(script, shell, startInfo);
         const process = new Process(startInfo);
@@ -132,14 +138,14 @@ export default class Process {
         }
     }
 
-    static run(fileName: string, args?: string[], options?: IProcessInvocationOptions) : IProcessResult {
+    static run(fileName: string, args?: string[], options?: IProcessInvocationOptions): IProcessResult {
         notNullOrWhiteSpace(fileName, 'fileName');
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
         let result: IProcessResult;
-        if(options?.capture) {
+        if (options?.capture) {
             result = process.capture();
-        } else if(options?.tee) {
+        } else if (options?.tee) {
             result = process.tee();
         } else {
             result = process.run();
@@ -155,15 +161,19 @@ export default class Process {
         return result;
     }
 
-    static async runAsync(fileName: string, args?: string[], options?: IProcessInvocationOptions) : Promise<IProcessResult> {
+    static async runAsync(
+        fileName: string,
+        args?: string[],
+        options?: IProcessInvocationOptions,
+    ): Promise<IProcessResult> {
         notNullOrWhiteSpace(fileName, 'fileName');
 
         const startInfo = createStartInfo(fileName, args, options);
         const process = new Process(startInfo);
         let result: IProcessResult;
-        if(options?.capture) {
+        if (options?.capture) {
             result = await process.captureAsync();
-        } else if(options?.tee) {
+        } else if (options?.tee) {
             result = await process.teeAsync();
         } else {
             result = await process.runAsync();
@@ -176,7 +186,7 @@ export default class Process {
         return result;
     }
 
-    static runScript(script: string, shell?: string, options?: IProcessInvocationOptions) : IProcessResult {
+    static runScript(script: string, shell?: string, options?: IProcessInvocationOptions): IProcessResult {
         const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = processRunner.resolveShellScript(script, shell, startInfo);
         const process = new Process(startInfo);
@@ -194,7 +204,11 @@ export default class Process {
         }
     }
 
-    static async runScriptAsync(script: string, shell?: string, options?: IProcessInvocationOptions) : Promise<IProcessResult> {
+    static async runScriptAsync(
+        script: string,
+        shell?: string,
+        options?: IProcessInvocationOptions,
+    ): Promise<IProcessResult> {
         const startInfo = new ProcessStartInfo(options || {});
         const tmpFile = await processRunner.resolveShellScriptAsync(script, shell, startInfo);
         const process = new Process(startInfo);
@@ -223,7 +237,7 @@ export default class Process {
             throw new Error('No arguments');
         }
         const first = arguments[0];
-        if(first === undefined || first === null) {
+        if (first === undefined || first === null) {
             throw new ArgumentNullError('capture');
         }
 
@@ -247,7 +261,7 @@ export default class Process {
             throw new Error('No arguments');
         }
         const first = arguments[0];
-        if(first === undefined || first === null) {
+        if (first === undefined || first === null) {
             throw new ArgumentNullError('capture');
         }
 
@@ -274,33 +288,33 @@ export default class Process {
         this.startInfo.fileName = fileName;
 
         const first = arguments[0];
-        if(first !== undefined) {
-            if(first instanceof AbortSignal) {
+        if (first !== undefined) {
+            if (first instanceof AbortSignal) {
                 this.startInfo.signal = first;
             } else if (typeof first === 'number') {
                 this.startInfo.signal = cancelAfter(first);
             }
         }
 
-        if(this.startInfo.args && this.startInfo.args instanceof ProcessArgs) {
+        if (this.startInfo.args && this.startInfo.args instanceof ProcessArgs) {
             const next = [];
-            for(let i = 0; i < this.startInfo.args.length; i++) {
+            for (let i = 0; i < this.startInfo.args.length; i++) {
                 next.push(this.startInfo.args[i]);
             }
 
-            this.startInfo.args =next;
+            this.startInfo.args = next;
         }
 
-        const ctx : IProcessInvocationContext = {
+        const ctx: IProcessInvocationContext = {
             startInfo: this.startInfo,
             signal: this.startInfo.signal,
-            outCaptures: this.startInfo.outCaptures === undefined ? 
-                this.#outCaptures : 
-                this.startInfo.outCaptures.concat(this.#outCaptures),
-            errorCaptures: this.startInfo.errorCaptures === undefined ? 
-                this.#errorCaptures : 
-                this.startInfo.errorCaptures.concat(this.#errorCaptures),
-        }
+            outCaptures: this.startInfo.outCaptures === undefined
+                ? this.#outCaptures
+                : this.startInfo.outCaptures.concat(this.#outCaptures),
+            errorCaptures: this.startInfo.errorCaptures === undefined
+                ? this.#errorCaptures
+                : this.startInfo.errorCaptures.concat(this.#errorCaptures),
+        };
 
         return processRunner.run(ctx);
     }
@@ -315,8 +329,8 @@ export default class Process {
         this.startInfo.fileName = fileName;
 
         const first = arguments[0];
-        if(first !== undefined) {
-            if(first instanceof AbortSignal) {
+        if (first !== undefined) {
+            if (first instanceof AbortSignal) {
                 this.startInfo.signal = first;
             } else if (typeof first === 'number') {
                 this.startInfo.timeout = first;
@@ -324,16 +338,16 @@ export default class Process {
             }
         }
 
-        const ctx : IProcessInvocationContext = {
+        const ctx: IProcessInvocationContext = {
             startInfo: this.startInfo,
             signal: this.startInfo.signal,
-            outCaptures: this.startInfo.outCaptures === undefined ? 
-                this.#outCaptures : 
-                this.startInfo.outCaptures.concat(this.#outCaptures),
-            errorCaptures: this.startInfo.errorCaptures === undefined ? 
-                this.#errorCaptures : 
-                this.startInfo.errorCaptures.concat(this.#errorCaptures),
-        }
+            outCaptures: this.startInfo.outCaptures === undefined
+                ? this.#outCaptures
+                : this.startInfo.outCaptures.concat(this.#outCaptures),
+            errorCaptures: this.startInfo.errorCaptures === undefined
+                ? this.#errorCaptures
+                : this.startInfo.errorCaptures.concat(this.#errorCaptures),
+        };
 
         return processRunner.runAsync(ctx);
     }
@@ -423,28 +437,28 @@ export const {
     captureScript,
 
     captureScriptAsync,
-} = Process
+} = Process;
 
-export { 
-    pathFinder,
-    IProcessStartInfo,
-    IProcessCapture,
-    IProcessInvocationOptions,
-    IProcessResult,
-    IParameterBuilder,
+export {
     CommandBuilder,
-    ProcessArgs,
-    ProcessError,
-    NotFoundOnPathError,
     findExecutable,
     findExecutableAsync,
     findExecutableOrThrow,
     findExecutableOrThrowAsync,
+    IParameterBuilder,
+    IProcessCapture,
+    IProcessInvocationOptions,
+    IProcessResult,
+    IProcessStartInfo,
+    NotFoundOnPathError,
+    pathFinder,
+    ProcessArgs,
+    ProcessError,
     registerExecutable,
     resolveScript,
     resolveScriptAsync,
-    which, 
-    whichAsync,   
+    which,
+    whichAsync,
 };
 
 export const fromArgs = ProcessArgs.from;

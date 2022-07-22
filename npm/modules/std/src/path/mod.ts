@@ -13,10 +13,10 @@ import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
 
 
-import { isWindows, isDarwin, isDeno, isNode, globalScope } from "../runtime/mod.js";
+import { globalScope, isDarwin, isDeno, isNode, isWindows } from '../runtime/mod.js';
 export * from './separator.js';
-import * as _win32 from "./win32.js";
-import * as _posix from "./posix.js";
+import * as _win32 from './win32.js';
+import * as _posix from './posix.js';
 
 const path2 = isWindows ? _win32 : _posix;
 
@@ -24,32 +24,32 @@ export const win32 = _win32;
 export const posix = _posix;
 
 export function tmpDir() {
-    if(isDeno) {
-        if(isWindows) {
-            return globalScope.Deno.env.get("TEMP") || globalScope.Deno.env.get("TMP") ||
-              "C:\\ProgramData\\Temp";
+    if (isDeno) {
+        if (isWindows) {
+            return globalScope.Deno.env.get('TEMP') || globalScope.Deno.env.get('TMP') ||
+                'C:\\ProgramData\\Temp';
         }
 
-        if(isDarwin) {
-            return globalScope.Deno.env.get("TMPDIR") || globalScope.Deno.env.get("TMP") ||
-              "/private/tmp";
+        if (isDarwin) {
+            return globalScope.Deno.env.get('TMPDIR') || globalScope.Deno.env.get('TMP') ||
+                '/private/tmp';
         }
 
-        return globalScope.Deno.env.get("TMPDIR") || "/tmp";
+        return globalScope.Deno.env.get('TMPDIR') || '/tmp';
     }
 
-    if(isNode) {
-        if(isWindows) {
-            return globalScope.process.env["TEMP"] || globalScope.process.env["TMP"] ||
-              "C:\\ProgramData\\Temp";
+    if (isNode) {
+        if (isWindows) {
+            return globalScope.process.env['TEMP'] || globalScope.process.env['TMP'] ||
+                'C:\\ProgramData\\Temp';
         }
 
-        if(isDarwin) {
-            return globalScope.process.env["TMPDIR"] || globalScope.process.env["TMP"] ||
-              "/private/tmp";
+        if (isDarwin) {
+            return globalScope.process.env['TMPDIR'] || globalScope.process.env['TMP'] ||
+                '/private/tmp';
         }
 
-        return globalScope.process.env["TMPDIR"] || "/tmp";
+        return globalScope.process.env['TMPDIR'] || '/tmp';
     }
 
     return undefined;
@@ -58,7 +58,7 @@ export function tmpDir() {
 export function filenameWithoutExtension(path: string): string {
     const ext = path2.extname(path);
     let name = path2.basename(path);
-    if(ext && ext.length > 0) {
+    if (ext && ext.length > 0) {
         name = name.substring(0, name.length - ext.length);
     }
 
@@ -67,27 +67,26 @@ export function filenameWithoutExtension(path: string): string {
 
 export const filename = path2.basename;
 
-
 export const {
-  basename,
-  delimiter,
+    basename,
+    delimiter,
 
-  dirname,
-  extname,
-  format,
-  fromFileUrl,
-  isAbsolute,
-  join,
-  normalize,
-  parse,
-  relative,
-  resolve,
-  sep,
-  toFileUrl,
-  toNamespacedPath,
+    dirname,
+    extname,
+    format,
+    fromFileUrl,
+    isAbsolute,
+    join,
+    normalize,
+    parse,
+    relative,
+    resolve,
+    sep,
+    toFileUrl,
+    toNamespacedPath,
 } = path2;
 
-export * from "./common.js";
-export { SEP, SEP_PATTERN } from "./separator.js";
-export * from "./_interface.js";
-export * from "./glob.js";
+export * from './common.js';
+export { SEP, SEP_PATTERN } from './separator.js';
+export * from './_interface.js';
+export * from './glob.js';

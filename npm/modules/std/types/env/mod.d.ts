@@ -1,10 +1,10 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
 import { IEnvironment, IEnvironmentPath, IEnvironmentVariables } from './interfaces.js';
-import { IRuntimeEnvironment, OsFamily, Runtime, RuntimeArch, runtimeInfo, IVersion } from '../runtime/mod.js';
-import { newLine, processId, getExitCode, setExitCode, commandLine, commandLineArgs, chdir, cwd, exit } from "./process.js";
-import { envVars, EnvironmentVariables } from "./variables.js";
-import { envPath, EnvironmentPath } from "./path.js";
+import { IRuntimeEnvironment, IVersion, OsFamily, Runtime, RuntimeArch, runtimeInfo } from '../runtime/mod.js';
+import { chdir, commandLine, commandLineArgs, cwd, exit, getExitCode, newLine, processId, setExitCode } from './process.js';
+import { EnvironmentVariables, envVars } from './variables.js';
+import { EnvironmentPath, envPath } from './path.js';
 export * from './interfaces.js';
 declare const userKey: string;
 declare const machineNameKey: string;
@@ -46,4 +46,4 @@ export declare class Environment implements IEnvironment {
     exit(code?: number): void;
 }
 export declare const env: Environment;
-export { envPath, envVars, chdir, cwd, exit, getExitCode, setExitCode, commandLine, commandLineArgs, newLine, processId, runtimeInfo, userDomainKey, userKey, machineNameKey, EnvironmentPath, EnvironmentVariables, };
+export { chdir, commandLine, commandLineArgs, cwd, EnvironmentPath, EnvironmentVariables, envPath, envVars, exit, getExitCode, machineNameKey, newLine, processId, runtimeInfo, setExitCode, userDomainKey, userKey, };

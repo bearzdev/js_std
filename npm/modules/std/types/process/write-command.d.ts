@@ -1,4 +1,4 @@
-import { ISecretMasker } from "../secrets/masker.js";
+import { ISecretMasker } from '../secrets/masker.js';
 export declare const writeCommandOptions: {
     enabled: boolean;
     masker: ISecretMasker;

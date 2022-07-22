@@ -1,9 +1,8 @@
-import { NotImplementedError } from "../errors/errors.js";
-import { IProcessInvocationContext, IProcessResult, IProcessRunner } from "./interfaces.js";
-import { resolveScript, resolveScriptAsync } from "./which.js";
+import { NotImplementedError } from '../errors/errors.js';
+import { IProcessInvocationContext, IProcessResult, IProcessRunner } from './interfaces.js';
+import { resolveScript, resolveScriptAsync } from './which.js';
 
-
-export const processRunner : IProcessRunner =  {
+export const processRunner: IProcessRunner = {
     // deno-lint-ignore no-unused-vars
     run(context: IProcessInvocationContext): IProcessResult {
         throw new NotImplementedError();
@@ -16,5 +15,5 @@ export const processRunner : IProcessRunner =  {
 
     resolveShellScript: resolveScript,
 
-    resolveShellScriptAsync: resolveScriptAsync
-}
+    resolveShellScriptAsync: resolveScriptAsync,
+};

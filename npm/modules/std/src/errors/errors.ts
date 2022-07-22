@@ -15,15 +15,13 @@ export class SystemError extends Error {
         this.data = new Map();
     }
 
-    set (props: Partial<this>) {
-    
-        for(const [key, value] of Object.entries(props)) {
-            
-            if(key === 'name' || key === 'stack') {
+    set(props: Partial<this>) {
+        for (const [key, value] of Object.entries(props)) {
+            if (key === 'name' || key === 'stack') {
                 continue;
             }
 
-            if(Object.hasOwn(this, key)) {
+            if (Object.hasOwn(this, key)) {
                 // @ts-ignore. between the Partial and Object.hasOwn, this is a valid property
                 this[key] = value;
             }
@@ -38,13 +36,13 @@ export class SystemError extends Error {
     }
 
     get stackTrace(): string[] {
-        if(!this.#stackLines) {
-            if(this.stack) {
+        if (!this.#stackLines) {
+            if (this.stack) {
                 this.#stackLines = this.stack.split('\n').splice(0, 1);
             } else {
                 this.#stackLines = [];
             }
-        }  
+        }
 
         return this.#stackLines;
     }
@@ -57,35 +55,34 @@ export class SystemError extends Error {
 
 /**
  * A decorator for hiding a function from the stack trace.
- * 
- * @returns {(target: any, _propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor}} 
+ *
+ * @returns {(target: any, _propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor}}
  */
 export function hideStack() {
-
     // deno-lint-ignore no-explicit-any
-    return function(target: any, _propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target: any, _propertyKey: string, descriptor: PropertyDescriptor) {
         const original = descriptor.value;
         if (typeof original === 'function') {
-          descriptor.value = (...args: unknown[]) => {
-            try {
-                return original.apply(target, args);
-            } catch (e) {
-                if(e instanceof Error && e.stack) {
-                    // first line of stack trace is the message, though could be multiple lines
-                    // if the dev used '\n' in the error message.
-                    // todo: figure out messages can exceed the first line.
-                    const lines = e.stack.split('\n');
-                    const start = lines.indexOf('    at ');
-                    if(start > -1) {
-                        e.stack = e.stack.split('\n').splice(start, 1).join('\n');
+            descriptor.value = (...args: unknown[]) => {
+                try {
+                    return original.apply(target, args);
+                } catch (e) {
+                    if (e instanceof Error && e.stack) {
+                        // first line of stack trace is the message, though could be multiple lines
+                        // if the dev used '\n' in the error message.
+                        // todo: figure out messages can exceed the first line.
+                        const lines = e.stack.split('\n');
+                        const start = lines.indexOf('    at ');
+                        if (start > -1) {
+                            e.stack = e.stack.split('\n').splice(start, 1).join('\n');
+                        }
                     }
+                    throw e;
                 }
-                throw e;
-            }
-          }
+            };
         }
         return descriptor;
-    }
+    };
 }
 
 export class ArgumentError extends SystemError {

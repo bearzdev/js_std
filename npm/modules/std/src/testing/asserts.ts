@@ -216,14 +216,13 @@ export class AssertContext {
         assert2(actual === true, message);
     }
 
-    
     false(actual: boolean, message?: string): void {
         assertFalse(actual, message);
     }
-    
+
     /**
      * Asserts the actual value is not undefined or null.
-     * 
+     *
      * @param actual the value to test.
      * @param message the failure message.
      */

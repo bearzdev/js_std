@@ -12,11 +12,11 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _Environment_vars, _Environment_path, _Environment_userInteractive;
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { runtimeInfo, isDeno, isBrowser, isNode, isWindows } from '../runtime/mod.js';
-import { newLine, processId, getExitCode, setExitCode, commandLine, commandLineArgs, chdir, cwd, exit } from "./process.js";
-import { envVars, EnvironmentVariables } from "./variables.js";
-import { envPath, EnvironmentPath } from "./path.js";
-import { getCiName, isCi } from "./ci.js";
+import { isBrowser, isDeno, isNode, isWindows, runtimeInfo, } from '../runtime/mod.js';
+import { chdir, commandLine, commandLineArgs, cwd, exit, getExitCode, newLine, processId, setExitCode, } from './process.js';
+import { EnvironmentVariables, envVars } from './variables.js';
+import { EnvironmentPath, envPath } from './path.js';
+import { getCiName, isCi } from './ci.js';
 export * from './interfaces.js';
 const userKey = isWindows ? 'USERNAME' : 'USER';
 const machineNameKey = isWindows ? 'COMPUTERNAME' : 'HOSTNAME';
@@ -128,5 +128,5 @@ export class Environment {
 }
 _Environment_vars = new WeakMap(), _Environment_path = new WeakMap(), _Environment_userInteractive = new WeakMap();
 export const env = new Environment(envVars, envPath);
-export { envPath, envVars, chdir, cwd, exit, getExitCode, setExitCode, commandLine, commandLineArgs, newLine, processId, runtimeInfo, userDomainKey, userKey, machineNameKey, EnvironmentPath, EnvironmentVariables, };
+export { chdir, commandLine, commandLineArgs, cwd, EnvironmentPath, EnvironmentVariables, envPath, envVars, exit, getExitCode, machineNameKey, newLine, processId, runtimeInfo, setExitCode, userDomainKey, userKey, };
 //# sourceMappingURL=mod.js.map

@@ -1,7 +1,6 @@
-
 // deno-lint-ignore no-explicit-any
 export type AnyConstructor = new (...args: any[]) => any;
-export type FormatDelegate= (format?: string, arg?: unknown, formatProvider?: unknown) => string;
+export type FormatDelegate = (format?: string, arg?: unknown, formatProvider?: unknown) => string;
 export type FormatProviderDelegate = (type?: string | AnyConstructor) => FormatDelegate;
 export type CloneDelegate = () => unknown;
 export type CloneDelegateOf<out T> = <T>() => T;
@@ -26,11 +25,11 @@ export interface IEquatable {
 }
 
 export interface IEquatableOf<T> {
-    equals(other: T): boolean
+    equals(other: T): boolean;
 }
 
 export interface IFormatProvider {
-    getFormat (formatType: string | AnyConstructor) : unknown;
+    getFormat(formatType: string | AnyConstructor): unknown;
 }
 
 export interface ICustomFormatter {
@@ -43,11 +42,9 @@ export interface IFormattable {
 }
 
 export interface IServiceProvider {
-    getService(serviceType: string | AnyConstructor) : unknown | undefined;
+    getService(serviceType: string | AnyConstructor): unknown | undefined;
 }
 
 export interface IProgressOf<T> {
     report(value: T): void;
 }
-
-

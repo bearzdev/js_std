@@ -1,10 +1,10 @@
-import { StopWatch } from "../diagnostics/stop-watch.js";
+import { StopWatch } from '../diagnostics/stop-watch.js';
 import { processRunner } from './base.js';
-import { ProcessResult } from "./start-info.js";
+import { ProcessResult } from './start-info.js';
 import { writeCommand } from './write-command.js';
-import * as child_process from "child_process";
-import { TimeoutError } from "../errors/errors.js";
-import { notNullOrWhiteSpace } from "../errors/check.js";
+import * as child_process from 'child_process';
+import { TimeoutError } from '../errors/errors.js';
+import { notNullOrWhiteSpace } from '../errors/check.js';
 processRunner.run = (context) => {
     // deno doesn't currently have a polyfill for child_process.spawnSync
     // however, the import above should be translated by deno dnt to import { child_process } from "child_process";
@@ -38,16 +38,18 @@ processRunner.run = (context) => {
     stopWatch.stop();
     if (stdoutType === 'pipe' && process.stdout) {
         outCaptures.forEach((capture) => {
-            if (context.signal && context.signal.aborted)
+            if (context.signal && context.signal.aborted) {
                 context.signal.throwIfAborted();
+            }
             capture.write(process.stdout);
             capture.dispose();
         });
     }
     if (stderrType === 'pipe') {
         errorCaptures.forEach((capture) => {
-            if (context.signal && context.signal.aborted)
+            if (context.signal && context.signal.aborted) {
                 context.signal.throwIfAborted();
+            }
             capture.write(process.stderr);
             capture.dispose();
         });
@@ -115,8 +117,9 @@ processRunner.runAsync = (context) => {
             process.on('exit', (_) => {
                 stopWatch.stop();
                 let ec = process.exitCode;
-                if (ec === null || ec === undefined)
+                if (ec === null || ec === undefined) {
                     ec = 0; // default to 1?
+                }
                 const result = new ProcessResult({
                     exitCode: ec,
                     args: si.args,

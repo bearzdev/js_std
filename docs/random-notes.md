@@ -20,6 +20,3 @@ ctrl + / will comment code
 - cloudcraft.co
 - <https://lucidscale.com/product/azure>
 - <https://www.storyblocks.com/pricing>
-- 
-
-flare

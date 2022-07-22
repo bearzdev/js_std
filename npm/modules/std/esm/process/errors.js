@@ -1,4 +1,4 @@
-import { SystemError } from "../errors/errors.js";
+import { SystemError } from '../errors/errors.js';
 export class NotFoundOnPathError extends SystemError {
     constructor(executable, message, innerError) {
         super(message || `Executable ${executable} not found on PATH.`, innerError);
@@ -8,7 +8,7 @@ export class NotFoundOnPathError extends SystemError {
             writable: true,
             value: void 0
         });
-        this.name = "NotFoundOnPathError";
+        this.name = 'NotFoundOnPathError';
         this.executable = executable;
     }
 }
@@ -27,7 +27,7 @@ export class ProcessError extends SystemError {
             writable: true,
             value: void 0
         });
-        this.name = "ProcessError";
+        this.name = 'ProcessError';
         this.exitCode = exitCode || 0;
         this.fileName = fileName;
     }

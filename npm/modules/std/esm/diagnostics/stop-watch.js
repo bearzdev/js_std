@@ -51,7 +51,7 @@ export function utcNow() {
     return utc;
 }
 export class StopWatch {
-    constructor(id = "") {
+    constructor(id = '') {
         _StopWatch_id.set(this, void 0);
         _StopWatch_runningSpanName.set(this, null);
         _StopWatch_startedAt.set(this, void 0);
@@ -75,7 +75,7 @@ export class StopWatch {
     get totalDuration() {
         return __classPrivateFieldGet(this, _StopWatch_totalDuration, "f");
     }
-    start(spanName = "") {
+    start(spanName = '') {
         if (this.isRunning) {
             throw new Error(`StopWatch '${__classPrivateFieldGet(this, _StopWatch_id, "f")}' is running task ${__classPrivateFieldGet(this, _StopWatch_runningSpanName, "f")}. Call stop() before starting a new task`);
         }
@@ -101,7 +101,7 @@ export class StopWatch {
         return task;
     }
     toString() {
-        let str = "";
+        let str = '';
         for (let i = 0; i < __classPrivateFieldGet(this, _StopWatch_tasks, "f").length; i++) {
             const task = __classPrivateFieldGet(this, _StopWatch_tasks, "f")[i];
             str += `${task.spanName} ${task.percentage}% ${task.duration}ms\n`;
@@ -114,6 +114,6 @@ Object.defineProperty(StopWatch, "NoTaskMessage", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: "No task info kept"
+    value: 'No task info kept'
 });
 //# sourceMappingURL=stop-watch.js.map

@@ -26,8 +26,8 @@ export class CancellationTokenSource extends AbortController {
         }.bind(this.signal);
     }
 
-    override get signal() : AbortSignal & { canBeCancelled: boolean, timeout: number | undefined } {
-        return super.signal as AbortSignal & { canBeCancelled: boolean, timeout: number | undefined };
+    override get signal(): AbortSignal & { canBeCancelled: boolean; timeout: number | undefined } {
+        return super.signal as AbortSignal & { canBeCancelled: boolean; timeout: number | undefined };
     }
 
     static cancelAfter(ms: number): AbortSignal {

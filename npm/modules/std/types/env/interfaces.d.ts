@@ -1,5 +1,5 @@
-import { IRuntimeEnvironment, IVersion, OsFamily, RuntimeArch } from "../runtime/interfaces.js";
-export declare type CiType = "circleci" | "github" | "gitlab" | "travisci" | 'jenkins' | 'azure' | 'appveyor' | 'bitbucket' | 'bamboo' | 'teamcity' | 'harness';
+import { IRuntimeEnvironment, IVersion, OsFamily, RuntimeArch } from '../runtime/interfaces.js';
+export declare type CiType = 'circleci' | 'github' | 'gitlab' | 'travisci' | 'jenkins' | 'azure' | 'appveyor' | 'bitbucket' | 'bamboo' | 'teamcity' | 'harness';
 export interface IVariableGetter {
     (name: string): string | undefined;
 }

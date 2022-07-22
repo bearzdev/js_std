@@ -1,10 +1,11 @@
-import { getBrowserRuntimeInformation, Version, globalScope } from "./base.browser.js";
-export { Version, globalScope, };
+import { getBrowserRuntimeInformation, globalScope, Version, } from './base.browser.js';
+export { globalScope, Version };
 const g = globalScope;
 let re;
 // allow the ability to short circuit querying the os release version
 let osVersion = g._osRelease || '';
-if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== 'undefined' && typeof (g.process.versions.node) !== 'undefined') {
+if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== 'undefined' &&
+    typeof (g.process.versions.node) !== 'undefined') {
     let platform = g.process.platform;
     switch (platform) {
         case 'win32':
@@ -20,14 +21,18 @@ if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== 'undef
     }
     let debug = false;
     let trace = false;
-    if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true)
+    if (typeof globalScope['_DEBUG'] !== 'undefined' && globalScope['_DEBUG'] === true) {
         debug = globalScope['_DEBUG'];
-    if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true)
+    }
+    if (typeof globalScope['_TRACE'] !== 'undefined' && globalScope['_TRACE'] === true) {
         trace = globalScope['_TRACE'];
-    if (g.process.env["DEBUG"] !== undefined)
+    }
+    if (g.process.env['DEBUG'] !== undefined) {
         debug = true;
-    if (g.process.env["TRACE"] !== undefined)
+    }
+    if (g.process.env['TRACE'] !== undefined) {
         trace = true;
+    }
     re = {
         version: Version.parse(g.process.versions.node),
         engine: 'v8',
@@ -43,7 +48,7 @@ if (typeof (g.process) !== 'undefined' && typeof (g.process.versions) !== 'undef
             'platform': g.process.platform,
             'arch': g.process.arch,
             'version': g.process.versions.node,
-        }, g.process.versions)
+        }, g.process.versions),
     };
 }
 else if (globalScope.navigator && globalScope.navigator.userAgent) {
@@ -52,10 +57,12 @@ else if (globalScope.navigator && globalScope.navigator.userAgent) {
 else {
     let debug = false;
     let trace = false;
-    if (typeof globalScope['_DEBUG'] !== 'undefined')
+    if (typeof globalScope['_DEBUG'] !== 'undefined') {
         debug = true;
-    if (typeof globalScope['_TRACE'] !== 'undefined')
+    }
+    if (typeof globalScope['_TRACE'] !== 'undefined') {
         trace = true;
+    }
     re = {
         version: Version.parse('0.0.0'),
         engine: 'unknown',
@@ -67,7 +74,7 @@ else {
         osFamily: 'unknown',
         osVersion: '',
         arch: 'unknown',
-        data: {}
+        data: {},
     };
 }
 export const DEBUG = re.debug;

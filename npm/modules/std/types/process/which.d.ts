@@ -1,8 +1,8 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import { IEnvironment } from "../env/mod.js";
-import { removeFile, removeFileAsync } from "../fs/mod.js";
-import type { IPathFinderEntry, IPathFinder, IPathFinderOptions, IProcessStartInfo } from "./interfaces.js";
+import { IEnvironment } from '../env/mod.js';
+import { removeFile, removeFileAsync } from '../fs/mod.js';
+import type { IPathFinder, IPathFinderEntry, IPathFinderOptions, IProcessStartInfo } from './interfaces.js';
 /**
  * which - Returns the full path of the executable file of the given program;
  * otherwise, returns undefined.
@@ -66,6 +66,6 @@ export declare class PathFinder implements IPathFinder {
     findOrThrowAsync(name: string, prependPaths?: string[], env?: IEnvironment): Promise<string>;
 }
 export declare const pathFinder: IPathFinder;
-export { removeFile, removeFileAsync, };
+export { removeFile, removeFileAsync };
 export declare function resolveScriptAsync(script: string, shell: string | undefined, startInfo: IProcessStartInfo): Promise<string>;
 export declare function resolveScript(script: string, shell: string | undefined, startInfo: IProcessStartInfo): string;

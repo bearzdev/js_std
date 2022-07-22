@@ -1,4 +1,4 @@
-import type { FormatInputPathObject } from "./_interface.js";
+import type { FormatInputPathObject } from './_interface.js';
 export declare function assertPath(path: string): void;
 export declare function isPosixPathSeparator(code: number): boolean;
 export declare function isPathSeparator(code: number): boolean;

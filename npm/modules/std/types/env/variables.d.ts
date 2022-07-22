@@ -1,6 +1,6 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
-import type { IEnvironmentVariables, IVariableGetter, IExpandOptions } from "./interfaces.js";
+import type { IEnvironmentVariables, IExpandOptions, IVariableGetter } from './interfaces.js';
 export default function expandVariables(template: string, getVariable: IVariableGetter, options?: IExpandOptions): string;
 export declare class EnvironmentVariables implements IEnvironmentVariables {
     #private;

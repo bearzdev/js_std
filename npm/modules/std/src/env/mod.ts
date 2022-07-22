@@ -1,11 +1,32 @@
 import "../_dnt.polyfills.js";
 import "../_dnt.polyfills.js";
 import { IEnvironment, IEnvironmentPath, IEnvironmentVariables } from './interfaces.js';
-import { IRuntimeEnvironment, OsFamily, Runtime, RuntimeArch, runtimeInfo, isDeno, isBrowser, isNode, isWindows, IVersion } from '../runtime/mod.js';
-import { newLine, processId, getExitCode, setExitCode, commandLine, commandLineArgs, chdir, cwd, exit } from "./process.js";
-import { envVars, EnvironmentVariables } from "./variables.js";
-import { envPath, EnvironmentPath } from "./path.js";
-import { getCiName, isCi } from "./ci.js";
+import {
+    IRuntimeEnvironment,
+    isBrowser,
+    isDeno,
+    isNode,
+    isWindows,
+    IVersion,
+    OsFamily,
+    Runtime,
+    RuntimeArch,
+    runtimeInfo,
+} from '../runtime/mod.js';
+import {
+    chdir,
+    commandLine,
+    commandLineArgs,
+    cwd,
+    exit,
+    getExitCode,
+    newLine,
+    processId,
+    setExitCode,
+} from './process.js';
+import { EnvironmentVariables, envVars } from './variables.js';
+import { EnvironmentPath, envPath } from './path.js';
+import { getCiName, isCi } from './ci.js';
 
 export * from './interfaces.js';
 
@@ -13,15 +34,14 @@ const userKey = isWindows ? 'USERNAME' : 'USER';
 const machineNameKey = isWindows ? 'COMPUTERNAME' : 'HOSTNAME';
 const userDomainKey = isWindows ? 'USERDOMAIN' : '';
 
-export class Environment implements IEnvironment 
-{
+export class Environment implements IEnvironment {
     #vars: IEnvironmentVariables;
     #path: IEnvironmentPath;
     #userInteractive = true;
 
     constructor(envVars: IEnvironmentVariables, envPath: IEnvironmentPath) {
-       this.#vars = envVars;
-       this.#path = envPath;
+        this.#vars = envVars;
+        this.#path = envPath;
     }
 
     get userInteractive() {
@@ -156,21 +176,21 @@ export class Environment implements IEnvironment
 export const env = new Environment(envVars, envPath);
 
 export {
-    envPath,
-    envVars,
     chdir,
-    cwd,
-    exit,
-    getExitCode,
-    setExitCode,
     commandLine,
     commandLineArgs,
+    cwd,
+    EnvironmentPath,
+    EnvironmentVariables,
+    envPath,
+    envVars,
+    exit,
+    getExitCode,
+    machineNameKey,
     newLine,
     processId,
     runtimeInfo,
+    setExitCode,
     userDomainKey,
     userKey,
-    machineNameKey,
-    EnvironmentPath,
-    EnvironmentVariables,
-}
+};

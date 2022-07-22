@@ -7,12 +7,12 @@
 // This module is browser compatible.
 import "../../_dnt.polyfills.js";
 import "../../_dnt.polyfills.js";
-const hexTable = new TextEncoder().encode("0123456789abcdef");
+const hexTable = new TextEncoder().encode('0123456789abcdef');
 function errInvalidByte(byte) {
     return new TypeError(`Invalid byte '${String.fromCharCode(byte)}'`);
 }
 function errLength() {
-    return new RangeError("Odd length hex string");
+    return new RangeError('Odd length hex string');
 }
 /** Converts a hex character into its value. */
 function fromHexChar(byte) {

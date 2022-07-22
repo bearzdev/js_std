@@ -1,6 +1,6 @@
 // Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
 // This module is browser compatible.
-import { SEP } from "./separator.js";
+import { SEP } from './separator.js';
 /** Determines the common path from a set of paths, using an optional separator,
  * which defaults to the OS default separator.
  *
@@ -14,8 +14,8 @@ import { SEP } from "./separator.js";
  * ```
  */
 export function common(paths, sep = SEP) {
-    const [first = "", ...remaining] = paths;
-    if (first === "" || remaining.length === 0) {
+    const [first = '', ...remaining] = paths;
+    if (first === '' || remaining.length === 0) {
         return first.substring(0, first.lastIndexOf(sep) + 1);
     }
     const parts = first.split(sep);
@@ -28,7 +28,7 @@ export function common(paths, sep = SEP) {
             }
         }
         if (endOfPrefix === 0) {
-            return "";
+            return '';
         }
     }
     const prefix = parts.slice(0, endOfPrefix).join(sep);

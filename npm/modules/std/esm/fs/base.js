@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-unused-vars
-import { NotImplementedError } from "../errors/errors.js";
+import { NotImplementedError } from '../errors/errors.js';
 export const fs = {
     createDirectory(path, options) {
         throw new NotImplementedError();
@@ -117,7 +117,7 @@ export const fs = {
         throw new NotImplementedError();
     },
     writeJsonFileAsync: function (path, 
-    // deno-lint-ignore no-explicit-any        
+    // deno-lint-ignore no-explicit-any
     data, options) {
         throw new NotImplementedError();
     },

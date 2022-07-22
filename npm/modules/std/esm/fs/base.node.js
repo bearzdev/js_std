@@ -1,5 +1,5 @@
 import { fs } from './base.js';
-import { join, basename } from '../path/mod.js';
+import { basename, join } from '../path/mod.js';
 import * as nodeFs from 'fs';
 import { isNode } from '../runtime/mod.js';
 if (isNode) {

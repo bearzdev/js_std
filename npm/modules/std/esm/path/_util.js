@@ -2,10 +2,10 @@
 // Copyright the Browserify authors. MIT License.
 // Ported from https://github.com/browserify/path-browserify/
 // This module is browser compatible.
-import { isLetterCharCode } from "../primitives/char.js";
-import { CHAR_BACKWARD_SLASH, CHAR_DOT, CHAR_FORWARD_SLASH, } from "../primitives/char_code_constants.js";
+import { isLetterCharCode } from '../primitives/char.js';
+import { CHAR_BACKWARD_SLASH, CHAR_DOT, CHAR_FORWARD_SLASH } from '../primitives/char_code_constants.js';
 export function assertPath(path) {
-    if (typeof path !== "string") {
+    if (typeof path !== 'string') {
         throw new TypeError(`Path must be a string. Received ${JSON.stringify(path)}`);
     }
 }
@@ -20,7 +20,7 @@ export function isWindowsDeviceRoot(code) {
 }
 // Resolves . and .. elements in a path with directory names
 export function normalizeString(path, allowAboveRoot, separator, isPathSeparator) {
-    let res = "";
+    let res = '';
     let lastSegmentLength = 0;
     let lastSlash = -1;
     let dots = 0;
@@ -44,7 +44,7 @@ export function normalizeString(path, allowAboveRoot, separator, isPathSeparator
                     if (res.length > 2) {
                         const lastSlashIndex = res.lastIndexOf(separator);
                         if (lastSlashIndex === -1) {
-                            res = "";
+                            res = '';
                             lastSegmentLength = 0;
                         }
                         else {
@@ -56,7 +56,7 @@ export function normalizeString(path, allowAboveRoot, separator, isPathSeparator
                         continue;
                     }
                     else if (res.length === 2 || res.length === 1) {
-                        res = "";
+                        res = '';
                         lastSegmentLength = 0;
                         lastSlash = i;
                         dots = 0;
@@ -67,7 +67,7 @@ export function normalizeString(path, allowAboveRoot, separator, isPathSeparator
                     if (res.length > 0)
                         res += `${separator}..`;
                     else
-                        res = "..";
+                        res = '..';
                     lastSegmentLength = 2;
                 }
             }
@@ -93,7 +93,7 @@ export function normalizeString(path, allowAboveRoot, separator, isPathSeparator
 export function _format(sep, pathObject) {
     const dir = pathObject.dir || pathObject.root;
     const base = pathObject.base ||
-        (pathObject.name || "") + (pathObject.ext || "");
+        (pathObject.name || '') + (pathObject.ext || '');
     if (!dir)
         return base;
     if (dir === pathObject.root)
@@ -101,12 +101,12 @@ export function _format(sep, pathObject) {
     return dir + sep + base;
 }
 const WHITESPACE_ENCODINGS = {
-    "\u0009": "%09",
-    "\u000A": "%0A",
-    "\u000B": "%0B",
-    "\u000C": "%0C",
-    "\u000D": "%0D",
-    "\u0020": "%20",
+    '\u0009': '%09',
+    '\u000A': '%0A',
+    '\u000B': '%0B',
+    '\u000C': '%0C',
+    '\u000D': '%0D',
+    '\u0020': '%20',
 };
 export function encodeWhitespace(string) {
     return string.replaceAll(/[\s]/g, (c) => {

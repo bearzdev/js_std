@@ -1,4 +1,4 @@
-import type { IDisposable } from "../primitives/interfaces.js";
+import type { IDisposable } from '../primitives/interfaces.js';
 
 export interface IProcessCapture extends IDisposable {
     write(data: Uint8Array): void;
@@ -29,22 +29,22 @@ export interface IProcessStartInfo {
 }
 
 export interface IPathFinderOptions {
-    envVariable?: string
-    paths?: string[]
-    windows?: string[]
-    linux?: string[]
-    darwin?: string[]
+    envVariable?: string;
+    paths?: string[];
+    windows?: string[];
+    linux?: string[];
+    darwin?: string[];
 }
 
 export interface IPathFinderEntry {
-    name: string
-    executableName: string
-    executablePath?: string
-    options?: IPathFinderOptions
+    name: string;
+    executableName: string;
+    executablePath?: string;
+    options?: IPathFinderOptions;
 }
 
 export interface IPathFinder {
-    register(name: string, executableName: string, options?: IPathFinderOptions): IPathFinder
+    register(name: string, executableName: string, options?: IPathFinderOptions): IPathFinder;
 
     find(name: string): string | undefined;
 
@@ -68,17 +68,17 @@ export interface IProcessInvocationOptions extends IProcessStartInfo {
 }
 
 export interface IParameterBuilder {
-    build() : string[]
+    build(): string[];
 }
 
 export interface IProcessRunner {
-    run(context: IProcessInvocationContext): IProcessResult
+    run(context: IProcessInvocationContext): IProcessResult;
 
-    runAsync(context: IProcessInvocationContext): Promise<IProcessResult>
+    runAsync(context: IProcessInvocationContext): Promise<IProcessResult>;
 
-    resolveShellScript: IShellScriptResolver,
+    resolveShellScript: IShellScriptResolver;
 
-    resolveShellScriptAsync: IAsyncShellScriptResolver
+    resolveShellScriptAsync: IAsyncShellScriptResolver;
 }
 
 export interface IProcessInvocationContext {

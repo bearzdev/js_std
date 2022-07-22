@@ -20,7 +20,7 @@ export function splitArguments(value) {
         Quote[Quote["Single"] = 1] = "Single";
         Quote[Quote["Double"] = 2] = "Double";
     })(Quote || (Quote = {}));
-    let token = "";
+    let token = '';
     let quote = Quote.None;
     const tokens = [];
     for (let i = 0; i < value.length; i++) {
@@ -29,13 +29,13 @@ export function splitArguments(value) {
             if (quote === Quote.Single && c === '\'') {
                 quote = Quote.None;
                 tokens.push(token);
-                token = "";
+                token = '';
                 continue;
             }
             else if (quote === Quote.Double && c === '"') {
                 quote = Quote.None;
                 tokens.push(token);
-                token = "";
+                token = '';
                 continue;
             }
             token += c;
@@ -55,18 +55,20 @@ export function splitArguments(value) {
                 if (j === '\'' || j === '`') {
                     if (k === '\n') {
                         i += 2;
-                        if (token.length > 0)
+                        if (token.length > 0) {
                             tokens.push(token);
-                        token = "";
+                        }
+                        token = '';
                         continue;
                     }
                     if (remaining > 3) {
                         const l = value[i + 3];
                         if (k === '\r' && l === '\n') {
                             i += 3;
-                            if (token.length > 0)
+                            if (token.length > 0) {
                                 tokens.push(token);
-                            token = "";
+                            }
+                            token = '';
                             continue;
                         }
                     }
@@ -74,7 +76,7 @@ export function splitArguments(value) {
             }
             if (token.length > 0) {
                 tokens.push(token);
-                token = "";
+                token = '';
             }
             continue;
         }
@@ -172,8 +174,9 @@ export class WritableStreamCapture extends ProcessCapture {
 }
 _WritableStreamCapture_stream = new WeakMap(), _WritableStreamCapture_chain = new WeakMap(), _WritableStreamCapture_writer = new WeakMap(), _WritableStreamCapture_close = new WeakMap();
 const collapseArgs = (parameters) => {
-    if (parameters === undefined || parameters.length === 0)
+    if (parameters === undefined || parameters.length === 0) {
         return [];
+    }
     if (parameters.length === 1 && Array.isArray(parameters[0])) {
         return parameters[0];
     }
